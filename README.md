@@ -1,4 +1,4 @@
-# school pare system
+# school parent communication system 
 
 
 We are proposing a web based system that servs as a bridge between students parents and the school. It notifies about info from the school to the parents. And if parents have somthing to contact the school they can also contact the school using the same system.
