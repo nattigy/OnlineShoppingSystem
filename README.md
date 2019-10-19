@@ -12,10 +12,16 @@ As a teacher i need to notify the parents of the students on the progress of the
 
 Acceptance Criteria:
 Functional:
+
 Can I notify the students daily progress to the parents?
+
 Can i see the grades of my child immedeatly. 
+
 Can I get notified about my childs actions in school daily
 
 Non-functional: Availability:
+
 Can I notify the parenys at any time (24 hours per day or 24/7/365)?
+
 Can I view the grades of my son at any time(24 hours per day or 24/7/365)?
+
