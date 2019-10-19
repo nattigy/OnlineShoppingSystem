@@ -1,16 +1,21 @@
-# Online Shopping System
+# school pare system
 
 
-We are proposing a web based system that have all the necessary information about the products and their prices and allows customers to view it from anywhere and the same system will also allow the owners to manage their store efficiently by providing them well organized data about the selling and buying of their goods so that they can make wise decisions based on well provided data.
+We are proposing a web based system that servs as a bridge between students parents and the school. It notifies about info from the school to the parents. And if parents have somthing to contact the school they can also contact the school using the same system.
 
-As a Customer, I need to order products using my phone or my laptop from any where.
-As a Customer, I need save my time i waste on looking for items and traveling to market places.
+As a parent i need to see my kids grades as soon they are out.
+
+As a parent i need to contact the school immediately when ever i want some thing.
+
+As a teacher i need to notify the parents of the students on the progress of the student.
+
+
 Acceptance Criteria:
 Functional:
-Can I save my order and come back to it later?
-Can I change my order before I pay for it?
-Can I see a running total of the cost of what I have chosen so far?
+Can I notify the students daily progress to the parents?
+Can i see the grades of my child immedeatly. 
+Can I get notified about my childs actions in school daily
 
 Non-functional: Availability:
-Can I place an order at any time (24 hours per day or 24/7/365)?
-Can I view the order at any time (24 hours per day or 24/7/365)?
+Can I notify the parenys at any time (24 hours per day or 24/7/365)?
+Can I view the grades of my son at any time(24 hours per day or 24/7/365)?
