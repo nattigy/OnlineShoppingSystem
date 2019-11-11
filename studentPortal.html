@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+    <title>Welcome Student</title>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <div class="navbar-header mr-5">
+            <button class="navbar-toggler mr-3" data-target="#mainNavBarr" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">SPCS</a>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="collapse navbar-collapse mx-5" id="mainNavBarr">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item">
+                    <select class="custom-select" id="" name="">
+                        <option value="">Math</option>
+                        <option value="">Physics</option>
+                        <option value="">Biology</option>
+                    </select>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#">Resources</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Task List</a></li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="">My profile <span class="caret"></span></a>
+                    <ul class="dropdown-menu p-1">
+                        <li><a class="nav-link text-info p-1" href="#">Class Mates</a></li>
+                        <li><a class="nav-link text-info p-1" href="#">Settings</a></li>
+                        <li><a class="nav-link text-info p-1" href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <button class="btn btn-outline-info border-0 collapse navbar-collapse text-dark">Calender</button>
+</nav>
+<!-- Navbar End-->
+
+<!-- Page Content -->
+<div class="container-fluid row">
+    <!-- Recent Column -->
+    <div class="col-3 min-width p-0 shadow-sm">
+    <div class="bg-light px-2 top-to-bottom">
+        <span class="badge badge-info">Assignments</span>
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header small p-2">
+                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                        Recently added
+                    </a>
+                </div>
+                <div class="collapse show" data-parent="#accordion" id="collapseOne">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <h6 class="card-title m-0">Card title</h6>
+                            <p class="card-text m-0 text-muted small">Some example text. Some example text.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header small p-2">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                        Less than a week
+                    </a>
+                </div>
+                <div class="collapse" data-parent="#accordion" id="collapseTwo">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <h6 class="card-title m-0">Card title</h6>
+                            <p class="card-text m-0 text-muted small">Some example text. Some example text.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header small p-2">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                        Less than a month
+                    </a>
+                </div>
+                <div class="collapse" data-parent="#accordion" id="collapseThree">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <h6 class="card-title m-0">Card title</h6>
+                            <p class="card-text m-0 text-muted small">Some example text. Some example text.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Recent Column End -->
+
+    <!-- Description Column -->
+    <div class="col-9">
+        <!-- Description -->
+        <div class="card mt-4 shadow-sm">
+            <div class="card-body">
+                <h4 class="card-title">Description</h4>
+                <p class="card-text">Some example text. Some example text. Lorem ipsum dolor sit amet, consectetur adipisicing elit. A adipisci asperiores et unde vero. Aliquid aperiam dicta et, exercitationem nesciunt numquam odit perferendis quo quod repudiandae rerum sunt totam voluptate.</p>
+                <a href="#" class="card-link">Resources</a>
+                <a href="#" class="card-link">Another link</a>
+            </div>
+        </div>
+
+        <!-- Comments -->
+        <div class="media border p-1 small mt-2">
+            <img src="assets/img/tech_tableturner.jpg" alt="John Doe" class="mr-3 mt-1 rounded-circle" style="width:60px;">
+            <div class="media-body">
+                <h6>John Doe <small><i>Posted on February 19, 2016</i></small></h6>
+                <p class="m-0">Lorem ipsum...</p>
+            </div>
+        </div>
+
+        <!-- My Comment -->
+        <div class="input-group mb-3 md-5 mt-2 input-group-sm">
+            <input type="text" class="form-control" placeholder="Your comment"/>
+            <div class="input-group-prepend">
+                <button class="btn">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script Tags -->
+<script src="assets/js/jquery-3.4.1.slim.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+</body>
+</html>
