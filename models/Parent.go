@@ -8,6 +8,3 @@ type Parent struct {
 	Child      Student
 }
 
-func (p *Parent) ViewGrade() Student {
-	return Student{}
-}

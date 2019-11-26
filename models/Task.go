@@ -15,8 +15,3 @@ type Task struct {
 	OnSubject        Subject
 }
 
-type Comment struct {
-	Data string
-	Date time.Duration
-	who  Subject
-}
