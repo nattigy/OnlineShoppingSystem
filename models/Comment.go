@@ -5,5 +5,5 @@ import "time"
 type Comment struct {
 	Data string
 	Date time.Duration
-	who  Subject
+	who  Student
 }

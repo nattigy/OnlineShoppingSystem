@@ -8,6 +8,6 @@ type TeacherUsecase interface {
 	RemoveTask(task models.Task) (bool, error)
 	UploadResource(subject models.Subject) error
 	TeacherUpdateProfile(teacher models.Teacher) error
-	ReportGrade(grade models.Grade) error
+	ReportGrade(grade models.Result) error
 	ViewClasses() ([]models.Student, error)
 }

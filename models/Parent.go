@@ -6,5 +6,6 @@ type Parent struct {
 	Email      string
 	Password   string
 	Child      Student
+	ProfilePic string
 }
 

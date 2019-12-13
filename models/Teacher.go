@@ -1,12 +1,11 @@
 package models
 
 type Teacher struct {
+	Id         int
 	FirstName  string
 	MiddleName string
 	Subject    string
-	HomeRoom   bool
 	Email      string
 	Password   string
+	ProfilePic string
 }
-
-

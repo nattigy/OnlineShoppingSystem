@@ -1,9 +1,7 @@
 package models
 
-import "time"
-
 type Resource struct {
+	SubjectId   Subject
 	Title       string
-	Date        time.Duration
 	Description string
 }

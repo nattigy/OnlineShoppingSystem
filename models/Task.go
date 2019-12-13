@@ -13,5 +13,6 @@ type Task struct {
 	DeadLine         time.Duration
 	Comments         []Comment
 	OnSubject        Subject
+	Resources        Resource
 }
 
