@@ -1,7 +1,8 @@
 package models
 
 type ClassRoom struct {
-	GradeLevel string
+	Id         int
+	GradeLevel int
 	Section    string
 	Task       Task
 	HomeRoom   Teacher

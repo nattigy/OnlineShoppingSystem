@@ -13,6 +13,6 @@ func NewParentUsecase(parentRepo parent.ParentRepository) *ParentUsecase {
 	return &ParentUsecase{parentRepo: parentRepo}
 }
 
-func (p *ParentUsecase) ViewGrade() (models.Student, error) {
-	return models.Student{}, nil
+func (p *ParentUsecase) ViewGrade(student models.Student) (models.Result, error) {
+	return models.Result{}, nil
 }

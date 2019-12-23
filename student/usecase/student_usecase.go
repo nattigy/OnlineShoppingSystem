@@ -14,18 +14,34 @@ func NewStudentUsecase(StudentRepo student.StudentRepository) *StudentUsecase {
 }
 
 func (st *StudentUsecase) ViewTasks(c models.ClassRoom, s models.Subject) ([]models.Task, error) {
-	return nil, nil
+	data, err := st.studentRepo.ViewTasks(c, s)
+	if err != nil {
+		return data, err
+	}
+	return data, nil
 }
 
-func (st *StudentUsecase) Comment(t models.Task, student models.Student) error {
+func (st *StudentUsecase) Comment(t models.Task, student models.Student, data string) error {
+	err := st.studentRepo.Comment(t, student, data)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (st *StudentUsecase) StudentUpdateProfile(student models.Student) error {
+	err := st.studentRepo.StudentUpdateProfile(student)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (st *StudentUsecase) ViewClass(classRoom models.ClassRoom) ([]models.Student, error) {
+	data, err := st.studentRepo.ViewClass(classRoom)
+	if err != nil {
+		return data, err
+	}
 	return nil, nil
 }
 

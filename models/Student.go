@@ -1,13 +1,12 @@
 package models
 
 type Student struct {
+	Id         int
 	FirstName  string
 	MiddleName string
 	Email      string
-	Class      string
 	Password   string
-	Result     Result
+	ClassRoom  ClassRoom
 	ParentName Parent
 	ProfilePic string
 }
-
