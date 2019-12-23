@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <title>Welcome Teacher</title>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <div class="navbar-header mr-5">
+            <button class="navbar-toggler mr-3" data-target="#mainNavBarr" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">SPCS</a>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="collapse navbar-collapse mx-5" id="mainNavBarr">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#post">Post</a></li>
+                <li class="nav-item"><a class="nav-link" href="#uploadResources">Upload Resources</a></li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="dropdown nav-item">
+                    <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="">My profile <span
+                                class="caret"></span></a>
+                    <ul class="dropdown-menu p-1">
+                        <li><a class="nav-link text-info p-1" href="#">My Students</a></li>
+                        <li><a class="nav-link text-info p-1" href="#">Settings</a></li>
+                        <li><a class="nav-link text-info p-1" href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <button class="btn btn-outline-info border-0 collapse navbar-collapse text-dark">Calender</button>
+</nav>
+<!-- Navbar End-->
+
+<!-- Post Begin -->
+<div class="container bg-light top-to-bottom shadow-sm pt-5" id="post">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#makeNewPost">Make New Post</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#previousPosts">Previous Posts</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="makeNewPost" class="tab-pane container active">
+            <form class="pt-5">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <label for="shortDescription">Short Description</label>
+                    <input type="text" class="form-control" id="shortDescription">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Details</label>
+                    <textarea class="form-control" rows="7" id="pwd"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+
+        <div id="previousPosts" class="tab-pane container pt-2">
+            <button class="btn m-2 float-right bg-transparent border-0 p-0 px-1">Refresh</button>
+            <table class="table rounded table-borderless table-secondary table-striped table-hover table-responsive-sm">
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...</td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...</td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...</td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Remove</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...</td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Remove</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Post End-->
+
+<!-- Upload Resource Start -->
+<div class="container bg-light top-to-bottom shadow-sm pt-5" id="uploadResources">
+    <form>
+        <div class="badge rounded p-2 mb-2 badge-info">Upload New File</div>
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile">
+            <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+        <button class="btn btn-success my-2">Upload</button>
+    </form>
+    <table class="table rounded table-borderless table-secondary table-striped table-hover table-responsive-sm">
+        <thead>
+        <tr>
+            <th>File Name</th>
+            <th>Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Physics Book</td>
+            <td>20/02/2019</td>
+            <td>
+                <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Remove</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Physics Book</td>
+            <td>20/02/2019</td>
+            <td>
+                <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Remove</button>
+            </td>
+        </tr>
+        <tr>
+            <td>Physics Book</td>
+            <td>20/02/2019</td>
+            <td>
+                <button class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1">Remove</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Upload Resource End -->
+
+<!-- Script Tags -->
+<script src="../assets/js/jquery-3.4.1.slim.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+</body>
+</html>
