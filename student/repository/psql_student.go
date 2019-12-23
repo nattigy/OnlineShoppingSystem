@@ -19,6 +19,7 @@ func (ps *PsqlStudentRepository) ViewTasks(c models.ClassRoom, s models.Subject)
 	var tasks []models.Task
 	if err != nil {
 		return tasks, err
+
 	}
 	var task models.Task
 
