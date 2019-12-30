@@ -5,7 +5,6 @@ type Parent struct {
 	MiddleName string
 	Email      string
 	Password   string
-	Child      Student
+	id         int
 	ProfilePic string
 }
-

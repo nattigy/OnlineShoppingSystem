@@ -13,6 +13,6 @@ func NewPsqlParentRepository(Conn *sql.DB) *PsqlParentRepository {
 	return &PsqlParentRepository{conn: Conn}
 }
 
-func (p *PsqlParentRepository) ViewGrade() (models.Student, error) {
-	return models.Student{}, nil
+func (p *PsqlParentRepository) ViewGrade(student models.Student) (models.Result, error) {
+	return models.Result{}, nil
 }

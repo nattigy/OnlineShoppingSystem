@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"time"
 )
 
 type PsqlStudentRepository struct {
@@ -14,25 +15,57 @@ func NewPsqlStudentRepository(Conn *sql.DB) *PsqlStudentRepository {
 }
 
 func (ps *PsqlStudentRepository) ViewTasks(c models.ClassRoom, s models.Subject) ([]models.Task, error) {
-	return nil, nil
+	data, err := ps.conn.Query("SELECT * FROM task WHERE class_room_id=$1 AND subject_id=$2", c.Id, s.Id)
+	var tasks []models.Task
+	if err != nil {
+		return tasks, err
+	}
+	var task models.Task
+
+	for data.Next() {
+		if err := data.Scan(&task.Id, &task.Title, &task.Description, &task.ShortDescription, &task.ClassRoomId, &task.ResourceId,
+			&task.SubjectId, &task.PostedDate, &task.Deadline,
+		); err != nil {
+			return tasks, err
+		}
+		tasks = append(tasks, task)
+	}
+	return tasks, nil
 }
 
-func (ps *PsqlStudentRepository) Comment(t models.Task, student models.Student) error {
-	return nil
+func (ps *PsqlStudentRepository) Comment(t models.Task, s models.Student, d string) error {
+	_, err := ps.conn.Exec("INSERT INTO comment(data, student_id, task_id, date) VALUES ($1, $2, $3, $4)", d, s.Id, t.Id, time.Now())
+	return err
 }
 
 func (ps *PsqlStudentRepository) StudentUpdateProfile(student models.Student) error {
-	return nil
+	_, err := ps.conn.Exec("UPDATE student SET email=$1, password=$2, profile_pic=$3 WHERE id=$4", student.Email,
+		student.Password, student.ProfilePic, student.Id)
+	return err
 }
 
 func (ps *PsqlStudentRepository) ViewClass(classRoom models.ClassRoom) ([]models.Student, error) {
-	return nil, nil
+	data, err := ps.conn.Query("SELECT first_name, middle_name, email FROM student WHERE class_room=$1", classRoom.Id)
+	var students []models.Student
+	if err != nil {
+		return students, err
+	}
+
+	var s models.Student
+
+	for data.Next() {
+		if err := data.Scan(&s.FirstName, &s.MiddleName, &s.Email); err != nil {
+			return students, err
+		}
+		students = append(students, s)
+	}
+	return students, err
 }
 
 func (ps *PsqlStudentRepository) ViewResources(subject models.Subject) ([]models.Resource, error) {
 	return nil, nil
 }
 
-func (ps *PsqlStudentRepository) ViewResult(s models.Student) ([]models.Result, error)  {
+func (ps *PsqlStudentRepository) ViewResult(s models.Student) ([]models.Result, error) {
 	return nil, nil
 }

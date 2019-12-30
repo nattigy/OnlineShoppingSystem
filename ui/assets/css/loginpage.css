@@ -1,0 +1,154 @@
+/* .navbar {
+  height: 80px;
+} */
+.navbar-toggler {
+  height: 34px;
+  display: flex;
+  margin-left: auto;
+  margin-right: 10px;
+}
+.navbar-toggler-icon {
+  height: 24px;
+}
+.navbar-nav {
+  display: flex;
+  margin-left: auto;
+}
+/* .jumbotron.text-center {
+  margin-top: 90px !important;
+} */
+.school {
+  font-size: 35px;
+  font-weight: 600;
+}
+
+.sideText {
+  line-height: 1.6;
+}
+.logo {
+  font-size: 16px;
+}
+.home {
+  font-size: 26px !important;
+}
+.cardImage {
+  width: 118px;
+  height: 118px;
+  text-align: center;
+}
+.card {
+  border: none !important;
+  /* margin-bottom: 155px !important; */
+}
+.footerLinks {
+  text-decoration: underline #eee;
+}
+.star {
+  color: #007bff;
+}
+
+/* .communication {
+  margin-top: 50px;
+  margin-bottom: 200px !important;
+} */
+/* .star {
+  background-color: cornflowerblue;
+} */
+
+@media (max-width: 501px) {
+  .communication {
+    font-size: 25px !important;
+  }
+}
+@media (max-width: 768px) {
+  .firstJumbo {
+    margin-bottom: 130px !important;
+  }
+  .thirdJumbo {
+    margin-bottom: 180px !important;
+  }
+  .fourthJumbo {
+    margin-bottom: 130px !important;
+  }
+}
+@media (min-width: 400px) {
+  .image {
+    width: 343px;
+    height: 192px;
+  }
+  .image2 {
+    width: 343px;
+    height: 192px;
+  }
+}
+@media (min-width: 576px) {
+  .jumboParent {
+    font-size: 18px !important;
+  }
+  .jumboButton {
+    font-size: 20px !important;
+  }
+  .jumboFoster {
+    font-size: 20px;
+  }
+  .star {
+    font-size: 25px;
+  }
+  .image {
+    width: 519px;
+    height: 290px;
+  }
+  .image2 {
+    width: 519px;
+    height: 290px;
+  }
+  .empower {
+    font-size: 30px !important;
+  }
+}
+@media (min-width: 640px) {
+  .image {
+    width: 267px;
+    float: left;
+    height: 149px;
+    margin-right: 20px !important;
+  }
+
+  .image2 {
+    width: 267px;
+    height: 149px;
+    margin-left: 10px !important;
+    float: right;
+  }
+  .empower {
+    font-size: 28px !important;
+  }
+}
+@media (min-width: 1200px) {
+  .sideText {
+    font-size: 20px;
+  }
+
+  .image {
+    margin-right: 90px !important;
+    width: 547px;
+    height: 306px;
+  }
+
+  .image2 {
+    margin-left: 90px !important;
+    width: 547px;
+    height: 306px;
+  }
+  .fifthJumbo {
+    margin-bottom: 100px !important;
+  }
+  .card {
+    border: none !important;
+    margin-bottom: 155px !important;
+  }
+  .communication {
+    margin-top: 50px;
+    margin-bottom: 130px !important;
+  }
+}

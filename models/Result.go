@@ -1,9 +1,10 @@
 package models
 
 type Result struct {
-	SubjectName Subject
-	Result      int
-	Assessment  int
-	Test        int
-	Final       int
+	SubjectId  Subject
+	StudentId  Student
+	Total      int
+	Assessment int
+	Test       int
+	Final      int
 }
