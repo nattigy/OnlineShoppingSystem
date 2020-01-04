@@ -5,5 +5,5 @@ type Resource struct {
 	Title       string
 	Description string
 	Id          int
-	path        string
+	Path        string
 }

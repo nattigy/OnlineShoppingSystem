@@ -35,6 +35,7 @@ func (ps *PsqlStudentRepository) ViewTasks(c models.ClassRoom, s models.Subject)
 
 func (ps *PsqlStudentRepository) Comment(t models.Task, s models.Student, d string) error {
 	_, err := ps.conn.Exec("INSERT INTO comment(data, student_id, task_id, date) VALUES ($1, $2, $3, $4)", d, s.Id, t.Id, time.Now())
+
 	return err
 }
 
@@ -63,9 +64,39 @@ func (ps *PsqlStudentRepository) ViewClass(classRoom models.ClassRoom) ([]models
 }
 
 func (ps *PsqlStudentRepository) ViewResources(subject models.Subject) ([]models.Resource, error) {
-	return nil, nil
+	data, err := ps.conn.Query("SELECT * FROM resources WHERE subject_id=$1", subject.Id)
+	var resources []models.Resource
+	if err != nil {
+		return resources, err
+	}
+	var resource models.Resource
+
+	for data.Next() {
+		if err := data.Scan(&resource.SubjectId, &resource.Title, &resource.Description, &resource.Path); err != nil {
+			return resources, err
+		}
+		resources = append(resources, resource)
+	}
+
+	return resources, err
 }
 
 func (ps *PsqlStudentRepository) ViewResult(s models.Student) ([]models.Result, error) {
+	data, err := ps.conn.Query("SELECT * FROM result WHERE student_id=$1", s.Id)
+	var results []models.Result
+	if err != nil {
+		return results, err
+	}
+	var result models.Result
+
+	for data.Next() {
+		if err := data.Scan(&result.StudentId, &result.SubjectId, &result.Assessment, &result.Test, &result.Final, &result.Total); err != nil {
+			return results, err
+		}
+		results = append(results, result)
+
+	}
+	return results, err
+
 	return nil, nil
 }
