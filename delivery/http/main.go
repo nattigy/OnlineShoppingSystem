@@ -4,9 +4,6 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/nattigy/parentschoolcommunicationsystem/authenticate"
 	"github.com/nattigy/parentschoolcommunicationsystem/database"
-	"html/template"
-	"net/http"
-
 	_parHandlers "github.com/nattigy/parentschoolcommunicationsystem/delivery/http/parentHandlers"
 	_stuHandlers "github.com/nattigy/parentschoolcommunicationsystem/delivery/http/studentHandlers"
 	_techHandlers "github.com/nattigy/parentschoolcommunicationsystem/delivery/http/teacherHandlers"
@@ -16,6 +13,8 @@ import (
 	_stuUsecase "github.com/nattigy/parentschoolcommunicationsystem/student/usecase"
 	_techRepo "github.com/nattigy/parentschoolcommunicationsystem/teacher/repository"
 	_techUsecase "github.com/nattigy/parentschoolcommunicationsystem/teacher/usecase"
+	"html/template"
+	"net/http"
 )
 
 var templ = template.Must(template.ParseGlob("ui/templates/*.html"))
@@ -32,7 +31,9 @@ func main() {
 	studentRepo := _stuRepo.NewPsqlStudentRepository(db)
 	studentUsecase := _stuUsecase.NewStudentUsecase(studentRepo)
 	stuHandlers := _stuHandlers.NewStudentHandler(templ, *studentUsecase)
+	loadStu := authenticate.NewLoadStudent(templ)
 
+	mux.HandleFunc("/student", loadStu.Student)
 	mux.HandleFunc("/student/viewTask", stuHandlers.ViewTasks)
 	mux.HandleFunc("/student/comment", stuHandlers.Comment)
 	mux.HandleFunc("/student/updateProfile", stuHandlers.StudentUpdateProfile)

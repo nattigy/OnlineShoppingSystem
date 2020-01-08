@@ -1,221 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/assets/css/student.css" rel="stylesheet" />
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/assets/css/student.css" rel="stylesheet"/>
     <title>Welcome Student</title>
-  </head>
-  <body>
-    <!-- Navbar -->
-    <nav
-      class="navbar navbar-expand-sm bg-white navbar-light sticky-top container "
-    >
-      <a href="#" class="navbar-brand text-primary">LOGO</a>
-      <!-- Logo -->
+</head>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#idforcollapsableitem"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <!-- Menu Items -->
-      <div class="collapse navbar-collapse " id="idforcollapsableitem">
-        <ul class="navbar-nav">
-          <!-- HOME TO BE IN FOOTER -->
-
-          <li class="nav-item p-lg-3 ">
-            <a class="nav-link " href="#">Home</a>
-          </li>
-          <li class="nav-item  p-lg-3 ">
-            <a class="nav-link" href="#">Resources</a>
-          </li>
-          <li class="nav-item p-lg-3 ">
-            <a class="nav-link " href="#">Task List</a>
-          </li>
-          <!-- </ul> -->
-
-          <!-- Older version
-          <li class="nav-item p-lg-3 ">
-            <select class="custom-select " id="" name="">
-              <option value="">Math</option>
-              <option value="">Physics</option>
-              <option value="">Biology</option>
-            </select>
-          </li> -->
-
-          <!-- MODIFIED -->
-          <!-- <li class="dropdown nav-item  p-lg-3  ">
-            <a class="dropdown-toggle nav-link" data-toggle="dropdown" href=""
-              >Select Subject <span class="caret"></span
-            ></a>
-            <ul class="dropdown-menu p-1 border-0">
-              <li>
-                <a class="nav-link p-1" href="#">Math</a>
-              </li>
-              <li><a class="nav-link p-1" href="#">Physics</a></li>
-              <li><a class="nav-link p-1" href="#">Biology</a></li>
-            </ul>
-          </li> -->
-
-          <!-- <ul class="navbar-nav"> -->
-          <li class="dropdown nav-item  p-lg-3 ">
-            <a class="dropdown-toggle nav-link" data-toggle="dropdown" href=""
-              >My profile <span class="caret"></span
-            ></a>
-            <ul class="dropdown-menu p-1 border-0">
-              <li>
-                <a class="nav-link p-1" href="#">Class Mates</a>
-              </li>
-              <li><a class="nav-link p-1" href="#">Settings</a></li>
-              <li><a class="nav-link p-1" href="#">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
-        <button
-          class="btn btn-outline-primary btn-sm px-3 py-2 "
-          style="border-radius: 20px;"
-          data-toggle="modal"
-          data-target="#loginModal"
-        >
-          Calander
-        </button>
-      </div>
-    </nav>
-    <!-- Navbar End-->
-
-    <!-- Page Content -->
-    <div class="container-fluid row">
-      <!-- Recent Column -->
-      <div class="col-3 min-width p-0 shadow-sm">
+<body>
+{{template "navbar.html" .User}}
+<!-- Page Content -->
+<div class="container-fluid row">
+    <!-- Recent Column -->
+    <div class="col-3 min-width p-0 shadow-sm">
         <div class="bg-light px-2 top-to-bottom">
-          <h3>
-            <span class="badge badge-pill badge-primary mb-2 mt-4"
-              >Assignments</span
-            >
-          </h3>
-          <div id="accordion">
-            <div class="card">
-              <div class="card-header large p-2">
-                <a class="card-link" data-toggle="collapse" href="#collapseOne">
-                  Recently added
-                </a>
-              </div>
-              <div
-                class="collapse show"
-                data-parent="#accordion"
-                id="collapseOne"
-              >
+            <span class="badge badge-info">Assignments</span>
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header small p-2">
+                        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                            Recently added
+                        </a>
+                    </div>
+                    {{$task := .Data}}
+                    {{range $index, $item := .Data}}
+                        {{$task = $item}}
+                        <div onclick="UpdateDescription({{$item}})" class="collapse show" data-parent="#accordion"
+                             id="collapseOne">
                 <div class="card">
                   <div class="card-body p-2">
-                    <h6 class="card-title m-0">Card title</h6>
-                    <p class="card-text m-0 text-muted small">
-                      Some example text. Some example text.
-                    </p>
+                      <h6 class="card-title m-0">{{.Title}}</h6>
+                      <p class="card-text m-0 text-muted small">{{.ShortDescription}}</p>
                   </div>
                 </div>
               </div>
-            </div>
+                    {{end}}
+                </div>
 
-            <div class="card">
-              <div class="card-header large p-2">
-                <a
-                  class="collapsed card-link"
-                  data-toggle="collapse"
-                  href="#collapseTwo"
-                >
-                  Less than a week
-                </a>
-              </div>
-              <div class="collapse" data-parent="#accordion" id="collapseTwo">
                 <div class="card">
-                  <div class="card-body p-2">
-                    <h6 class="card-title m-0">Card title</h6>
-                    <p class="card-text m-0 text-muted small">
-                      Some example text. Some example text.
-                    </p>
-                  </div>
+                    <div class="card-header small p-2">
+                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                            Less than a week
+                        </a>
+                    </div>
+                    <div class="collapse" data-parent="#accordion" id="collapseTwo">
+                        <div class="card">
+                            <div class="card-body p-2">
+                                <h6 class="card-title m-0">Card title</h6>
+                                <p class="card-text m-0 text-muted small">Some example text. Some example text.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
 
-            <div class="card">
-              <div class="card-header large p-2">
-                <a
-                  class="collapsed card-link"
-                  data-toggle="collapse"
-                  href="#collapseThree"
-                >
-                  Less than a month
-                </a>
-              </div>
-              <div class="collapse" data-parent="#accordion" id="collapseThree">
                 <div class="card">
-                  <div class="card-body p-2">
-                    <h6 class="card-title m-0">Card title</h6>
-                    <p class="card-text m-0 text-muted small">
-                      Some example text. Some example text.
-                    </p>
-                  </div>
+                    <div class="card-header small p-2">
+                        <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                            Less than a month
+                        </a>
+                    </div>
+                    <div class="collapse" data-parent="#accordion" id="collapseThree">
+                        <div class="card">
+                            <div class="card-body p-2">
+                                <h6 class="card-title m-0">Card title</h6>
+                                <p class="card-text m-0 text-muted small">Some example text. Some example text.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
-      <!-- Recent Column End -->
+    </div>
+    <!-- Recent Column End -->
 
-      <!-- Description Column -->
-      <div class="col-9">
+    <!-- Description Column -->
+    <div class="col-9">
         <!-- Description -->
+        {{template "description" $task}}
+        {{define "description"}}
+            <div id="contentDescription" style="display: none">
         <div class="card mt-4 shadow-sm">
           <div class="card-body">
-            <h4 class="card-title">Description</h4>
-            <p class="card-text">
-              Some example text. Some example text. Lorem ipsum dolor sit amet,
-              consectetur adipisicing elit. A adipisci asperiores et unde vero.
-              Aliquid aperiam dicta et, exercitationem nesciunt numquam odit
-              perferendis quo quod repudiandae rerum sunt totam voluptate.
-            </p>
+              <h4 class="card-title" id="taskTitle">{{.Title}}</h4>
+              <h6 class="card-title text-muted">Description</h6>
+              <p class="card-text" id="taskDescription">{{.Description}}</p>
             <a href="#" class="card-link">Resources</a>
             <a href="#" class="card-link">Another link</a>
           </div>
         </div>
-
         <!-- Comments -->
         <div class="media border p-1 small mt-2">
-          <img
-            src="assets/img/teachers.png"
-            alt="John Doe"
-            class="mr-3 mt-1 rounded-circle"
-            style="width:60px;"
-          />
+            <img src="../assets/img/tech_tableturner.jpg" alt="John Doe" class="mr-3 mt-1 rounded-circle"
+                 style="width:60px;">
           <div class="media-body">
-            <h6>
-              John Doe <small><i>Posted on February 19, 2016</i></small>
+              <h6>John Doe
+                  <small><i>Posted on February 19, 2016</i></small>
             </h6>
             <p class="m-0">Lorem ipsum...</p>
           </div>
         </div>
-
+            </div>
+            <div class="jumbotron" id="notification">
+                <h1>Noting has been posted yet</h1>
+            </div>
+        {{end}}
         <!-- My Comment -->
+        {{template "comment" $task}}
+        {{define "comment"}}
+            <form action="/student/comment" method="post">
         <div class="input-group mb-3 md-5 mt-2 input-group-sm">
-          <input type="text" class="form-control" placeholder="Your comment" />
+            <input type="text" class="form-control" name="comment" placeholder="Your comment"/>
+            <input type="hidden" name="taskId" id="taskID" value="{{.Id}}"/>
           <div class="input-group-prepend">
-            <button class="btn btn-outline-primary btn-sm px-3 py-2">
-              Send
-            </button>
+              <button class="btn">Send</button>
           </div>
         </div>
-      </div>
+            </form>
+        {{end}}
     </div>
+</div>
 
-    <!-- Script Tags -->
-    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-  </body>
+<!-- Script Tags -->
+<script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/main.js"></script>
+</body>
 </html>

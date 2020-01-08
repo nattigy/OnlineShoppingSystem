@@ -1,461 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/css/teacher.css" />
-    <link rel="stylesheet" href="/assets/css/datepicker.css" />
-    <script
-      src="https://kit.fontawesome.com/fd4f08bda7.js"
-      crossorigin="anonymous"
-    ></script>
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/assets/css/teacher.css"/>
+    <link rel="stylesheet" href="/assets/css/datepicker.css"/>
+    <script src="https://kit.fontawesome.com/fd4f08bda7.js" crossorigin="anonymous"></script>
     <title>Welcome Teacher</title>
-  </head>
-  <body data-spy="scroll" data-target=".navbar" data-offset="50">
-    <!-- Navbar -->
-    <nav
-      class="navbar navbar-expand-sm bg-white navbar-light sticky-top container "
-    >
-      <a href="#" class="navbar-brand text-primary">LOGO</a>
-      <!-- Logo -->
+</head>
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#idforcollapsableitem"
-      >
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-sm bg-white navbar-light sticky-top container ">
+    <a href="#" class="navbar-brand text-primary">LOGO</a>
+    <!-- Logo -->
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#idforcollapsableitem">
         <span class="navbar-toggler-icon"></span>
-      </button>
-      <!-- Menu Items -->
-      <div class="collapse navbar-collapse " id="idforcollapsableitem">
+    </button>
+    <!-- Menu Items -->
+    <div class="collapse navbar-collapse " id="idforcollapsableitem">
         <ul class="navbar-nav">
-          <!-- HOME TO BE IN FOOTER -->
+            <!-- HOME TO BE IN FOOTER -->
 
-          <li class="nav-item p-lg-3 ">
-            <a class="nav-link " href="#">Home</a>
-          </li>
-          <li class="nav-item  p-lg-3 ">
-            <a class="nav-link" href="#">Post</a>
-          </li>
-          <li class="nav-item p-lg-3 ">
-            <a class="nav-link " href="#">Upload Resources</a>
-          </li>
+            <li class="nav-item p-lg-3 ">
+                <a class="nav-link " href="#">Home</a>
+            </li>
+            <li class="nav-item  p-lg-3 ">
+                <a class="nav-link" href="#">Post</a>
+            </li>
+            <li class="nav-item p-lg-3 ">
+                <a class="nav-link " href="#">Upload Resources</a>
+            </li>
 
-          <li class="dropdown nav-item  p-lg-3 ">
-            <a class="dropdown-toggle nav-link" data-toggle="dropdown" href=""
-              >My profile <span class="caret"></span
-            ></a>
-            <ul class="dropdown-menu p-1 border-0">
-              <li>
-                <a class="nav-link p-1" href="#">My Students</a>
-              </li>
-              <li><a class="nav-link p-1" href="#">Settings</a></li>
-              <li><a class="nav-link p-1" href="#">Logout</a></li>
-            </ul>
-          </li>
+            <li class="dropdown nav-item  p-lg-3 ">
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="">My profile <span
+                            class="caret"></span></a>
+                <ul class="dropdown-menu p-1 border-0">
+                    <li>
+                        <a class="nav-link p-1" href="#">My Students</a>
+                    </li>
+                    <li><a class="nav-link p-1" href="#">Settings</a></li>
+                    <li><a class="nav-link p-1" href="#">Logout</a></li>
+                </ul>
+            </li>
         </ul>
-        <button
-          class="btn btn-outline-primary btn-sm px-3 py-2 "
-          style="border-radius: 20px;"
-          data-toggle="modal"
-          data-target="#calanderModal"
-        >
-          Calander
+        <button class="btn btn-outline-primary btn-sm px-3 py-2 " style="border-radius: 20px;" data-toggle="modal"
+                data-target="#calanderModal">
+            Calander
         </button>
-      </div>
-    </nav>
-    <!-- Navbar End-->
+    </div>
+</nav>
+<!-- Navbar End-->
 
-    <!-- Post Begin -->
-    <div class="container bg-light top-to-bottom shadow-sm pt-5" id="post">
-      <ul class="nav nav-tabs">
+<!-- Post Begin -->
+<div class="container bg-light top-to-bottom shadow-sm pt-5" id="post">
+    <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#makeNewPost"
-            >Make New Post</a
-          >
+            <a class="nav-link active" data-toggle="tab" href="#makeNewPost">Make New Post</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#previousPosts"
-            >Previous Posts</a
-          >
+            <a class="nav-link" data-toggle="tab" href="#previousPosts">Previous Posts</a>
         </li>
-      </ul>
+    </ul>
 
-      <div class="tab-content">
+    <div class="tab-content">
         <div id="makeNewPost" class="tab-pane container active">
-          <form class="pt-5">
-            <div class="form-group">
-              <label for="title">Title</label>
-              <input type="text" class="form-control" id="title" />
-            </div>
-            <div class="form-group">
-              <label for="shortDescription">Short Description</label>
-              <input type="text" class="form-control" id="shortDescription" />
-            </div>
-            <div class="form-group">
-              <label for="pwd">Details</label>
-              <textarea class="form-control" rows="7" id="pwd"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+            <form class="pt-5">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title"/>
+                </div>
+                <div class="form-group">
+                    <label for="shortDescription">Short Description</label>
+                    <input type="text" class="form-control" id="shortDescription"/>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Details</label>
+                    <textarea class="form-control" rows="7" id="pwd"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
 
         <div id="previousPosts" class="tab-pane container pt-2">
-          <button class="btn m-2 float-right bg-transparent border-0 p-0 px-1">
-            Refresh
-          </button>
+            <button class="btn m-2 float-right bg-transparent border-0 p-0 px-1">
+                Refresh
+            </button>
 
-          <!-- table previous post -->
+            <!-- table previous post -->
 
-          <table
-            id="table"
-            class="table  table-borderless  table-hover table-responsive-sm"
-          >
-            <!-- <thead> -->
-            <tr>
-              <th>Title</th>
-              <th>Date</th>
-              <th>Description</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-            <!-- </thead> -->
+            <table id="table" class="table  table-borderless  table-hover table-responsive-sm">
+                <!-- <thead> -->
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+                <!-- </thead> -->
 
-            <!-- <tbody> -->
-            <tr>
-              <td>Home work</td>
-              <td>20/02/2019</td>
-              <td>
-                Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
-              </td>
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Edit">
-                  <button
-                    class="btn btn-primary btn-xs"
-                    data-title="Edit"
-                    data-toggle="modal"
-                    data-target="#editModal"
-                  >
-                    <span><i class="fas fa-edit"></i></span>
-                  </button>
-                </p>
-              </td>
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Delete">
-                  <button
-                    class="btn btn-danger btn-xs"
-                    data-title="Delete"
-                    data-toggle="modal"
-                    data-target="#delete"
-                  >
-                    <span><i class="fas fa-trash-alt"></i></span>
-                  </button>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Home work</td>
-              <td>20/02/2019</td>
-              <td>
-                Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
-              </td>
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Edit">
-                  <button
-                    class="btn btn-primary btn-xs"
-                    data-title="Edit"
-                    data-toggle="modal"
-                    data-target="#editModal"
-                  >
-                    <span><i class="fas fa-edit"></i></span>
-                  </button>
-                </p>
-              </td>
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Delete">
-                  <button
-                    class="btn btn-danger btn-xs"
-                    data-title="Delete"
-                    data-toggle="modal"
-                    data-target="#delete"
-                  >
-                    <span><i class="fas fa-trash-alt"></i></span>
-                  </button>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Home work</td>
-              <td>20/02/2019</td>
-              <td>
-                Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
-              </td>
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Edit">
-                  <button
-                    class="btn btn-primary btn-xs"
-                    data-title="Edit"
-                    data-toggle="modal"
-                    data-target="#editModal"
-                  >
-                    <span><i class="fas fa-edit"></i></span>
-                  </button>
-                </p>
-              </td>
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Delete">
-                  <button
-                    class="btn btn-danger btn-xs"
-                    data-title="Delete"
-                    data-toggle="modal"
-                    data-target="#delete"
-                  >
-                    <span><i class="fas fa-trash-alt"></i></span>
-                  </button>
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td>Home work</td>
-              <td>20/02/2019</td>
-              <td>
-                Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
-              </td>
-              <!-- <td> -->
-              <!-- <button
-                    class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1"
-                  >
-                    Edit
-                  </button> -->
+                <!-- <tbody> -->
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>
+                        Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
+                    </td>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Edit">
+                            <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal"
+                                    data-target="#editModal">
+                                <span><i class="fas fa-edit"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Delete">
+                            <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"
+                                    data-target="#delete">
+                                <span><i class="fas fa-trash-alt"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>
+                        Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
+                    </td>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Edit">
+                            <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal"
+                                    data-target="#editModal">
+                                <span><i class="fas fa-edit"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Delete">
+                            <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"
+                                    data-target="#delete">
+                                <span><i class="fas fa-trash-alt"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>
+                        Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
+                    </td>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Edit">
+                            <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal"
+                                    data-target="#editModal">
+                                <span><i class="fas fa-edit"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Delete">
+                            <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"
+                                    data-target="#delete">
+                                <span><i class="fas fa-trash-alt"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Home work</td>
+                    <td>20/02/2019</td>
+                    <td>
+                        Lorem oijif jvihkjd ovoioijv [ hvioOIVOIAVO V ovoiVHO VO[ ...
+                    </td>
+                    <!-- <td> -->
+                    <!-- <button
+                            class="btn btn-primary bg-transparent border-0 text-primary p-0 px-1"
+                          >
+                            Edit
+                          </button> -->
 
-              <!-- <button
-                  class="btn btn-outline-primary btn-sm px-3 py-2"
-                  style="border-radius: 20px;"
-                  data-toggle="modal"
-                  data-target="#editModal"
-                >
-                  Edit
-                </button>
-              </td>
-              <td>
-                <button
-                  class="btn btn-outline-primary btn-sm px-3 py-2"
-                  style="border-radius: 20px;"
-                >
-                  Remove
-                </button>
-              </td> -->
+                    <!-- <button
+                          class="btn btn-outline-primary btn-sm px-3 py-2"
+                          style="border-radius: 20px;"
+                          data-toggle="modal"
+                          data-target="#editModal"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-outline-primary btn-sm px-3 py-2"
+                          style="border-radius: 20px;"
+                        >
+                          Remove
+                        </button>
+                      </td> -->
 
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Edit">
-                  <button
-                    class="btn btn-primary btn-xs"
-                    data-title="Edit"
-                    data-toggle="modal"
-                    data-target="#editModal"
-                  >
-                    <span><i class="fas fa-edit"></i></span>
-                  </button>
-                </p>
-              </td>
-              <td>
-                <p data-placement="top" data-toggle="tooltip" title="Delete">
-                  <button
-                    class="btn btn-danger btn-xs"
-                    data-title="Delete"
-                    data-toggle="modal"
-                    data-target="#delete"
-                  >
-                    <span><i class="fas fa-trash-alt"></i></span>
-                  </button>
-                </p>
-              </td>
-            </tr>
-          </table>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Edit">
+                            <button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal"
+                                    data-target="#editModal">
+                                <span><i class="fas fa-edit"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                    <td>
+                        <p data-placement="top" data-toggle="tooltip" title="Delete">
+                            <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"
+                                    data-target="#delete">
+                                <span><i class="fas fa-trash-alt"></i></span>
+                            </button>
+                        </p>
+                    </td>
+                </tr>
+            </table>
 
-          <!-- </tbody> -->
+            <!-- </tbody> -->
         </div>
-      </div>
     </div>
-    <!-- Post End-->
+</div>
+<!-- Post End-->
 
-    <!-- Upload Resource Start -->
-    <div
-      class="container bg-light top-to-bottom shadow-sm pt-5"
-      id="uploadResources"
-    >
-      <form>
+<!-- Upload Resource Start -->
+<div class="container bg-light top-to-bottom shadow-sm pt-5" id="uploadResources">
+    <form>
         <div class="badge rounded p-2 mb-2 badge-primary">Upload New File</div>
         <div class="custom-file">
-          <input
-            type="file"
-            class="custom-file-input btn-primary"
-            id="customFile"
-          />
-          <label class="custom-file-label" for="customFile">Choose file</label>
+            <input type="file" class="custom-file-input btn-primary" id="customFile"/>
+            <label class="custom-file-label" for="customFile">Choose file</label>
         </div>
         <button class="btn btn-primary my-2">Upload</button>
-      </form>
-      <!-- table new post -->
-      <table
-        id="table1"
-        class="table table-borderless table-hover table-responsive-sm"
-      >
+    </form>
+    <!-- table new post -->
+    <table id="table1" class="table table-borderless table-hover table-responsive-sm">
         <!-- <thead> -->
         <tr>
-          <th>File Name</th>
-          <th>Date</th>
-          <th>Delete</th>
+            <th>File Name</th>
+            <th>Date</th>
+            <th>Delete</th>
         </tr>
         <!-- </thead> -->
         <!-- <tbody> -->
         <tr>
-          <td>Physics Book</td>
-          <td>20/02/2019</td>
-          <td>
-            <p data-placement="top" data-toggle="tooltip" title="Delete">
-              <button
-                class="btn btn-danger btn-xs"
-                data-title="Delete"
-                data-toggle="modal"
-                data-target="#delete"
-              >
-                <span><i class="fas fa-trash-alt"></i></span>
-              </button>
-            </p>
-          </td>
+            <td>Physics Book</td>
+            <td>20/02/2019</td>
+            <td>
+                <p data-placement="top" data-toggle="tooltip" title="Delete">
+                    <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
+                        <span><i class="fas fa-trash-alt"></i></span>
+                    </button>
+                </p>
+            </td>
         </tr>
         <tr>
-          <td>Physics Book</td>
-          <td>20/02/2019</td>
-          <td>
-            <p data-placement="top" data-toggle="tooltip" title="Delete">
-              <button
-                class="btn btn-danger btn-xs"
-                data-title="Delete"
-                data-toggle="modal"
-                data-target="#delete"
-              >
-                <span><i class="fas fa-trash-alt"></i></span>
-              </button>
-            </p>
-          </td>
+            <td>Physics Book</td>
+            <td>20/02/2019</td>
+            <td>
+                <p data-placement="top" data-toggle="tooltip" title="Delete">
+                    <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
+                        <span><i class="fas fa-trash-alt"></i></span>
+                    </button>
+                </p>
+            </td>
         </tr>
         <tr>
-          <td>Physics Book</td>
-          <td>20/02/2019</td>
-          <td>
-            <p data-placement="top" data-toggle="tooltip" title="Delete">
-              <button
-                class="btn btn-danger btn-xs"
-                data-title="Delete"
-                data-toggle="modal"
-                data-target="#delete"
-              >
-                <span><i class="fas fa-trash-alt"></i></span>
-              </button>
-            </p>
-          </td>
+            <td>Physics Book</td>
+            <td>20/02/2019</td>
+            <td>
+                <p data-placement="top" data-toggle="tooltip" title="Delete">
+                    <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
+                        <span><i class="fas fa-trash-alt"></i></span>
+                    </button>
+                </p>
+            </td>
         </tr>
         <!-- </tbody> -->
-      </table>
-    </div>
+    </table>
+</div>
 
-    <!-- Upload Resource End -->
-    <div class="modal fade top" id="editModal">
-      <div class="modal-dialog">
+<!-- Upload Resource End -->
+<div class="modal fade top" id="editModal">
+    <div class="modal-dialog">
         <!-- Edit Form -->
         <form>
-          <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">Edit</h4>
-              <button class="close" data-dismiss="modal" type="button">
-                &times;
-              </button>
-            </div>
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit</h4>
+                    <button class="close" data-dismiss="modal" type="button">
+                        &times;
+                    </button>
+                </div>
 
-            <!-- Modal body -->
-            <div class="modal-body">
-              <div class="form-group">
-                <!-- <label for="text">Title:</label> -->
-                <input
-                  class="form-control"
-                  placeholder="Home work"
-                  type="text"
-                />
-              </div>
-              <div class="form-group">
-                <!-- <label for="date">Date:</label> -->
-                <input type="date" class="form-control" />
-              </div>
-              <div class="form-group">
-                <!-- <label for="textarea">Description:</label> -->
-                <textarea
-                  class="form-control"
-                  rows="3"
-                  placeholder="Description"
-                ></textarea>
-              </div>
-              <!-- <div class="custom-control custom-checkbox">
-                <input
-                  class="custom-control-input"
-                  id="customCheck"
-                  name="example1"
-                  type="checkbox"
-                />
-                <label class="custom-control-label" for="customCheck"
-                  >Remember me</label
-                >
-              </div> -->
-            </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <!-- <label for="text">Title:</label> -->
+                        <input class="form-control" placeholder="Home work" type="text"/>
+                    </div>
+                    <div class="form-group">
+                        <!-- <label for="date">Date:</label> -->
+                        <input type="date" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <!-- <label for="textarea">Description:</label> -->
+                        <textarea class="form-control" rows="3" placeholder="Description"></textarea>
+                    </div>
+                    <!-- <div class="custom-control custom-checkbox">
+                        <input
+                          class="custom-control-input"
+                          id="customCheck"
+                          name="example1"
+                          type="checkbox"
+                        />
+                        <label class="custom-control-label" for="customCheck"
+                          >Remember me</label
+                        >
+                      </div> -->
+                </div>
 
-            <!-- Modal footer -->
-            <div class="modal-footer d-block">
-              <button
-                type="submit"
-                class="btn btn-outline-primary btn-block"
-                style="width: 100%;"
-              >
-                <i class="fas fa-check-circle" aria-hidden="true"></i> Update
-              </button>
+                <!-- Modal footer -->
+                <div class="modal-footer d-block">
+                    <button type="submit" class="btn btn-outline-primary btn-block" style="width: 100%;">
+                        <i class="fas fa-check-circle" aria-hidden="true"></i> Update
+                    </button>
+                </div>
             </div>
-          </div>
         </form>
         <!-- Form End-->
-      </div>
     </div>
-    <!-- Edit modal -->
+</div>
+<!-- Edit modal -->
 
 <!-- calander modal -->
-    <div class="modal fade" id="calanderModal" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
-      <div class="modal-dialog" role="document">
+<div class="modal fade" id="calanderModal" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalLabel">Choose Your Date</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <input type="text" class="form-control" data-toggle="datepicker">
-          </div>
-          <div class="modal-footer">
-            
-            <button type="submit" class="btn btn-outline-primary btn-block" data-dismiss="modal"><span><i class="far fa-calendar-check"></i></span> Submit</button>
-          </div>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Choose Your Date</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" data-toggle="datepicker">
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-outline-primary btn-block" data-dismiss="modal"><span><i
+                                class="far fa-calendar-check"></i></span> Submit
+                </button>
+            </div>
         </div>
-      </div>
     </div>
+</div>
   </div>
 
-    <!-- Script Tags -->
-    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/datepicker.js"></script>
-    <script src="/assets/js/calander.js"></script>
-    <script src="/assets/js/table.js"></script>
-  </body>
+<!-- Script Tags -->
+<script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/datepicker.js"></script>
+<script src="/assets/js/calander.js"></script>
+<script src="/assets/js/table.js"></script>
+</body>
+
 </html>
