@@ -46,9 +46,17 @@ func (st *StudentUsecase) ViewClass(classRoom models.ClassRoom) ([]models.Studen
 }
 
 func (st *StudentUsecase) ViewResources(subject models.Subject) ([]models.Resource, error) {
-	return nil, nil
+	data, err := st.studentRepo.ViewResources(subject)
+	if err != nil {
+		return data, err
+	}
+	return data, nil
 }
 
 func (st *StudentUsecase) ViewResult(s models.Student) ([]models.Result, error) {
-	return nil, nil
+	data, err := st.studentRepo.ViewResult(s)
+	if err != nil {
+		return data, err
+	}
+	return data, nil
 }
