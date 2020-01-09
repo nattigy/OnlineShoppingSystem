@@ -1,13 +1,16 @@
-package models
+package gorm_models
+
+import "github.com/jinzhu/gorm"
 
 type Task struct {
-	Id               int
+	gorm.Model
 	Title            string
 	Description      string
 	ShortDescription string
-	ClassRoomId      int
-	ResourceId       int
 	SubjectId        int
-	PostedDate       string
+	Subject          Subject
+	ClassRoomId      int
+	ClassRoom        ClassRoom
 	Deadline         string
+	Comments         []Comment
 }

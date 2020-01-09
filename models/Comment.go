@@ -1,10 +1,14 @@
-package models
+package gorm_models
 
-import "time"
+import (
+	"github.com/jinzhu/gorm"
+)
 
 type Comment struct {
+	gorm.Model
 	Data      string
-	Date      time.Duration
-	StudentId Student
-	TaskId    Task
+	TaskId    int
+	Task      Task
+	StudentId int
+	Student   Student
 }

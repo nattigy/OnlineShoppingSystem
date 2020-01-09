@@ -1,4 +1,4 @@
-package models
+package gorm_models
 
 type Teacher struct {
 	Id         int

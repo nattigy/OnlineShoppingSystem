@@ -1,15 +1,15 @@
-package models
-
-import "github.com/jinzhu/gorm"
+package gorm_models
 
 type Student struct {
-	gorm.Model
-	Id         int    `json:"id"`
-	FirstName  string `json:"first_name"`
-	MiddleName string `json:"middle_name"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	ClassRoom  int    `json:"class_room"`
-	ParentName Parent `json:"parent_name"`
-	ProfilePic string `json:"profile_pic"`
+	Id          int
+	FirstName   string
+	MiddleName  string
+	Email       string
+	Password    string
+	ClassRoomId int
+	ClassRoom   ClassRoom
+	ParentId    int
+	Parent      Parent
+	ProfilePic  string
+	Result      []Result
 }
