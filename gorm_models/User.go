@@ -7,6 +7,6 @@ type User struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Role     string `json:"role"`
-	LoggedIn bool `json:"logged_in"`
+	LoggedIn bool   `json:"logged_in"`
 	//ProfilePic string
 }

@@ -1,6 +1,6 @@
 package teacher
 
-import "github.com/nattigy/parentschoolcommunicationsystem/models"
+import "github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
 
 type TeacherRepository interface {
 	MakeNewPost(task models.Task, c models.ClassRoom) error

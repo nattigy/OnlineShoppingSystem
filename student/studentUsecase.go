@@ -1,6 +1,6 @@
 package student
 
-import "github.com/nattigy/parentschoolcommunicationsystem/models"
+import "github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
 
 type StudentUsecase interface {
 	ViewTasks(c models.ClassRoom, s models.Subject) ([]models.Task, error)

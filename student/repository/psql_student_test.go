@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/database"
-	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
 	"testing"
 )
 

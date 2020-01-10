@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
 )
 
 type GormStudentRepository struct {

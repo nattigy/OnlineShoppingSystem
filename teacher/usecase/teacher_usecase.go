@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
 	"github.com/nattigy/parentschoolcommunicationsystem/teacher"
 )
 
