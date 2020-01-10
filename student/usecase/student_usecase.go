@@ -45,7 +45,7 @@ func (st *StudentUsecase) ViewClass(classRoom models.ClassRoom) ([]models.Studen
 	return nil, nil
 }
 
-func (st *StudentUsecase) ViewResources(subject models.Subject) ([]models.Resource, error) {
+func (st *StudentUsecase) ViewResources(subject models.Subject) ([]models.Resources, error) {
 	data, err := st.studentRepo.ViewResources(subject)
 	if err != nil {
 		return data, err

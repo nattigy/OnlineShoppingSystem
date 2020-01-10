@@ -1,12 +1,12 @@
-package gorm_models
+package models
 
 import "github.com/jinzhu/gorm"
 
 type Resources struct {
 	gorm.Model
-	SubjectId   int
+	SubjectId   uint
 	Subject     Subject
 	Title       string
 	Description string
-	path        string
+	Path        string
 }

@@ -1,10 +1,10 @@
-package gorm_models
+package models
 
 type Subject struct {
-	Id          int
-	TeacherId   int
+	Id          uint
+	TeacherId   uint
 	Teacher     Teacher
-	ClassRoomId int
+	ClassRoomId uint
 	ClassRoom   ClassRoom
 	SubjectName string
 	Tasks       []Task

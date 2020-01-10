@@ -1,10 +1,10 @@
-package gorm_models
+package models
 
 type ClassRoom struct {
-	Id         int
+	Id         uint
 	GradeLevel int
 	Section    string
-	HomeRoom   int
+	HomeRoom   uint
 	Subjects   []Subject
 	Student    []Student
 	Teacher    Teacher

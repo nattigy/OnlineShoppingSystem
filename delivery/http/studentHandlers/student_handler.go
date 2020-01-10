@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/authenticate"
-	"github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
+	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/student/usecase"
 	"html/template"
 	"net/http"
@@ -35,8 +35,9 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 		Section:    "a",
 	}
 	id, _ := strconv.Atoi(r.FormValue("id"))
+	u := uint(id)
 	subject := models.Subject{
-		Id: id,
+		Id: u,
 	}
 	role := authenticate.Role{
 		Student: true,

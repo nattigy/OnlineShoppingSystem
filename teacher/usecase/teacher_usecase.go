@@ -25,7 +25,7 @@ func (t *TeacherUsecase) RemoveTask(task models.Task) error {
 	return nil
 }
 
-func (t *TeacherUsecase) UploadResource(resource models.Resource, s models.Subject, room models.ClassRoom) error {
+func (t *TeacherUsecase) UploadResource(resource models.Resources, s models.Subject, room models.ClassRoom) error {
 	return nil
 }
 

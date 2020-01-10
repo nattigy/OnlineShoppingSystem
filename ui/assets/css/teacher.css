@@ -1,38 +1,45 @@
 .navbar-toggler {
-  height: 34px;
-  display: flex;
-  margin-left: auto;
-  margin-right: 10px;
+    height: 34px;
+    display: flex;
+    margin-left: auto;
+    margin-right: 10px;
 }
+
 .navbar-toggler-icon {
-  height: 24px;
+    height: 24px;
 }
+
 .navbar-nav {
-  display: flex;
-  margin-left: auto;
+    display: flex;
+    margin-left: auto;
 }
+
 .top {
-  top: 10% !important;
+    top: 10% !important;
 }
+
 .top-to-bottom {
-  height: 95vh;
+    height: 95vh;
 }
+
 .min-width {
-  width: 300px;
+    width: 300px;
 }
 
 th {
-  background-color: #ccc;
-  color: black;
+    background-color: #ccc;
+    color: black;
 }
+
 @media (max-width: 750px) {
-  .min-width {
-    width: 0 !important;
-    overflow: hidden;
-    flex: 0 0 0;
-  }
-  .col-9 {
-    flex: 0 0 95%;
-    max-width: 95%;
-  }
+    .min-width {
+        width: 0 !important;
+        overflow: hidden;
+        flex: 0 0 0;
+    }
+
+    .col-9 {
+        flex: 0 0 95%;
+        max-width: 95%;
+    }
 }

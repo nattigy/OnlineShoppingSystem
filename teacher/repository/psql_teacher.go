@@ -25,7 +25,7 @@ func (t *PsqlTeacherRepository) RemoveTask(task models.Task) error {
 	return nil
 }
 
-func (t *PsqlTeacherRepository) UploadResource(resource models.Resource, s models.Subject, room models.ClassRoom) error {
+func (t *PsqlTeacherRepository) UploadResource(resource models.Resources, s models.Subject, room models.ClassRoom) error {
 	return nil
 }
 

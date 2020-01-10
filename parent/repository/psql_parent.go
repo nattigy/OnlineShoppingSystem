@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
+	"github.com/nattigy/parentschoolcommunicationsystem/models"
 )
 
 type PsqlParentRepository struct {
@@ -13,6 +13,6 @@ func NewPsqlParentRepository(Conn *sql.DB) *PsqlParentRepository {
 	return &PsqlParentRepository{conn: Conn}
 }
 
-func (p *PsqlParentRepository) ViewGrade(student models.Student) (models.Result, error) {
-	return models.Result{}, nil
+func (p *PsqlParentRepository) ViewGrade(student models.Student) ([]models.Result, error) {
+	return []models.Result{}, nil
 }

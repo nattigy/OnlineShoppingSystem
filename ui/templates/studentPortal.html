@@ -29,13 +29,13 @@
                         {{$task = $item}}
                         <div onclick="UpdateDescription({{$item}})" class="collapse show" data-parent="#accordion"
                              id="collapseOne">
-                <div class="card">
-                  <div class="card-body p-2">
-                      <h6 class="card-title m-0">{{.Title}}</h6>
-                      <p class="card-text m-0 text-muted small">{{.ShortDescription}}</p>
-                  </div>
-                </div>
-              </div>
+                            <div class="card">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title m-0">{{.Title}}</h6>
+                                    <p class="card-text m-0 text-muted small">{{.ShortDescription}}</p>
+                                </div>
+                            </div>
+                        </div>
                     {{end}}
                 </div>
 
@@ -81,26 +81,26 @@
         {{template "description" $task}}
         {{define "description"}}
             <div id="contentDescription" style="display: none">
-        <div class="card mt-4 shadow-sm">
-          <div class="card-body">
-              <h4 class="card-title" id="taskTitle">{{.Title}}</h4>
-              <h6 class="card-title text-muted">Description</h6>
-              <p class="card-text" id="taskDescription">{{.Description}}</p>
-            <a href="#" class="card-link">Resources</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-        <!-- Comments -->
-        <div class="media border p-1 small mt-2">
-            <img src="../assets/img/tech_tableturner.jpg" alt="John Doe" class="mr-3 mt-1 rounded-circle"
-                 style="width:60px;">
-          <div class="media-body">
-              <h6>John Doe
-                  <small><i>Posted on February 19, 2016</i></small>
-            </h6>
-            <p class="m-0">Lorem ipsum...</p>
-          </div>
-        </div>
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title" id="taskTitle">{{.Title}}</h4>
+                        <h6 class="card-title text-muted">Description</h6>
+                        <p class="card-text" id="taskDescription">{{.Description}}</p>
+                        <a href="#" class="card-link">Resources</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+                <!-- Comments -->
+                <div class="media border p-1 small mt-2">
+                    <img src="../assets/img/tech_tableturner.jpg" alt="John Doe" class="mr-3 mt-1 rounded-circle"
+                         style="width:60px;">
+                    <div class="media-body">
+                        <h6>John Doe
+                            <small><i>Posted on February 19, 2016</i></small>
+                        </h6>
+                        <p class="m-0">Lorem ipsum...</p>
+                    </div>
+                </div>
             </div>
             <div class="jumbotron" id="notification">
                 <h1>Noting has been posted yet</h1>
@@ -110,13 +110,13 @@
         {{template "comment" $task}}
         {{define "comment"}}
             <form action="/student/comment" method="post">
-        <div class="input-group mb-3 md-5 mt-2 input-group-sm">
-            <input type="text" class="form-control" name="comment" placeholder="Your comment"/>
-            <input type="hidden" name="taskId" id="taskID" value="{{.Id}}"/>
-          <div class="input-group-prepend">
-              <button class="btn">Send</button>
-          </div>
-        </div>
+                <div class="input-group mb-3 md-5 mt-2 input-group-sm">
+                    <input type="text" class="form-control" name="comment" placeholder="Your comment"/>
+                    <input type="hidden" name="taskId" id="taskID" value="{{.Id}}"/>
+                    <div class="input-group-prepend">
+                        <button class="btn">Send</button>
+                    </div>
+                </div>
             </form>
         {{end}}
     </div>

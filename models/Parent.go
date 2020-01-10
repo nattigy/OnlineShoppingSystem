@@ -1,7 +1,7 @@
-package gorm_models
+package models
 
-type Teacher struct {
-	Id         int
+type Parent struct {
+	Id         uint
 	FirstName  string
 	MiddleName string
 	Email      string

@@ -1,10 +1,10 @@
-package gorm_models
+package models
 
 type Result struct {
-	Id         int
-	SubjectId  int
+	Id         uint
+	SubjectId  uint
 	Subject    Subject
-	StudentId  int
+	StudentId  uint
 	Student    Student
 	Assessment int
 	Test       int

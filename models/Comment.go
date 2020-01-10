@@ -1,4 +1,4 @@
-package gorm_models
+package models
 
 import (
 	"github.com/jinzhu/gorm"
@@ -7,8 +7,8 @@ import (
 type Comment struct {
 	gorm.Model
 	Data      string
-	TaskId    int
+	TaskId    uint
 	Task      Task
-	StudentId int
+	StudentId uint
 	Student   Student
 }

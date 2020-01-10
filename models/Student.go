@@ -1,14 +1,14 @@
-package gorm_models
+package models
 
 type Student struct {
-	Id          int
+	Id          uint
 	FirstName   string
 	MiddleName  string
 	Email       string
 	Password    string
-	ClassRoomId int
+	ClassRoomId uint
 	ClassRoom   ClassRoom
-	ParentId    int
+	ParentId    uint
 	Parent      Parent
 	ProfilePic  string
 	Result      []Result

@@ -23,8 +23,8 @@ func (ps *PsqlStudentRepository) ViewTasks(c models.ClassRoom, s models.Subject)
 	var task models.Task
 
 	for data.Next() {
-		if err := data.Scan(&task.Id, &task.Title, &task.Description, &task.ShortDescription, &task.ClassRoomId, &task.ResourceId,
-			&task.SubjectId, &task.PostedDate, &task.Deadline,
+		if err := data.Scan(&task.Id, &task.Title, &task.Description, &task.ShortDescription, &task.ClassRoomId,
+			&task.SubjectId, &task.CreatedAt, &task.Deadline,
 		); err != nil {
 			return tasks, err
 		}
@@ -63,13 +63,13 @@ func (ps *PsqlStudentRepository) ViewClass(classRoom models.ClassRoom) ([]models
 	return students, err
 }
 
-func (ps *PsqlStudentRepository) ViewResources(subject models.Subject) ([]models.Resource, error) {
+func (ps *PsqlStudentRepository) ViewResources(subject models.Subject) ([]models.Resources, error) {
 	data, err := ps.conn.Query("SELECT * FROM resources WHERE subject_id=$1", subject.Id)
-	var resources []models.Resource
+	var resources []models.Resources
 	if err != nil {
 		return resources, err
 	}
-	var resource models.Resource
+	var resource models.Resources
 
 	for data.Next() {
 		if err := data.Scan(&resource.SubjectId, &resource.Title, &resource.Description, &resource.Path); err != nil {
