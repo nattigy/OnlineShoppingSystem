@@ -14,5 +14,9 @@ func NewParentUsecase(parentRepo parent.ParentRepository) *ParentUsecase {
 }
 
 func (p *ParentUsecase) ViewGrade(student models.Student) ([]models.Result, error) {
-	return []models.Result{}, nil
+	data, err := p.ViewGrade(student)
+	if err != nil {
+		return data, err
+	}
+	return data, nil
 }
