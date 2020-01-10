@@ -49,16 +49,15 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 		Role:     role,
 		Loggedin: true,
 	}
-	var stu models.Student
+	var stu models.User
 	cookie, _ := r.Cookie("session")
 	bb := []byte(cookie.Value)
-
-	fmt.Println(string(bb))
+	fmt.Println("bb printed", string(bb))
 	err := json.Unmarshal(bb, &stu)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("error", err)
 	}
-	fmt.Println(stu)
+	fmt.Println("stru printed", stu)
 
 	data, err := p.SUsecase.ViewTasks(classRoom, subject)
 	if err != nil {
@@ -88,9 +87,7 @@ func (p *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
 	comment := r.FormValue(key1)
 	id := r.FormValue(key2)
 
-	task := models.Task{
-		Id: 12,
-	}
+	task := models.Task{}
 
 	student := models.Student{
 		Id: 12,
