@@ -1,6 +1,6 @@
 package teacher
 
-import "github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
+import "github.com/nattigy/parentschoolcommunicationsystem/models"
 
 type TeacherUsecase interface {
 	MakeNewPost(task models.Task) (bool, error)

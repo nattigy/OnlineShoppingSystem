@@ -3,7 +3,7 @@ package usecase
 import (
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/database"
-	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
 	"github.com/nattigy/parentschoolcommunicationsystem/student/repository"
 	"testing"
 )
@@ -11,12 +11,12 @@ import (
 func TestViewTasks(t *testing.T) {
 	studentRepo := repository.NewPsqlStudentRepository(database.Config())
 	v := NewStudentUsecase(studentRepo)
-	c := models.ClassRoom{
+	c := gorm_models.ClassRoom{
 		Id:         12,
 		GradeLevel: 12,
 		Section:    "a",
 	}
-	s := models.Subject{
+	s := gorm_models.Subject{
 		Id: 31,
 	}
 	data, err := v.ViewTasks(c, s)
