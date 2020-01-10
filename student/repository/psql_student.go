@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/nattigy/parentschoolcommunicationsystem/gorm_models"
+	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"time"
 )
 
