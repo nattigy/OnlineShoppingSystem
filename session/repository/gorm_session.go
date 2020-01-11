@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 )
@@ -25,21 +26,23 @@ func (s *SessionRepository) Sessions() ([]models.Session, []error) {
 	return sess, err
 }
 
-func (s *SessionRepository) UpdateSession(sess *models.Session) (*models.Session, []error) {
+func (s *SessionRepository) UpdateSession(sess models.Session) (models.Session, []error) {
 	mysession := sess
 	err := s.conn.Update(&mysession).GetErrors()
 	return mysession, err
 }
 
-func (s *SessionRepository) StoreSession(sess *models.Session) (*models.Session, []error) {
+func (s *SessionRepository) StoreSession(sess models.Session) (models.Session, []error) {
 	session := sess
+	fmt.Println("session tobe stored", sess)
 	err := s.conn.Create(&session).GetErrors()
 	return session, err
 }
 
 func (s *SessionRepository) GetSession(value string) (models.Session, []error) {
 	var sess models.Session
-	err := s.conn.Where("uuid = ?").First(&sess).GetErrors()
+	err := s.conn.Where("uuid = ?", value).First(&sess).GetErrors()
+	fmt.Println(err)
 	return sess, err
 }
 

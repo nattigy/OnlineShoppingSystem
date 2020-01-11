@@ -12,7 +12,6 @@ import (
 	"github.com/satori/uuid"
 	"html/template"
 	"net/http"
-	"time"
 )
 
 type LoginHandler struct {
@@ -38,8 +37,6 @@ func (l *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	auth, role, err := l.Authenticate(user)
 	if err != nil {
-		res, _ := w.Write([]byte("0"))
-		fmt.Println(res, err)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -49,16 +46,21 @@ func (l *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 		role.LoggedIn = true
 		value, _ := uuid.NewV4()
 
-		if err != nil {
-			c := &http.Cookie{
-				Name:     "session",
-				Value:    "",
-				Path:     "/",
-				MaxAge:   0,
-				Expires:  time.Unix(0, 0),
-				HttpOnly: true,
+		if err == nil {
+			u, err := l.session.GetSession(cookie.Value)
+			if u.Role == utility.Student {
+				http.Redirect(w, r, "/student/viewTask?id=1", http.StatusSeeOther)
+				return
+			} else if u.Role == utility.Teacher {
+				http.Redirect(w, r, "/teacher", http.StatusSeeOther)
+				return
+			} else if u.Role == utility.Parent {
+				http.Redirect(w, r, "/parent", http.StatusSeeOther)
+				return
 			}
-			http.SetCookie(w, c)
+			if err != nil {
+
+			}
 		}
 
 		cookie = &http.Cookie{
@@ -69,15 +71,18 @@ func (l *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 		}
 		http.SetCookie(w, cookie)
 
-		newSession := models.Session{Email: role.Email, UserID: role.Id, Uuid: cookie.Value}
-		l.session.StoreSession(&newSession)
+		newSession := models.Session{Email: role.Email, UserID: role.Id, Uuid: cookie.Value, Role: role.Role}
+		l.session.StoreSession(newSession)
 
 		if role.Role == utility.Student {
-			http.Redirect(w, r, "/student/viewTask", http.StatusSeeOther)
+			fmt.Println("here student")
+			http.Redirect(w, r, "/student/viewTask?id=1", http.StatusSeeOther)
 		} else if role.Role == utility.Teacher {
-			http.Redirect(w, r, "/teacher", http.StatusSeeOther)
+			fmt.Println("here teacher")
+			http.Redirect(w, r, "/teacher/makeNewPost", http.StatusSeeOther)
 		} else if role.Role == utility.Parent {
-			http.Redirect(w, r, "/parent", http.StatusSeeOther)
+			fmt.Println("here parent")
+			http.Redirect(w, r, "/parent/viewGrade", http.StatusSeeOther)
 		}
 	}
 }

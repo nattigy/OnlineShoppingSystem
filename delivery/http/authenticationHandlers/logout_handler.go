@@ -33,6 +33,5 @@ func (l *LogoutHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 	}
 	http.SetCookie(w, cookie)
-	_, _ = w.Write([]byte("0"))
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

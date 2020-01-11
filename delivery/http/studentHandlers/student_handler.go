@@ -28,7 +28,6 @@ type Info struct {
 }
 
 func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
-
 	user, err := p.Session.Check(w, r)
 	if err != nil {
 		fmt.Println(err)

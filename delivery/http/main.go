@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
-	"github.com/nattigy/parentschoolcommunicationsystem/authenticate"
 	"github.com/nattigy/parentschoolcommunicationsystem/database"
+	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/authenticationHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/utility"
 	"html/template"
@@ -41,11 +41,7 @@ func main() {
 	}
 	defer gormdb.Close()
 
-	CreateTables(gormdb)
-
-	//var task []models.Task
-	//gormdb.Where("class_room_id = ? AND subject_id = ?", 1, 1).Find(&task)
-	//fmt.Println(task)
+	//CreateTables(gormdb)
 
 	session := _sessRepo.NewSessionRepository(gormdb)
 	sessionUSecase := _sessUsecase.NewSessionUsecase(session)
@@ -65,7 +61,7 @@ func main() {
 
 	teacherRepo := _techRepo.NewGormTeacherRepository(gormdb)
 	teacherUsecase := _techUsecase.NewTeacherUsecase(teacherRepo)
-	techHandlers := _techHandlers.NewTeacherHandler(templ, *teacherUsecase)
+	techHandlers := _techHandlers.NewTeacherHandler(templ, *teacherUsecase, sessionUSecase, utiity)
 
 	mux.HandleFunc("/teacher/makeNewPost", techHandlers.MakeNewPost)
 	mux.HandleFunc("/teacher/editPost", techHandlers.EditPost)
@@ -77,18 +73,20 @@ func main() {
 
 	parentRepo := _parRepo.NewGormParentRepository(gormdb)
 	parentUsecase := _parUsecase.NewParentUsecase(parentRepo)
-	parHandlers := _parHandlers.NewParentHandler(templ, *parentUsecase)
+	parHandlers := _parHandlers.NewParentHandler(templ, *parentUsecase, sessionUSecase, utiity)
 
 	mux.HandleFunc("/parent/viewGrade", parHandlers.ViewGrade)
 
-	mux.HandleFunc("/login", authenticate.HandelLogin)
-	mux.HandleFunc("/", Home)
+	loginHandler := authenticationHandlers.NewLoginHandler(templ, studentUsecase, teacherUsecase, parentUsecase, sessionUSecase)
+	logoutHandler := authenticationHandlers.NewLogoutHandler(templ, studentUsecase, teacherUsecase, parentUsecase, sessionUSecase)
+
+	homePageHandler := authenticationHandlers.NewHomePageHandler(templ, studentUsecase, teacherUsecase, parentUsecase, sessionUSecase)
+
+	mux.HandleFunc("/login", loginHandler.Login)
+	mux.HandleFunc("/logout", logoutHandler.Logout)
+	mux.HandleFunc("/", homePageHandler.Home)
 
 	_ = http.ListenAndServe(":3000", mux)
-}
-
-func Home(w http.ResponseWriter, r *http.Request) {
-	_ = templ.ExecuteTemplate(w, "index.html", "here")
 }
 
 func CreateTables(gormdb *gorm.DB) {
@@ -131,9 +129,9 @@ func CreateTables(gormdb *gorm.DB) {
 	student2 := models.Student{FirstName: "Moti", MiddleName: "Dinsa", Email: "moti@gmail.com", Password: "1234", ClassRoomId: 1, ParentId: 1}
 	comment := models.Comment{StudentId: 1, TaskId: 1, Data: "nati commenting"}
 	comment2 := models.Comment{StudentId: 1, TaskId: 1, Data: "moti commenting"}
-	user1 := models.User{Id: 1, Password: "1234", Email: "nati@gmail.com"}
-	user2 := models.User{Id: 10, Password: "1234", Email: "aman@gmail.com"}
-	user3 := models.User{Id: 20, Password: "1234", Email: "dinsa@gmail.com"}
+	user1 := models.User{Id: 1, Password: "1234", Email: "nati@gmail.com", Role: "student"}
+	user2 := models.User{Id: 10, Password: "1234", Email: "aman@gmail.com", Role: "teacher"}
+	user3 := models.User{Id: 20, Password: "1234", Email: "dinsa@gmail.com", Role: "parent"}
 
 	fmt.Println(gormdb.Create(&teacher))
 	fmt.Println(gormdb.Create(&teacher2))
