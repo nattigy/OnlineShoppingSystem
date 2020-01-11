@@ -22,9 +22,13 @@ func NewStudentHandler(templ *template.Template, SUsecase usecase.StudentUsecase
 	return &StudentHandler{templ: templ, SUsecase: SUsecase, Session: session, utility: utility}
 }
 
-type Info struct {
-	Data []models.Task
-	User models.User
+type StudentInfo struct {
+	User          models.User
+	Tasks         []models.Task
+	UpdateProfile models.Student
+	Resources     []models.Resources
+	Result        []models.Result
+	ClassMates    []models.Student
 }
 
 func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
@@ -51,20 +55,15 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	in := Info{
-		Data: data,
-		User: user,
+	in := StudentInfo{
+		Tasks: data,
+		User:  user,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
 	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
 	if err != nil {
 		fmt.Println(err)
 	}
-}
-
-func OnCardCliked(r string) string {
-	fmt.Println(r)
-	return "hello"
 }
 
 func (p *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
@@ -106,7 +105,15 @@ func (p *StudentHandler) StudentUpdateProfile(w http.ResponseWriter, r *http.Req
 		fmt.Println("Id not found")
 		return
 	}
-
+	in := StudentInfo{
+		User:          user,
+		UpdateProfile: models.Student{Email: user.Email, Password: user.Password},
+	}
+	//_ = json.NewEncoder(w).Encode(data)
+	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (p *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
@@ -119,7 +126,15 @@ func (p *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
-
+	in := StudentInfo{
+		User:       user,
+		ClassMates: []models.Student{},
+	}
+	//_ = json.NewEncoder(w).Encode(data)
+	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (p *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) {
@@ -132,7 +147,15 @@ func (p *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
-
+	in := StudentInfo{
+		User:      user,
+		Resources: []models.Resources{},
+	}
+	//_ = json.NewEncoder(w).Encode(data)
+	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (p *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
@@ -145,5 +168,13 @@ func (p *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
-
+	in := StudentInfo{
+		User:   user,
+		Result: []models.Result{},
+	}
+	//_ = json.NewEncoder(w).Encode(data)
+	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

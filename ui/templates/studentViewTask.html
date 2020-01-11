@@ -1,0 +1,108 @@
+{{define "studentViewTask"}}
+    {{.}}
+    <div class="container-fluid row">
+        <!-- Recent Column -->
+        <div class="col-3 min-width p-0 shadow-sm">
+            <div class="bg-light px-2 top-to-bottom">
+                <span class="badge badge-info">Assignments</span>
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header small p-2">
+                            <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                                Recently added
+                            </a>
+                        </div>
+                        {{$task := .}}
+                        {{range $index, $item := .}}
+                            {{$task = $item}}
+                            <div onclick="UpdateDescription({{$item}})" class="collapse show" data-parent="#accordion"
+                                 id="collapseOne">
+                                <div class="card">
+                                    <div class="card-body p-2">
+                                        <h6 class="card-title m-0">{{.Title}}</h6>
+                                        <p class="card-text m-0 text-muted small">{{.ShortDescription}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {{end}}
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header small p-2">
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                                Less than a week
+                            </a>
+                        </div>
+                        <div class="collapse" data-parent="#accordion" id="collapseTwo">
+                            <div class="card">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title m-0">Card title</h6>
+                                    <p class="card-text m-0 text-muted small">Some example text. Some example text.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header small p-2">
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                                Less than a month
+                            </a>
+                        </div>
+                        <div class="collapse" data-parent="#accordion" id="collapseThree">
+                            <div class="card">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title m-0">Card title</h6>
+                                    <p class="card-text m-0 text-muted small">Some example text. Some example text.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Recent Column End -->
+
+        <!-- Description Column -->
+        <div class="col-9">
+            <!-- Description -->
+            <div id="contentDescription" style="display: none">
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title" id="taskTitle">{{$task.Title}}</h4>
+                        <h6 class="card-title text-muted">Description</h6>
+                        <p class="card-text" id="taskDescription">{{$task.Description}}</p>
+                        <a href="#" class="card-link">Resources</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+                <!-- Comments -->
+                {{range $index, $item := $task.Comments}}
+                    <div class="media border p-1 small mt-2">
+                        <img src="../assets/img/tech_tableturner.jpg" alt="John Doe" class="mr-3 mt-1 rounded-circle"
+                             style="width:60px;">
+                        <div class="media-body">
+                            <h6>{{$item.Student.FirstName}}
+                                <small><i>Posted on {{$item.CreatedAt}}</i></small>
+                            </h6>
+                            <p class="m-0">{{$item.Data}}</p>
+                        </div>
+                    </div>
+                {{end}}
+            </div>
+            <div class="jumbotron" id="notification">
+                <h1>Click on tasks to see the detail</h1>
+            </div>
+            <!-- My Comment -->
+            <form action="/student/comment" method="post">
+                <div class="input-group mb-3 md-5 mt-2 input-group-sm">
+                    <input type="text" class="form-control" name="comment" placeholder="Your comment"/>
+                    <input type="hidden" name="taskId" id="taskID" value="{{$task.Id}}"/>
+                    <div class="input-group-prepend">
+                        <button class="btn">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{{end}}

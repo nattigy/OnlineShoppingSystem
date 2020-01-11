@@ -2,6 +2,7 @@ package parentHandlers
 
 import (
 	"fmt"
+	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/parent/usecase"
 	"github.com/nattigy/parentschoolcommunicationsystem/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/utility"
@@ -20,6 +21,11 @@ func NewParentHandler(templ *template.Template, PUsecase usecase.ParentUsecase, 
 	return &ParentHandler{templ: templ, PUsecase: PUsecase, Session: session, utility: utility}
 }
 
+type ParentInfo struct {
+	User   models.User
+	Result []models.Result
+}
+
 func (p *ParentHandler) ViewGrade(w http.ResponseWriter, r *http.Request) {
 	user, err := p.Session.Check(w, r)
 	if err != nil {
@@ -29,5 +35,14 @@ func (p *ParentHandler) ViewGrade(w http.ResponseWriter, r *http.Request) {
 	if user.Id == 0 {
 		fmt.Println("Id not found")
 		return
+	}
+	in := ParentInfo{
+		User:   user,
+		Result: []models.Result{},
+	}
+	//_ = json.NewEncoder(w).Encode(data)
+	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
 	}
 }

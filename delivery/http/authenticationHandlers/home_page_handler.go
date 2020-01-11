@@ -25,7 +25,7 @@ func NewHomePageHandler(tmpl *template.Template, student student.StudentUsecase,
 
 func (h *HomePageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		h.tmpl.ExecuteTemplate(w, "error.html", http.StatusSeeOther)
+		h.tmpl.ExecuteTemplate(w, "errorPage", http.StatusSeeOther)
 		return
 	}
 	cookie, err := r.Cookie("session")

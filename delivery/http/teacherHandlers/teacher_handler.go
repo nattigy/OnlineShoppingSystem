@@ -2,6 +2,7 @@ package teacherHandlers
 
 import (
 	"fmt"
+	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/teacher/usecase"
 	"github.com/nattigy/parentschoolcommunicationsystem/utility"
@@ -20,6 +21,13 @@ func NewTeacherHandler(templ *template.Template, TUsecase usecase.TeacherUsecase
 	return &TeacherHandler{templ: templ, TUsecase: TUsecase, Session: session, utility: utility}
 }
 
+type TeacherInfo struct {
+	User          models.User
+	Post          models.Task
+	Resource      models.Resources
+	UpdateProfile models.Teacher
+}
+
 func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {
 	user, err := t.Session.Check(w, r)
 	if err != nil {
@@ -30,7 +38,10 @@ func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
-	w.Write([]byte("make new post"))
+	in := TeacherInfo{
+		User: user,
+	}
+	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 }
 
 func (t *TeacherHandler) EditPost(w http.ResponseWriter, r *http.Request) {
@@ -43,6 +54,10 @@ func (t *TeacherHandler) EditPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+	in := TeacherInfo{
+		User: user,
+	}
+	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 }
 
 func (t *TeacherHandler) RemoveTask(w http.ResponseWriter, r *http.Request) {
@@ -55,6 +70,10 @@ func (t *TeacherHandler) RemoveTask(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+	in := TeacherInfo{
+		User: user,
+	}
+	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 }
 
 func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) {
@@ -67,6 +86,10 @@ func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) 
 		fmt.Println("Id not found")
 		return
 	}
+	in := TeacherInfo{
+		User: user,
+	}
+	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 }
 
 func (t *TeacherHandler) TeacherUpdateProfile(w http.ResponseWriter, r *http.Request) {
@@ -79,6 +102,10 @@ func (t *TeacherHandler) TeacherUpdateProfile(w http.ResponseWriter, r *http.Req
 		fmt.Println("Id not found")
 		return
 	}
+	in := TeacherInfo{
+		User: user,
+	}
+	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 }
 
 func (t *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
@@ -91,6 +118,10 @@ func (t *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+	in := TeacherInfo{
+		User: user,
+	}
+	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 }
 
 func (t *TeacherHandler) ViewClasses(w http.ResponseWriter, r *http.Request) {
@@ -103,4 +134,8 @@ func (t *TeacherHandler) ViewClasses(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+	in := TeacherInfo{
+		User: user,
+	}
+	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 }
