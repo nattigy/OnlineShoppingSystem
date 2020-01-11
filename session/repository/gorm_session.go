@@ -13,15 +13,15 @@ func NewSessionRepository(conn *gorm.DB) *SessionRepository {
 	return &SessionRepository{conn: conn}
 }
 
-func (s *SessionRepository) Sessions() ([]models.Session, []error) {
-	var sess []models.Session
-	err := s.conn.Find(&sess).GetErrors()
+func (s *SessionRepository) DeleteSession(id int) (models.Session, []error) {
+	sess := models.Session{UserID: uint(id)}
+	err := s.conn.Delete(&sess).GetErrors()
 	return sess, err
 }
 
-func (s *SessionRepository) DeleteSession(id uint) (models.Session, []error) {
-	sess := models.Session{UserID: id}
-	err := s.conn.Delete(&sess).GetErrors()
+func (s *SessionRepository) Sessions() ([]models.Session, []error) {
+	var sess []models.Session
+	err := s.conn.Find(&sess).GetErrors()
 	return sess, err
 }
 
@@ -41,4 +41,10 @@ func (s *SessionRepository) GetSession(value string) (models.Session, []error) {
 	var sess models.Session
 	err := s.conn.Where("uuid = ?").First(&sess).GetErrors()
 	return sess, err
+}
+
+func (s *SessionRepository) GetUser(id uint) (models.User, []error) {
+	user := models.User{}
+	err := s.conn.Where("id = ?", id).First(&user).GetErrors()
+	return user, err
 }

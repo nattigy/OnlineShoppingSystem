@@ -8,4 +8,5 @@ type SessionRepository interface {
 	UpdateSession(sess *models.Session) (*models.Session, []error)
 	StoreSession(sess *models.Session) (*models.Session, []error)
 	GetSession(value string) (models.Session, []error)
+	GetUser(id uint) (models.User, []error)
 }
