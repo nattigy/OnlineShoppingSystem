@@ -5,6 +5,7 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/session"
 	"net/http"
+	"strings"
 )
 
 type SessionUsecase struct {
@@ -48,8 +49,7 @@ func (s *SessionUsecase) Check(w http.ResponseWriter, r *http.Request) (models.U
 	}
 	sess, _ := s.GetSession(cookie.Value)
 	user, _ := s.GetUser(sess.UserID)
-	urlRole := r.URL.Path
-	if user.Role != urlRole {
+	if user.Role != checkUserRole(r.URL.Path) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return models.User{}, nil
 	}
@@ -60,4 +60,24 @@ func (s *SessionUsecase) Check(w http.ResponseWriter, r *http.Request) (models.U
 func (s *SessionUsecase) GetUser(id uint) (models.User, []error) {
 	data, err := s.session.GetUser(id)
 	return data, err
+}
+
+func checkUserRole(urlPath string) string {
+	splittedPath := strings.Split(urlPath, "")
+	var userRole string
+	ctr := 0
+	i := 0
+	for {
+		if ctr < 2 {
+			if splittedPath[i] == "/" {
+				ctr++
+			} else {
+				userRole += splittedPath[i]
+			}
+			i++
+		} else if ctr == 2 {
+			break
+		}
+	}
+	return userRole
 }

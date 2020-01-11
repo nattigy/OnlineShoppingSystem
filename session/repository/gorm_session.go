@@ -49,5 +49,6 @@ func (s *SessionRepository) GetSession(value string) (models.Session, []error) {
 func (s *SessionRepository) GetUser(id uint) (models.User, []error) {
 	user := models.User{}
 	err := s.conn.Where("id = ?", id).First(&user).GetErrors()
+	user.LoggedIn = true
 	return user, err
 }
