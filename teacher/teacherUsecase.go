@@ -3,7 +3,7 @@ package teacher
 import "github.com/nattigy/parentschoolcommunicationsystem/models"
 
 type TeacherUsecase interface {
-	MakeNewPost(task models.Task, classRoom models.ClassRoom) error
+	MakeNewPost(task models.Task, subject models.Subject) error
 	EditPost(task models.Task) error
 	RemoveTask(task models.Task) error
 	UploadResource(resource models.Resources, s models.Subject, room models.ClassRoom) error

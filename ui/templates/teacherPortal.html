@@ -14,12 +14,12 @@
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
 {{template "navbar.html" .User}}
 <!-- Page contents -->
-{{if .Post}}
-    {{template "teacherMakeNewPost" .Post}}
+{{if or .Post .FetchPost}}
+    {{template "teacherMakeNewPost" .Data.FetchPost}}
 {{else if .Resource}}
-    {{template "teacherUploadResource" .Resource}}
+    {{template "teacherUploadResource" .Data.Resource}}
 {{else if .UpdateProfile}}
-    {{template "teacherUpdateProfile" .UpdateProfile}}
+    {{template "teacherUpdateProfile" .Data.UpdateProfile}}
 {{else}}
     {{template "errorPage"}}
 {{end}}

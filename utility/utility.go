@@ -21,8 +21,16 @@ const (
 	Parent  string = "parent"
 )
 
-func (u *Utility) GetSubject(id uint) models.Subject {
+func (u *Utility) GetSubjectById(id uint) models.Subject {
 	subject := models.Subject{}
 	_ = u.conn.Where("id = ?", id).First(&subject).GetErrors()
 	return subject
+}
+
+func (u *Utility) GetSubjectByClassRoom(grade int, section string) (models.Subject, error) {
+	subject := models.Subject{}
+	classRoom := models.ClassRoom{}
+	errs := u.conn.Where("grade_level = ? AND section = ?", grade, section).Find(&classRoom).GetErrors()
+	errs = u.conn.Where("class_room_id = ?", classRoom.Id).Find(&subject).GetErrors()
+	return subject, errs[0]
 }

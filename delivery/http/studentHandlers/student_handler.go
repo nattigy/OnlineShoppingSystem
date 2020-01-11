@@ -45,7 +45,7 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 
 	classRoom := models.ClassRoom{
-		Id: p.utility.GetSubject(uint(id)).ClassRoomId,
+		Id: p.utility.GetSubjectById(uint(id)).ClassRoomId,
 	}
 	subject := models.Subject{
 		Id: uint(id),

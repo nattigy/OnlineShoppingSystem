@@ -8,6 +8,7 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/utility"
 	"html/template"
 	"net/http"
+	"strconv"
 )
 
 type TeacherHandler struct {
@@ -23,9 +24,21 @@ func NewTeacherHandler(templ *template.Template, TUsecase usecase.TeacherUsecase
 
 type TeacherInfo struct {
 	User          models.User
-	Post          models.Task
+	Post          bool
+	Edit          bool
+	Resource      bool
+	UpdateProfile bool
+	Students      bool
+	Data          data
+	FetchPost     bool
+	UploadResult  bool
+}
+
+type data struct {
 	Resource      models.Resources
 	UpdateProfile models.Teacher
+	Students      []models.Student
+	FetchPost     []models.Task
 }
 
 func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {
@@ -38,10 +51,36 @@ func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+
+	title := r.FormValue("title")
+	shortDescriptio := r.FormValue("shortDescription")
+	description := r.FormValue("description")
+	grade, _ := strconv.Atoi(r.FormValue("grade"))
+	section := r.FormValue("section")
+
+	newTask := models.Task{Title: title, ShortDescription: shortDescriptio, Description: description}
+	subject, err := t.utility.GetSubjectByClassRoom(grade, section)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if title != "" && shortDescriptio != "" && description != "" && grade != 0 && section != "" {
+		err = t.TUsecase.MakeNewPost(newTask, subject)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
 	in := TeacherInfo{
 		User: user,
+		Post: true,
 	}
-	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (t *TeacherHandler) EditPost(w http.ResponseWriter, r *http.Request) {
@@ -56,8 +95,12 @@ func (t *TeacherHandler) EditPost(w http.ResponseWriter, r *http.Request) {
 	}
 	in := TeacherInfo{
 		User: user,
+		Edit: true,
 	}
-	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (t *TeacherHandler) RemoveTask(w http.ResponseWriter, r *http.Request) {
@@ -73,7 +116,10 @@ func (t *TeacherHandler) RemoveTask(w http.ResponseWriter, r *http.Request) {
 	in := TeacherInfo{
 		User: user,
 	}
-	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) {
@@ -87,9 +133,14 @@ func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	in := TeacherInfo{
-		User: user,
+		User:     user,
+		Resource: true,
+		Data:     data{Resource: models.Resources{}},
 	}
-	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (t *TeacherHandler) TeacherUpdateProfile(w http.ResponseWriter, r *http.Request) {
@@ -103,9 +154,14 @@ func (t *TeacherHandler) TeacherUpdateProfile(w http.ResponseWriter, r *http.Req
 		return
 	}
 	in := TeacherInfo{
-		User: user,
+		User:          user,
+		UpdateProfile: true,
+		Data:          data{UpdateProfile: models.Teacher{}},
 	}
-	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (t *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
@@ -119,9 +175,13 @@ func (t *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	in := TeacherInfo{
-		User: user,
+		User:         user,
+		UploadResult: true,
 	}
-	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (t *TeacherHandler) ViewClasses(w http.ResponseWriter, r *http.Request) {
@@ -135,7 +195,12 @@ func (t *TeacherHandler) ViewClasses(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	in := TeacherInfo{
-		User: user,
+		User:     user,
+		Students: true,
+		Data:     data{Students: []models.Student{}},
 	}
-	t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
