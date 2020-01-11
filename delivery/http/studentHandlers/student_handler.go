@@ -1,11 +1,11 @@
 package studentHandlers
 
 import (
-	"encoding/json"
 	"fmt"
-	"github.com/nattigy/parentschoolcommunicationsystem/authenticate"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"github.com/nattigy/parentschoolcommunicationsystem/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/student/usecase"
+	"github.com/nattigy/parentschoolcommunicationsystem/utility"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -14,50 +14,39 @@ import (
 type StudentHandler struct {
 	templ    *template.Template
 	SUsecase usecase.StudentUsecase
+	Session  session.SessionUsecase
+	utility  utility.Utility
 }
 
-func NewStudentHandler(t *template.Template, us usecase.StudentUsecase) *StudentHandler {
-	return &StudentHandler{
-		templ:    t,
-		SUsecase: us,
-	}
+func NewStudentHandler(templ *template.Template, SUsecase usecase.StudentUsecase, session session.SessionUsecase, utility utility.Utility) *StudentHandler {
+	return &StudentHandler{templ: templ, SUsecase: SUsecase, Session: session, utility: utility}
 }
 
 type Info struct {
 	Data []models.Task
-	User authenticate.User
+	User models.User
 }
 
 func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
-	classRoom := models.ClassRoom{
-		Id:         12,
-		GradeLevel: 12,
-		Section:    "a",
+
+	user, err := p.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	u := uint(id)
-	subject := models.Subject{
-		Id: u,
-	}
-	role := authenticate.Role{
-		Student: true,
-		Teacher: false,
-		Parent:  false,
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
 	}
 
-	user := authenticate.User{
-		Role:     role,
-		Loggedin: true,
+	id, _ := strconv.Atoi(r.FormValue("id"))
+
+	classRoom := models.ClassRoom{
+		Id: p.utility.GetSubject(uint(id)).ClassRoomId,
 	}
-	var stu models.User
-	cookie, _ := r.Cookie("session")
-	bb := []byte(cookie.Value)
-	fmt.Println("bb printed", string(bb))
-	err := json.Unmarshal(bb, &stu)
-	if err != nil {
-		fmt.Println("error", err)
+	subject := models.Subject{
+		Id: uint(id),
 	}
-	fmt.Println("stru printed", stu)
 
 	data, err := p.SUsecase.ViewTasks(classRoom, subject)
 	if err != nil {
@@ -80,6 +69,15 @@ func OnCardCliked(r string) string {
 }
 
 func (p *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
+	user, err := p.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
+	}
 
 	key1 := "comment"
 	key2 := "taskId"
@@ -100,17 +98,53 @@ func (p *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
 }
 
 func (p *StudentHandler) StudentUpdateProfile(w http.ResponseWriter, r *http.Request) {
+	user, err := p.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
+	}
 
 }
 
 func (p *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
+	user, err := p.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
+	}
 
 }
 
 func (p *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) {
+	user, err := p.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
+	}
 
 }
 
 func (p *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
+	user, err := p.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
+	}
 
 }
