@@ -1,18 +1,13 @@
 {{define "studentResources"}}
     <h2>Resources</h2>
-
     <div class="container">
         <div><a href="/student/resources?id=1" name="subjectId">Maths</a></div>
         <div><a href="/student/resources?id=2" name="subjectId">Physics</a></div>
         {{range .}}
-
             <div>
-
                 <label for="">Title: {{.Title}}</label>
                 <label for="">Description: {{.Description}}</label>
             </div>
         {{end}}
-
     </div>
-
 {{end}}

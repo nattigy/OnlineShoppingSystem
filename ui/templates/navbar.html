@@ -9,22 +9,33 @@
                 {{if eq .Role "student"}}
                     <ul class="navbar-nav">
                         <li class="nav-item  p-lg-3 ">
-                            <a class="nav-link" href="/services/student/resources">Resources</a>
+                            <a class="nav-link" href="/student/resources">Resources</a>
                         </li>
-                        <li class="nav-item  p-md-4 ">
-                            <select class="border-0" name="" id="">
-                                <option value=""><a href="/services/student/viewTask?id=1">Math</a></option>
-                                <option value=""><a href="/services/student/viewTask?id=2">Physics</a></option>
-                            </select>
+                        <li class="nav-item  p-lg-3">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-outline-primary border-0 dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    Choose subject
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/student/viewTask?id=1">Math</a>
+                                    <a class="dropdown-item" href="/student/viewTask?id=2">Physics</a>
+                                </div>
+                            </div>
                         </li>
-                        <li class="dropdown nav-item  p-md-4 ">
-                            <select class="border-0" name="" id="">
-                                <option disabled selected class="text-muted" value="">My profile</option>
-                                <option value=""><a href="/services/student/viewClass">Class Mates</a></option>
-                                <option value=""><a href="/services/student/viewResult">Grade Report</a></option>
-                                <option value=""><a href="/services/student/updateProfile">Settings</a></option>
-                                <option value=""><a href="/logout">Logout</a></option>
-                            </select>
+                        <li class="nav-item  p-lg-3">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-outline-primary border-0 dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    My Profile
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/student/viewClass">Class Mates</a>
+                                    <a class="dropdown-item" href="/student/viewResult">Grade Report</a>
+                                    <a class="dropdown-item" href="/student/updateProfile">Settings</a>
+                                    <a class="dropdown-item" href="/logout">Logout</a>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                     <button class="btn btn-outline-primary btn-sm px-3 py-2 " style="border-radius: 20px;">
@@ -33,19 +44,26 @@
                 {{else if eq .Role "teacher"}}
                     <ul class="navbar-nav">
                         <li class="nav-item  p-lg-3 ">
-                            <a class="nav-link" href="/services/teacher/makeNewPost">Post</a>
+                            <a class="nav-link" href="/teacher/makeNewPost">Post</a>
                         </li>
                         <li class="nav-item p-lg-3 ">
-                            <a class="nav-link " href="/services/teacher/uploadResources">Upload Resources</a>
+                            <a class="nav-link" href="/teacher/uploadResources">Upload Resources</a>
                         </li>
-
-                        <li class="dropdown nav-item  p-md-d ">
-                            <select class="border-0" name="" id="">
-                                <option disabled selected value="">My profile</option>
-                                <option value=""><a href="/services/teacher/viewClasses">My Students</a></option>
-                                <option value=""><a href="/services/teacher/updateProfile">Setting</a></option>
-                                <option value=""><a href="/logout">Logout</a></option>
-                            </select>
+                        <li class="nav-item p-lg-3 ">
+                            <a class="nav-link" href="/teacher/reportGrade">Report student Grade</a>
+                        </li>
+                        <li class="nav-item  p-lg-3">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-outline-primary border-0 dropdown-toggle"
+                                        data-toggle="dropdown">
+                                    My Profile
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/teacher/viewClasses">My Students</a>
+                                    <a class="dropdown-item" href="/teacher/updateProfile">Settings</a>
+                                    <a class="dropdown-item" href="/logout">Logout</a>
+                                </div>
+                            </div>
                         </li>
                     </ul>
                     <button class="btn btn-outline-primary btn-sm px-3 py-2 " style="border-radius: 20px;"
@@ -56,10 +74,10 @@
                 {{else if eq .Role "parent"}}
                     <ul class="navbar-nav">
                         <li class="nav-item  p-lg-3 ">
-                            <a class="nav-link" href="#">Contact teacher</a>
+                            <a class="nav-link" href="/teacher/receive">Contact teacher</a>
                         </li>
                         <li class="nav-item p-lg-3 ">
-                            <a class="nav-link " href="/services/parent/viewGrade">View Report card</a>
+                            <a class="nav-link " href="/parent/viewGrade">View Report card</a>
                         </li>
                         <li class="nav-item p-lg-3"><a class="nav-link p-1" href="/logout">Logout</a></li>
                     </ul>

@@ -1,25 +1,15 @@
 {{define "studentViewResult"}}
     <h2>View Result</h2>
-
     <div class="container">
         <table>
             {{range .}}
-
                 <tr>
                     <td>{{.Subject.SubjectName}}</td>
                     <td>Assessment {{.Assessment}}</td>
                     <td>Final {{.Final}}</td>
                     <td>Total {{.Total}}</td>
                 </tr>
-
-
             {{end}}
-
         </table>
-
-
     </div>
-
-
-
 {{end}}
