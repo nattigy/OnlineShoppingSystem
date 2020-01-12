@@ -51,8 +51,8 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 		Id: uint(id),
 	}
 
-	data, err := p.SUsecase.ViewTasks(classRoom, subject)
-	if err != nil {
+	data, errs := p.SUsecase.ViewTasks(classRoom, subject)
+	if len(errs) != 0 {
 		fmt.Println(err)
 	}
 	in := StudentInfo{

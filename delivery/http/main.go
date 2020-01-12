@@ -7,6 +7,8 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/database"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/authenticationHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/chat/handlers"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/chat/usecases"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/utility"
 	"html/template"
 	"net/http"
@@ -78,6 +80,14 @@ func main() {
 
 	mux.HandleFunc("/parent/viewGrade", parHandlers.ViewGrade)
 
+	chatUsecase := usecases.NewChatUsecase(gormdb)
+	chatHandler := handlers.NewChatHandler(templ, *chatUsecase, utiity)
+
+	mux.HandleFunc("/teacher/send", chatHandler.Send)
+	mux.HandleFunc("/parent/send", chatHandler.Send)
+	mux.HandleFunc("/teacher/receive", chatHandler.Get)
+	mux.HandleFunc("/parent/receive", chatHandler.Get)
+
 	loginHandler := authenticationHandlers.NewLoginHandler(templ, studentUsecase, teacherUsecase, parentUsecase, sessionUSecase)
 	logoutHandler := authenticationHandlers.NewLogoutHandler(templ, studentUsecase, teacherUsecase, parentUsecase, sessionUSecase)
 
@@ -102,6 +112,7 @@ func CreateTables(gormdb *gorm.DB) {
 	gormdb.CreateTable(&models.Comment{})
 	gormdb.CreateTable(&models.User{})
 	gormdb.CreateTable(&models.Session{})
+	gormdb.CreateTable(&models.Message{})
 
 	//fmt.Println(gormdb.Model(&models.Subject{}).AddForeignKey("teacher_id", "teachers(id)", "RESTRICT", "RESTRICT"))
 	//fmt.Println(gormdb.Model(&models.Subject{}).AddForeignKey("class_room_id", "class_rooms(id)", "RESTRICT", "RESTRICT"))

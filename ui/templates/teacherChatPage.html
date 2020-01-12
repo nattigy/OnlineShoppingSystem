@@ -1,0 +1,47 @@
+{{define "teacherChatPage"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="/assets/css/student.css" rel="stylesheet"/>
+        <title>Teacher Chat</title>
+    </head>
+    <body>
+    {{.}}
+    <div class="container bg-light row h-75">
+        <div class="col-4">
+            <div class="bg-primary p-2">Parent</div>
+            <div>
+                {{range $index, $item := .Parents}}
+                    <div class="card">
+                        <p class="card-title">{{$item.Name}}</p>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+        <div class="col-8 h-100">
+            <div class="bg-info p-2">Me</div>
+            <div class="h-100 bg-dark">
+
+                {{range $index, $item := .}}
+                    <div class="card bg-{{if .}}primary{{else}}info{{end}}">
+                        <p class="card-title">message</p>
+                    </div>
+                {{end}}
+
+                <form action="/send" method="post">
+                    <input placeholder="Your massage" type="text" name="message"><input type="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Tags -->
+    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+    </body>
+    </html>
+{{end}}

@@ -88,3 +88,17 @@ func (u *Utility) GetClassRoomByTeacherId(id uint) ([]models.ClassRoom, []error)
 	}
 	return classRooms, errs
 }
+
+func (u *Utility) GetTeacherByParentId(id uint) (models.Teacher, []error) {
+	student := models.Student{}
+	errs := u.conn.Where("parent_id = ?", id).First(&student).GetErrors()
+	if errs != nil {
+		return models.Teacher{}, errs
+	}
+	classRoom := models.ClassRoom{}
+	errs = u.conn.Where("id = ?", student.ClassRoomId).First(&classRoom).GetErrors()
+	if errs != nil {
+		return models.Teacher{}, errs
+	}
+	return models.Teacher{Id: classRoom.HomeRoom}, nil
+}
