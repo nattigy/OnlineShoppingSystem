@@ -29,6 +29,7 @@ type TeacherInfo struct {
 	Students      []models.Student
 	FetchPost     []models.Task
 	Task          models.Task
+	Result        []models.Result
 }
 
 func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {

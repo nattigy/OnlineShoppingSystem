@@ -52,10 +52,10 @@ func (l *LoginHandler) Login(w http.ResponseWriter, r *http.Request) {
 				http.Redirect(w, r, "/student/viewTask?id=1", http.StatusSeeOther)
 				return
 			} else if u.Role == utility.Teacher {
-				http.Redirect(w, r, "/teacher", http.StatusSeeOther)
+				http.Redirect(w, r, "/teacher/makeNewPost", http.StatusSeeOther)
 				return
 			} else if u.Role == utility.Parent {
-				http.Redirect(w, r, "/parent", http.StatusSeeOther)
+				http.Redirect(w, r, "/parent/viewGrade", http.StatusSeeOther)
 				return
 			}
 			if err != nil {

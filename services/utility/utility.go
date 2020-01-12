@@ -58,11 +58,11 @@ func (u *Utility) GetStudentsByTeacherId(id uint) ([]models.Student, []error) {
 	var students []models.Student
 	student := models.Student{}
 	classRooms, errs := u.GetClassRoomByTeacherId(id)
-	for i := 0; i <= len(classRooms); i++ {
+	for i := 0; i < len(classRooms); i++ {
 		errs := u.conn.Where("class_room_id = ?", classRooms[i].Id).Find(&student).GetErrors()
-		if errs != nil {
+		if len(errs) != 0 {
 			fmt.Println(errs)
-			//return []models.Student{}, nil
+			return []models.Student{}, errs
 		}
 		students = append(students, student)
 	}
@@ -75,14 +75,15 @@ func (u *Utility) GetClassRoomByTeacherId(id uint) ([]models.ClassRoom, []error)
 	classRoom := models.ClassRoom{}
 	var subjects []models.Subject
 	errs := u.conn.Where("teacher_id = ?", id).Find(&subjects).GetErrors()
-	if errs != nil {
-		//return classRooms, errs
+	if len(errs) != 0 {
+		fmt.Println(errs)
+		return classRooms, errs
 	}
-	fmt.Println(subjects)
-	for i := 0; i <= len(subjects); i++ {
+	for i := 0; i < len(subjects); i++ {
 		errs := u.conn.Where("id = ?", subjects[i].ClassRoomId).Find(&classRoom).GetErrors()
-		if errs != nil {
-			//return classRooms, errs
+		if len(errs) != 0 {
+			fmt.Println(errs)
+			return classRooms, errs
 		}
 		classRooms = append(classRooms, classRoom)
 	}
@@ -92,12 +93,14 @@ func (u *Utility) GetClassRoomByTeacherId(id uint) ([]models.ClassRoom, []error)
 func (u *Utility) GetTeacherByParentId(id uint) (models.Teacher, []error) {
 	student := models.Student{}
 	errs := u.conn.Where("parent_id = ?", id).First(&student).GetErrors()
-	if errs != nil {
+	if len(errs) != 0 {
+		fmt.Println(errs)
 		return models.Teacher{}, errs
 	}
 	classRoom := models.ClassRoom{}
 	errs = u.conn.Where("id = ?", student.ClassRoomId).First(&classRoom).GetErrors()
-	if errs != nil {
+	if len(errs) != 0 {
+		fmt.Println(errs)
 		return models.Teacher{}, errs
 	}
 	return models.Teacher{Id: classRoom.HomeRoom}, nil
@@ -106,16 +109,17 @@ func (u *Utility) GetTeacherByParentId(id uint) (models.Teacher, []error) {
 func (u *Utility) GetParentsByTeacherId(id uint) ([]models.Parent, []error) {
 	classRoom := models.ClassRoom{}
 	errs := u.conn.Where("home_room = ?", id).First(&classRoom).GetErrors()
-	if errs != nil {
+	if len(errs) != 0 {
+		fmt.Println(errs)
 		return []models.Parent{}, errs
 	}
 	var students []models.Student
 	errs = u.conn.Where("class_room_id = ?", classRoom.Id).Find(&students).GetErrors()
 	parent := models.Parent{}
 	var parents []models.Parent
-	for i := 0; i <= len(students); i++ {
+	for i := 0; i < len(students); i++ {
 		errs = u.conn.Where("id = ?", students[i].ParentId).Find(&parent).GetErrors()
-		if errs != nil {
+		if len(errs) != 0 {
 			fmt.Println(errs)
 			return nil, errs
 		}

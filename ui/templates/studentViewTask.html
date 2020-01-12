@@ -22,15 +22,15 @@
                                 Recently added
                             </a>
                         </div>
-                        {{$task := .Tasks}}
+                        {{$task := .Task}}
                         {{range $index, $item := .Tasks}}
                             {{$task = $item}}
                             <div onclick="UpdateDescription({{$item}})" class="collapse show" data-parent="#accordion"
                                  id="collapseOne">
                                 <div class="card">
                                     <div class="card-body p-2">
-                                        <h6 class="card-title m-0">{{.Tasks.Title}}</h6>
-                                        <p class="card-text m-0 text-muted small">{{.Tasks.ShortDescription}}</p>
+                                        <h6 class="card-title m-0">{{$item.Title}}</h6>
+                                        <p class="card-text m-0 text-muted small">{{$item.ShortDescription}}</p>
                                     </div>
                                 </div>
                             </div>

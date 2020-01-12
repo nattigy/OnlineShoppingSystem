@@ -25,6 +25,7 @@ func NewStudentHandler(templ *template.Template, SUsecase usecase.StudentUsecase
 type StudentInfo struct {
 	User          models.User
 	Tasks         []models.Task
+	Task          models.Task
 	UpdateProfile models.Student
 	Resources     []models.Resources
 	Result        []models.Result
@@ -57,6 +58,7 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 	}
 	in := StudentInfo{
 		Tasks: data,
+		Task:  models.Task{},
 		User:  user,
 	}
 	//_ = json.NewEncoder(w).Encode(data)

@@ -45,8 +45,8 @@ func (h *HomePageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	if user.Role == utility.Student {
 		http.Redirect(w, r, "/student/viewTask", http.StatusSeeOther)
 	} else if user.Role == utility.Teacher {
-		http.Redirect(w, r, "/teacher", http.StatusSeeOther)
+		http.Redirect(w, r, "/teacher/makeNewPost", http.StatusSeeOther)
 	} else if user.Role == utility.Parent {
-		http.Redirect(w, r, "/parent", http.StatusSeeOther)
+		http.Redirect(w, r, "/parent/viewGrade", http.StatusSeeOther)
 	}
 }
