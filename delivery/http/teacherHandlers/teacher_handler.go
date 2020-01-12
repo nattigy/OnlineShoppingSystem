@@ -108,21 +108,21 @@ func (t *TeacherHandler) EditPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *TeacherHandler) RemoveTask(w http.ResponseWriter, r *http.Request) {
-	//user, err := t.Session.Check(w, r)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	//if user.Id == 0 {
-	//	fmt.Println("Id not found")
-	//	return
-	//}
-	//id, err := strconv.Atoi(r.FormValue("id"))
-	//errs := t.TUsecase.RemoveTask(models.Task{Id: uint(id)})
-	//if errs != nil {
-	//	fmt.Println(errs)
-	//}
-	//http.Redirect(w, r, "/teacher/fetchPosts", http.StatusSeeOther)
+	user, err := t.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
+	}
+	id, err := strconv.Atoi(r.FormValue("id"))
+	errs := t.TUsecase.RemoveTask(models.Task{Id: uint(id)})
+	if errs != nil {
+		fmt.Println(errs)
+	}
+	http.Redirect(w, r, "/teacher/fetchPosts", http.StatusSeeOther)
 }
 
 func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) {
