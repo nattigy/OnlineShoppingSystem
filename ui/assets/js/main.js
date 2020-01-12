@@ -16,11 +16,11 @@ function EditPost(task) {
 }
 
 function openFetchPost() {
-    window.location.href = '/teacher/fetchPosts'
+    window.location.href = '../../../services/teacher/fetchPosts'
 }
 
 function makeNewPost() {
-    window.location.href = '/teacher/makeNewPost'
+    window.location.href = '../../../services/teacher/makeNewPost'
 }
 
 function DeletePost(task) {

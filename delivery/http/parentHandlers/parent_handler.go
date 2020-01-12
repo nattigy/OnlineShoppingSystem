@@ -3,9 +3,9 @@ package parentHandlers
 import (
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/parent/usecase"
-	"github.com/nattigy/parentschoolcommunicationsystem/session"
-	"github.com/nattigy/parentschoolcommunicationsystem/utility"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/parent/usecase"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/utility"
 	"html/template"
 	"net/http"
 )

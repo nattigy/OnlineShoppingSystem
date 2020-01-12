@@ -2,11 +2,11 @@ package authenticationHandlers
 
 import (
 	"fmt"
-	"github.com/nattigy/parentschoolcommunicationsystem/parent"
-	"github.com/nattigy/parentschoolcommunicationsystem/session"
-	"github.com/nattigy/parentschoolcommunicationsystem/student"
-	"github.com/nattigy/parentschoolcommunicationsystem/teacher"
-	"github.com/nattigy/parentschoolcommunicationsystem/utility"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/parent"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/student"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/teacher"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/utility"
 	"html/template"
 	"net/http"
 )

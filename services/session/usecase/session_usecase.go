@@ -2,16 +2,16 @@ package usecase
 
 import (
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/session"
+	session2 "github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"net/http"
 	"strings"
 )
 
 type SessionUsecase struct {
-	session session.SessionRepository
+	session session2.SessionRepository
 }
 
-func NewSessionUsecase(session session.SessionRepository) *SessionUsecase {
+func NewSessionUsecase(session session2.SessionRepository) *SessionUsecase {
 	return &SessionUsecase{session: session}
 }
 

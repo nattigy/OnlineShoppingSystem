@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/session"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
 )
 
 type Utility struct {

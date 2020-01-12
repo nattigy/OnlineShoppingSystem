@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/database"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/student/repository"
+	repository2 "github.com/nattigy/parentschoolcommunicationsystem/services/student/repository"
 	"testing"
 )
 
 func TestViewTasks(t *testing.T) {
-	studentRepo := repository.NewPsqlStudentRepository(database.Config())
+	studentRepo := repository2.NewPsqlStudentRepository(database.Config())
 	v := NewStudentUsecase(studentRepo)
 	c := models.ClassRoom{
 		Id:         12,

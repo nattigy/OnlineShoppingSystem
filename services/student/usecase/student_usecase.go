@@ -2,14 +2,14 @@ package usecase
 
 import (
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/student"
+	student2 "github.com/nattigy/parentschoolcommunicationsystem/services/student"
 )
 
 type StudentUsecase struct {
-	studentRepo student.StudentRepository
+	studentRepo student2.StudentRepository
 }
 
-func NewStudentUsecase(StudentRepo student.StudentRepository) *StudentUsecase {
+func NewStudentUsecase(StudentRepo student2.StudentRepository) *StudentUsecase {
 	return &StudentUsecase{studentRepo: StudentRepo}
 }
 

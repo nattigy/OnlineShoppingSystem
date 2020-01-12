@@ -2,14 +2,14 @@ package usecase
 
 import (
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/parent"
+	parent2 "github.com/nattigy/parentschoolcommunicationsystem/services/parent"
 )
 
 type ParentUsecase struct {
-	parentRepo parent.ParentRepository
+	parentRepo parent2.ParentRepository
 }
 
-func NewParentUsecase(parentRepo parent.ParentRepository) *ParentUsecase {
+func NewParentUsecase(parentRepo parent2.ParentRepository) *ParentUsecase {
 	return &ParentUsecase{parentRepo: parentRepo}
 }
 

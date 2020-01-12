@@ -3,9 +3,9 @@ package studentHandlers
 import (
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/session"
-	"github.com/nattigy/parentschoolcommunicationsystem/student/usecase"
-	"github.com/nattigy/parentschoolcommunicationsystem/utility"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/student/usecase"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/utility"
 	"html/template"
 	"net/http"
 	"strconv"
