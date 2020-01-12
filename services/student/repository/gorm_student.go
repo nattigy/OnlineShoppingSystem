@@ -13,37 +13,37 @@ func NewGormStudentRepository(Conn *gorm.DB) *GormStudentRepository {
 	return &GormStudentRepository{conn: Conn}
 }
 
-func (gs *GormStudentRepository) ViewTasks(classRoom models.ClassRoom, subject models.Subject) ([]models.Task, error) {
+func (gs *GormStudentRepository) ViewTasks(classRoom models.ClassRoom, subject models.Subject) ([]models.Task, []error) {
 	var task []models.Task
-	gs.conn.Where("class_room_id = ? AND subject_id = ?", 1, 1).Find(&task)
-	return task, nil
+	errs := gs.conn.Where("class_room_id = ? AND subject_id = ?", classRoom.Id, subject.Id).Find(&task).GetErrors()
+	return task, errs
 }
 
-func (gs *GormStudentRepository) Comment(task models.Task, student models.Student, d string) error {
+func (gs *GormStudentRepository) Comment(task models.Task, student models.Student, d string) []error {
 	comment := models.Comment{TaskId: task.Id, StudentId: student.Id, Data: d}
-	gs.conn.Create(&comment)
-	return nil
+	errs := gs.conn.Create(&comment).GetErrors()
+	return errs
 }
 
-func (gs *GormStudentRepository) StudentUpdateProfile(student models.Student) error {
-	gs.conn.Model(&student).Where("id = ?", 1).Updates(models.Student{Email: student.Email, Password: student.Password, ProfilePic: student.ProfilePic})
-	return nil
+func (gs *GormStudentRepository) StudentUpdateProfile(student models.Student) []error {
+	errs := gs.conn.Model(&student).Where("id = ?", student.Id).Updates(models.Student{Email: student.Email, Password: student.Password, ProfilePic: student.ProfilePic}).GetErrors()
+	return errs
 }
 
-func (gs *GormStudentRepository) ViewClass(classRoom models.ClassRoom) ([]models.Student, error) {
+func (gs *GormStudentRepository) ViewClass(classRoom models.ClassRoom) ([]models.Student, []error) {
 	var student []models.Student
-	gs.conn.Where("class_room_id = ?", 1).Find(&student)
-	return student, nil
+	errs := gs.conn.Where("class_room_id = ?", classRoom.Id).Find(&student).GetErrors()
+	return student, errs
 }
 
-func (gs *GormStudentRepository) ViewResources(subject models.Subject) ([]models.Resources, error) {
+func (gs *GormStudentRepository) ViewResources(subject models.Subject) ([]models.Resources, []error) {
 	var resources []models.Resources
-	gs.conn.Where("subject_id = ?", 1).Find(&resources)
-	return resources, nil
+	errs := gs.conn.Where("subject_id = ?", subject.Id).Find(&resources).GetErrors()
+	return resources, errs
 }
 
-func (gs *GormStudentRepository) ViewResult(student models.Student) ([]models.Result, error) {
+func (gs *GormStudentRepository) ViewResult(student models.Student) ([]models.Result, []error) {
 	var result []models.Result
-	gs.conn.Where("student_id = ?", 1).Find(&result)
-	return result, nil
+	errs := gs.conn.Where("student_id = ?", student.Id).Find(&result).GetErrors()
+	return result, errs
 }

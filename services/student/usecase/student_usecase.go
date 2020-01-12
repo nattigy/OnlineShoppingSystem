@@ -13,49 +13,49 @@ func NewStudentUsecase(StudentRepo student2.StudentRepository) *StudentUsecase {
 	return &StudentUsecase{studentRepo: StudentRepo}
 }
 
-func (st *StudentUsecase) ViewTasks(c models.ClassRoom, s models.Subject) ([]models.Task, error) {
+func (st *StudentUsecase) ViewTasks(c models.ClassRoom, s models.Subject) ([]models.Task, []error) {
 	data, err := st.studentRepo.ViewTasks(c, s)
-	if err != nil {
+	if len(err) != 0 {
 		return data, err
 	}
 	return data, nil
 }
 
-func (st *StudentUsecase) Comment(t models.Task, student models.Student, data string) error {
+func (st *StudentUsecase) Comment(t models.Task, student models.Student, data string) []error {
 	err := st.studentRepo.Comment(t, student, data)
-	if err != nil {
+	if len(err) != 0 {
 		return err
 	}
 	return nil
 }
 
-func (st *StudentUsecase) StudentUpdateProfile(student models.Student) error {
+func (st *StudentUsecase) StudentUpdateProfile(student models.Student) []error {
 	err := st.studentRepo.StudentUpdateProfile(student)
-	if err != nil {
+	if len(err) != 0 {
 		return err
 	}
 	return nil
 }
 
-func (st *StudentUsecase) ViewClass(classRoom models.ClassRoom) ([]models.Student, error) {
+func (st *StudentUsecase) ViewClass(classRoom models.ClassRoom) ([]models.Student, []error) {
 	data, err := st.studentRepo.ViewClass(classRoom)
-	if err != nil {
+	if len(err) != 0 {
 		return data, err
 	}
 	return nil, nil
 }
 
-func (st *StudentUsecase) ViewResources(subject models.Subject) ([]models.Resources, error) {
+func (st *StudentUsecase) ViewResources(subject models.Subject) ([]models.Resources, []error) {
 	data, err := st.studentRepo.ViewResources(subject)
-	if err != nil {
+	if len(err) != 0 {
 		return data, err
 	}
 	return data, nil
 }
 
-func (st *StudentUsecase) ViewResult(s models.Student) ([]models.Result, error) {
+func (st *StudentUsecase) ViewResult(s models.Student) ([]models.Result, []error) {
 	data, err := st.studentRepo.ViewResult(s)
-	if err != nil {
+	if len(err) != 0 {
 		return data, err
 	}
 	return data, nil
