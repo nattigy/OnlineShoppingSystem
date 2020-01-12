@@ -13,9 +13,9 @@ func NewChatUsecase(conn *gorm.DB) *ChatUsecase {
 	return &ChatUsecase{conn: conn}
 }
 
-func (c *ChatUsecase) Store(parent models.Parent, teacher models.Teacher, data string) []error {
-	message := models.Message{ParentId: parent.Id, TeacherId: teacher.Id, MessageContent: data}
-	errs := c.conn.Create(message).GetErrors()
+func (c *ChatUsecase) Store(parent models.Parent, teacher models.Teacher, message models.Message) []error {
+	newMessage := models.Message{ParentId: parent.Id, TeacherId: teacher.Id, MessageContent: message.MessageContent, From: message.From}
+	errs := c.conn.Create(&newMessage).GetErrors()
 	return errs
 }
 

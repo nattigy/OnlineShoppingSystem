@@ -46,7 +46,7 @@ func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 			return
 		}
-		errs := c.chatUsecase.Store(models.Parent{Id: user.Id}, teacher, data)
+		errs := c.chatUsecase.Store(models.Parent{Id: user.Id}, teacher, models.Message{MessageContent: data, From: "parent"})
 		if len(err) != 0 {
 			fmt.Println(errs)
 			return
@@ -55,7 +55,7 @@ func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request) {
 	} else if user.Role == "teacher" {
 		parentId := r.FormValue("parentId")
 		id, _ := strconv.Atoi(parentId)
-		errs := c.chatUsecase.Store(models.Parent{Id: uint(id)}, models.Teacher{Id: user.Id}, data)
+		errs := c.chatUsecase.Store(models.Parent{Id: uint(id)}, models.Teacher{Id: user.Id}, models.Message{MessageContent: data, From: "teacher"})
 		if len(errs) != 0 {
 			fmt.Println(errs)
 			return
