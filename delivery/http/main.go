@@ -70,6 +70,7 @@ func main() {
 	mux.HandleFunc("/teacher/updateProfile", techHandlers.TeacherUpdateProfile)
 	mux.HandleFunc("/teacher/reportGrade", techHandlers.ReportGrade)
 	mux.HandleFunc("/teacher/viewClasses", techHandlers.ViewClasses)
+	mux.HandleFunc("/teacher/fetchPosts", techHandlers.FetchPosts)
 
 	parentRepo := _parRepo.NewGormParentRepository(gormdb)
 	parentUsecase := _parUsecase.NewParentUsecase(parentRepo)

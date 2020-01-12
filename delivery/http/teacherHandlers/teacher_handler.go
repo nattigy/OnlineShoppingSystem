@@ -59,16 +59,16 @@ func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {
 	section := r.FormValue("section")
 
 	newTask := models.Task{Title: title, ShortDescription: shortDescriptio, Description: description}
-	subject, err := t.utility.GetSubjectByClassRoom(grade, section)
+	subject, errs := t.utility.GetSubjectByClassRoom(grade, section)
 
-	if err != nil {
-		fmt.Println(err)
+	if errs != nil {
+		fmt.Println(errs)
 	}
 
 	if title != "" && shortDescriptio != "" && description != "" && grade != 0 && section != "" {
-		err = t.TUsecase.MakeNewPost(newTask, subject)
-		if err != nil {
-			fmt.Println(err)
+		errs = t.TUsecase.MakeNewPost(newTask, subject)
+		if errs != nil {
+			fmt.Println(errs)
 		}
 	}
 
@@ -93,33 +93,36 @@ func (t *TeacherHandler) EditPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
-	in := TeacherInfo{
-		User: user,
-		Edit: true,
+	editTitle := r.FormValue("editTitle")
+	editDate := r.FormValue("editDate")
+	editDescription := r.FormValue("editDescription")
+	id, _ := strconv.Atoi(r.FormValue("id"))
+
+	editedTask := models.Task{Id: uint(id), Title: editTitle, Deadline: editDate, ShortDescription: editDescription}
+
+	errs := t.TUsecase.EditPost(editedTask)
+	if errs != nil {
+		fmt.Println(errs)
 	}
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
-	if err != nil {
-		fmt.Println(err)
-	}
+	http.Redirect(w, r, "/teacher/fetchPosts", http.StatusSeeOther)
 }
 
 func (t *TeacherHandler) RemoveTask(w http.ResponseWriter, r *http.Request) {
-	user, err := t.Session.Check(w, r)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	if user.Id == 0 {
-		fmt.Println("Id not found")
-		return
-	}
-	in := TeacherInfo{
-		User: user,
-	}
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
-	if err != nil {
-		fmt.Println(err)
-	}
+	//user, err := t.Session.Check(w, r)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//if user.Id == 0 {
+	//	fmt.Println("Id not found")
+	//	return
+	//}
+	//id, err := strconv.Atoi(r.FormValue("id"))
+	//errs := t.TUsecase.RemoveTask(models.Task{Id: uint(id)})
+	//if errs != nil {
+	//	fmt.Println(errs)
+	//}
+	//http.Redirect(w, r, "/teacher/fetchPosts", http.StatusSeeOther)
 }
 
 func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) {
@@ -203,4 +206,30 @@ func (t *TeacherHandler) ViewClasses(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
+}
+
+func (t *TeacherHandler) FetchPosts(w http.ResponseWriter, r *http.Request) {
+	//user, err := t.Session.Check(w, r)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//if user.Id == 0 {
+	//	fmt.Println("Id not found")
+	//	return
+	//}
+	//subject, _ := t.utility.GetSubjectByTeacherId(user.Id)
+	//prevoiusPosts, errs := t.TUsecase.FetchPosts(subject)
+	//if errs != nil {
+	//	fmt.Println(errs)
+	//}
+	//in := TeacherInfo{
+	//	User:     user,
+	//	FetchPost: true,
+	//	Data:     data{FetchPost: prevoiusPosts},
+	//}
+	//err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }

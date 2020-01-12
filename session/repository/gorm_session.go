@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 )
@@ -14,10 +13,10 @@ func NewSessionRepository(conn *gorm.DB) *SessionRepository {
 	return &SessionRepository{conn: conn}
 }
 
-func (s *SessionRepository) DeleteSession(id int) (models.Session, []error) {
+func (s *SessionRepository) DeleteSession(id uint) []error {
 	sess := models.Session{UserID: uint(id)}
-	err := s.conn.Delete(&sess).GetErrors()
-	return sess, err
+	err := s.conn.Unscoped().Delete(&sess).GetErrors()
+	return err
 }
 
 func (s *SessionRepository) Sessions() ([]models.Session, []error) {
@@ -34,7 +33,6 @@ func (s *SessionRepository) UpdateSession(sess models.Session) (models.Session, 
 
 func (s *SessionRepository) StoreSession(sess models.Session) (models.Session, []error) {
 	session := sess
-	fmt.Println("session tobe stored", sess)
 	err := s.conn.Create(&session).GetErrors()
 	return session, err
 }
@@ -42,7 +40,6 @@ func (s *SessionRepository) StoreSession(sess models.Session) (models.Session, [
 func (s *SessionRepository) GetSession(value string) (models.Session, []error) {
 	var sess models.Session
 	err := s.conn.Where("uuid = ?", value).First(&sess).GetErrors()
-	fmt.Println(err)
 	return sess, err
 }
 

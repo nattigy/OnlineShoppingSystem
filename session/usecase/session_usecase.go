@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/session"
 	"net/http"
@@ -21,9 +20,9 @@ func (s *SessionUsecase) Sessions() ([]models.Session, []error) {
 	return data, err
 }
 
-func (s *SessionUsecase) DeleteSession(id int) (models.Session, []error) {
-	data, err := s.session.DeleteSession(id)
-	return data, err
+func (s *SessionUsecase) DeleteSession(id uint) []error {
+	err := s.session.DeleteSession(id)
+	return err
 }
 
 func (s *SessionUsecase) UpdateSession(sess models.Session) (models.Session, []error) {
@@ -53,7 +52,6 @@ func (s *SessionUsecase) Check(w http.ResponseWriter, r *http.Request) (models.U
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return models.User{}, nil
 	}
-	fmt.Println("user in check", user)
 	return user, err
 }
 

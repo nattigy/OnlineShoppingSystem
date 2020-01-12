@@ -24,50 +24,6 @@
     {{template "errorPage"}}
 {{end}}
 
-
-
-
-<div class="modal fade top" id="editModal">
-    <div class="modal-dialog">
-        <!-- Edit Form -->
-        <form action="/teacher/editPost">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Edit</h4>
-                    <button class="close" data-dismiss="modal" type="button">
-                        &times;
-                    </button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="form-group">
-                        <!-- <label for="text">Title:</label> -->
-                        <input class="form-control" placeholder="Home work" type="text"/>
-                    </div>
-                    <div class="form-group">
-                        <!-- <label for="date">Date:</label> -->
-                        <input type="date" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                        <!-- <label for="textarea">Description:</label> -->
-                        <textarea class="form-control" rows="3" placeholder="Description"></textarea>
-                    </div>
-                </div>
-                <!-- Modal footer -->
-                <div class="modal-footer d-block">
-                    <button type="submit" class="btn btn-outline-primary btn-block" style="width: 100%;">
-                        <i class="fas fa-check-circle" aria-hidden="true"></i> Update
-                    </button>
-                </div>
-            </div>
-        </form>
-        <!-- Form End-->
-    </div>
-</div>
-<!-- Edit modal -->
-
 <!-- calander modal -->
 <div class="modal fade" id="calanderModal" role="dialog" aria-labelledby="modalLabel" tabindex="-1">
     <div class="modal-dialog" role="document">
@@ -98,6 +54,7 @@
 <script src="/assets/js/datepicker.js"></script>
 <script src="/assets/js/calander.js"></script>
 <script src="/assets/js/table.js"></script>
+<script src="/assets/js/main.js"></script>
 </body>
 
 </html>

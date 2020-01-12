@@ -1,6 +1,7 @@
 package authenticationHandlers
 
 import (
+	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/parent"
 	"github.com/nattigy/parentschoolcommunicationsystem/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/student"
@@ -34,4 +35,9 @@ func (l *LogoutHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	}
 	http.SetCookie(w, cookie)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+	sessId, _ := l.session.GetSession(cookie.Value)
+	errors := l.session.DeleteSession(sessId.ID)
+	if errors != nil {
+		fmt.Println(errors)
+	}
 }

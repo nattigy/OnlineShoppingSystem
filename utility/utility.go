@@ -27,10 +27,16 @@ func (u *Utility) GetSubjectById(id uint) models.Subject {
 	return subject
 }
 
-func (u *Utility) GetSubjectByClassRoom(grade int, section string) (models.Subject, error) {
+func (u *Utility) GetSubjectByClassRoom(grade int, section string) (models.Subject, []error) {
 	subject := models.Subject{}
 	classRoom := models.ClassRoom{}
-	errs := u.conn.Where("grade_level = ? AND section = ?", grade, section).Find(&classRoom).GetErrors()
-	errs = u.conn.Where("class_room_id = ?", classRoom.Id).Find(&subject).GetErrors()
-	return subject, errs[0]
+	errs := u.conn.Where("grade_level = ? AND section = ?", grade, section).First(&classRoom).GetErrors()
+	errs = u.conn.Where("class_room_id = ?", classRoom.Id).First(&subject).GetErrors()
+	return subject, errs
+}
+
+func (u *Utility) GetSubjectByTeacherId(id uint) (models.Subject, []error) {
+	subject := models.Subject{}
+	errs := u.conn.Where("teacher_id = ?", id).First(&subject).GetErrors()
+	return subject, errs
 }
