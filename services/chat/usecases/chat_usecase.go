@@ -21,6 +21,6 @@ func (c *ChatUsecase) Store(parent models.Parent, teacher models.Teacher, data s
 
 func (c *ChatUsecase) Get(parent models.Parent, teacher models.Teacher) ([]models.Message, []error) {
 	var messages []models.Message
-	errs := c.conn.Where("parent_id = ? AND teacher_id = ?", parent.Id, teacher.Id).Order("CreatedAt").Find(&messages).GetErrors()
+	errs := c.conn.Where("parent_id = ? AND teacher_id = ?", parent.Id, teacher.Id).Order("created_at").Find(&messages).GetErrors()
 	return messages, errs
 }

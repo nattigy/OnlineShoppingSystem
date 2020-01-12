@@ -81,7 +81,7 @@ func main() {
 	mux.HandleFunc("/parent/viewGrade", parHandlers.ViewGrade)
 
 	chatUsecase := usecases.NewChatUsecase(gormdb)
-	chatHandler := handlers.NewChatHandler(templ, *chatUsecase, utiity)
+	chatHandler := handlers.NewChatHandler(templ, *chatUsecase, sessionUSecase, utiity)
 
 	mux.HandleFunc("/teacher/send", chatHandler.Send)
 	mux.HandleFunc("/parent/send", chatHandler.Send)

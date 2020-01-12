@@ -18,15 +18,15 @@ type ChatHandler struct {
 	utility     utility.Utility
 }
 
+func NewChatHandler(templ *template.Template, chatUsecase usecases.ChatUsecase, session session.SessionUsecase, utility utility.Utility) *ChatHandler {
+	return &ChatHandler{templ: templ, chatUsecase: chatUsecase, Session: session, utility: utility}
+}
+
 type ChatInfo struct {
 	Message []models.Message
 	User    models.User
 	Parents []models.Parent
 	Teacher models.Teacher
-}
-
-func NewChatHandler(templ *template.Template, chatUsecase usecases.ChatUsecase, utility utility.Utility) *ChatHandler {
-	return &ChatHandler{templ: templ, chatUsecase: chatUsecase, utility: utility}
 }
 
 func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request) {

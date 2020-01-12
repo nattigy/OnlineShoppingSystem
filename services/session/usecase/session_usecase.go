@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	session2 "github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"net/http"
@@ -43,6 +44,7 @@ func (s *SessionUsecase) GetSession(value string) (models.Session, []error) {
 func (s *SessionUsecase) Check(w http.ResponseWriter, r *http.Request) (models.User, error) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
+		fmt.Println(err)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return models.User{}, err
 	}

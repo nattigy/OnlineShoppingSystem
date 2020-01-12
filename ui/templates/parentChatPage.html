@@ -22,16 +22,16 @@
         <div class="col-8 h-100">
             <div class="bg-info p-2">Me</div>
             <div class="h-100 bg-dark">
-
+                <div>
+                    <form action="/parent/send" method="post">
+                        <input placeholder="Your massage" type="text" name="message"><input type="submit">
+                    </form>
+                </div>
                 {{range $index, $item := .Messages}}
                     <div class="card bg-{{if eq $item.From "teacher"}}primary{{else}}info{{end}}">
                         <p class="card-title">{{$item.MessageContent}}</p>
                     </div>
                 {{end}}
-
-                <form action="/parent/send" method="post">
-                    <input placeholder="Your massage" type="text" name="message"><input type="submit">
-                </form>
             </div>
         </div>
     </div>
