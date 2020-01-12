@@ -209,27 +209,27 @@ func (t *TeacherHandler) ViewClasses(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *TeacherHandler) FetchPosts(w http.ResponseWriter, r *http.Request) {
-	//user, err := t.Session.Check(w, r)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	//if user.Id == 0 {
-	//	fmt.Println("Id not found")
-	//	return
-	//}
-	//subject, _ := t.utility.GetSubjectByTeacherId(user.Id)
-	//prevoiusPosts, errs := t.TUsecase.FetchPosts(subject)
-	//if errs != nil {
-	//	fmt.Println(errs)
-	//}
-	//in := TeacherInfo{
-	//	User:     user,
-	//	FetchPost: true,
-	//	Data:     data{FetchPost: prevoiusPosts},
-	//}
-	//err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
+	user, err := t.Session.Check(w, r)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if user.Id == 0 {
+		fmt.Println("Id not found")
+		return
+	}
+	subject, _ := t.utility.GetSubjectByTeacherId(user.Id)
+	prevoiusPosts, errs := t.TUsecase.FetchPosts(subject)
+	if errs != nil {
+		fmt.Println(errs)
+	}
+	in := TeacherInfo{
+		User:      user,
+		FetchPost: true,
+		Data:      data{FetchPost: prevoiusPosts},
+	}
+	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
