@@ -24,21 +24,11 @@ func NewTeacherHandler(templ *template.Template, TUsecase usecase.TeacherUsecase
 
 type TeacherInfo struct {
 	User          models.User
-	Post          bool
-	Edit          bool
-	Resource      bool
-	UpdateProfile bool
-	Students      bool
-	Data          data
-	FetchPost     bool
-	UploadResult  bool
-}
-
-type data struct {
 	Resource      models.Resources
 	UpdateProfile models.Teacher
 	Students      []models.Student
 	FetchPost     []models.Task
+	Task          models.Task
 }
 
 func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {
@@ -74,10 +64,9 @@ func (t *TeacherHandler) MakeNewPost(w http.ResponseWriter, r *http.Request) {
 
 	in := TeacherInfo{
 		User: user,
-		Post: true,
 	}
 
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherMakeNewPost", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -136,9 +125,7 @@ func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	in := TeacherInfo{
-		User:     user,
-		Resource: true,
-		Data:     data{Resource: models.Resources{}},
+		User: user,
 	}
 	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 	if err != nil {
@@ -156,10 +143,10 @@ func (t *TeacherHandler) TeacherUpdateProfile(w http.ResponseWriter, r *http.Req
 		fmt.Println("Id not found")
 		return
 	}
+	teacher, _ := t.utility.GetTeacherById(user.Id)
 	in := TeacherInfo{
 		User:          user,
-		UpdateProfile: true,
-		Data:          data{UpdateProfile: models.Teacher{}},
+		UpdateProfile: teacher,
 	}
 	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 	if err != nil {
@@ -178,8 +165,7 @@ func (t *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	in := TeacherInfo{
-		User:         user,
-		UploadResult: true,
+		User: user,
 	}
 	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
 	if err != nil {
@@ -197,12 +183,15 @@ func (t *TeacherHandler) ViewClasses(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+	students, errs := t.utility.GetStudentsByTeacherId(user.Id)
+	if errs != nil {
+		fmt.Println(errs)
+	}
 	in := TeacherInfo{
 		User:     user,
-		Students: true,
-		Data:     data{Students: []models.Student{}},
+		Students: students,
 	}
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherViewClasses", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -225,10 +214,10 @@ func (t *TeacherHandler) FetchPosts(w http.ResponseWriter, r *http.Request) {
 	}
 	in := TeacherInfo{
 		User:      user,
-		FetchPost: true,
-		Data:      data{FetchPost: prevoiusPosts},
+		FetchPost: prevoiusPosts,
+		Task:      prevoiusPosts[0],
 	}
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherEditPost", in)
 	if err != nil {
 		fmt.Println(err)
 	}
