@@ -51,8 +51,8 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 		Id: uint(id),
 	}
 
-	data, errs := p.SUsecase.ViewTasks(classRoom, subject)
-	if len(errs) != 0 {
+	data, _ := p.SUsecase.ViewTasks(classRoom, subject)
+	if err != nil {
 		fmt.Println(err)
 	}
 	in := StudentInfo{
@@ -145,9 +145,12 @@ func (p *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+	student, _ := p.utility.GetStudentById(user.Id)
+	studentClassroom := student.ClassRoom
+	classMates, _ := p.SUsecase.ViewClass(studentClassroom)
 	in := StudentInfo{
 		User:       user,
-		ClassMates: []models.Student{},
+		ClassMates: classMates,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
 	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
@@ -166,9 +169,13 @@ func (p *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+	subjectId := r.FormValue("subjectId")
+	subjectIdUint, err := strconv.ParseUint(subjectId, 10, 32)
+	subject := p.utility.GetSubjectById(uint(subjectIdUint))
+	resources, _ := p.SUsecase.ViewResources(subject)
 	in := StudentInfo{
 		User:      user,
-		Resources: []models.Resources{},
+		Resources: resources,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
 	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
@@ -187,9 +194,12 @@ func (p *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+
+	student, _ := p.utility.GetStudentById(user.Id)
+	results, _ := p.SUsecase.ViewResult(student)
 	in := StudentInfo{
 		User:   user,
-		Result: []models.Result{},
+		Result: results,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
 	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)

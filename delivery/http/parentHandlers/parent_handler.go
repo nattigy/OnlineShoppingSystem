@@ -36,6 +36,7 @@ func (p *ParentHandler) ViewGrade(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Id not found")
 		return
 	}
+
 	in := ParentInfo{
 		User:   user,
 		Result: []models.Result{},
