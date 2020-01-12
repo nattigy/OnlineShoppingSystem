@@ -17,7 +17,6 @@ func NewGormTeacherRepository(Conn *gorm.DB) *GormTeacherRepository {
 func (gs *GormTeacherRepository) MakeNewPost(task models.Task, subject models.Subject) []error {
 	task.ClassRoomId = subject.ClassRoomId
 	task.SubjectId = subject.Id
-	fmt.Println("here my task", task)
 	errs := gs.conn.Create(&task).GetErrors()
 	return errs
 }
