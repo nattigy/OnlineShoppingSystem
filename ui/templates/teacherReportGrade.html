@@ -1,4 +1,4 @@
-{{define "studentResources"}}
+{{define "teacherReportGrade"}}
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -6,23 +6,18 @@
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
         <link href="/assets/css/student.css" rel="stylesheet"/>
-        <title>Welcome {{.User.Email}}</title>
+        <title>Teacher Chat</title>
     </head>
     <body>
     {{template "navbar.html" .User}}
-    <h2>Resources</h2>
-    <div class="container">
-        <div><a href="/student/resources?id=1" name="subjectId">Maths</a></div>
-        <div><a href="/student/resources?id=2" name="subjectId">Physics</a></div>
-        {{range .Resources}}
-            <div>
-                <label for="">Title: {{.Resources.Title}}</label>
-                <label for="">Description: {{.Resources.Description}}</label>
-            </div>
-        {{end}}
-    </div>
+    {{.Result}}
     <!-- Script Tags -->
     <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/datepicker.js"></script>
+    <script src="/assets/js/calander.js"></script>
+    <script src="/assets/js/table.js"></script>
     <script src="/assets/js/main.js"></script>
+    </body>
+    </html>
 {{end}}

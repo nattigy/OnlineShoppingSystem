@@ -1,4 +1,15 @@
 {{define "studentClassMates"}}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="/assets/css/student.css" rel="stylesheet"/>
+        <title>Welcome {{.User.Email}}</title>
+    </head>
+    <body>
+    {{template "navbar.html" .User}}
     <h2>Class Mates</h2>
     <table>
         <th>
@@ -6,12 +17,16 @@
         <td>Middle Name</td>
         <td>Email</td>
         </th>
-        {{range .}}
+        {{range $index, $item := .ClassMates}}
             <tr>
-                <td>{{.FirstName}}</td>
-                <td>{{.MiddleName}}</td>
-                <td>{{.Email}}</td>
+                <td>{{$item.FirstName}}</td>
+                <td>{{$item.MiddleName}}</td>
+                <td>{{$item.Email}}</td>
             </tr>
         {{end}}
     </table>
+    <!-- Script Tags -->
+    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/main.js"></script>
 {{end}}

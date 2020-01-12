@@ -127,7 +127,7 @@ func (t *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) 
 	in := TeacherInfo{
 		User: user,
 	}
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherUploadResource", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -148,7 +148,7 @@ func (t *TeacherHandler) TeacherUpdateProfile(w http.ResponseWriter, r *http.Req
 		User:          user,
 		UpdateProfile: teacher,
 	}
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherUpdateProfile", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -167,7 +167,7 @@ func (t *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
 	in := TeacherInfo{
 		User: user,
 	}
-	err = t.templ.ExecuteTemplate(w, "teacherPortal.html", in)
+	err = t.templ.ExecuteTemplate(w, "teacherReportGrade", in)
 	if err != nil {
 		fmt.Println(err)
 	}

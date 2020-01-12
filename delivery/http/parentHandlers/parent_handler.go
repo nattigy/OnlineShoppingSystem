@@ -42,7 +42,7 @@ func (p *ParentHandler) ViewGrade(w http.ResponseWriter, r *http.Request) {
 		Result: []models.Result{},
 	}
 	//_ = json.NewEncoder(w).Encode(data)
-	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	err = p.templ.ExecuteTemplate(w, "parentViewResult", in)
 	if err != nil {
 		fmt.Println(err)
 	}

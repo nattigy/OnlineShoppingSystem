@@ -60,7 +60,7 @@ func (p *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 		User:  user,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
-	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	err = p.templ.ExecuteTemplate(w, "studentViewTask", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -129,7 +129,7 @@ func (p *StudentHandler) StudentUpdateProfile(w http.ResponseWriter, r *http.Req
 		}
 	}
 	//_ = json.NewEncoder(w).Encode(data)
-	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	err = p.templ.ExecuteTemplate(w, "studentUpdateProfile", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -153,7 +153,7 @@ func (p *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
 		ClassMates: classMates,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
-	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	err = p.templ.ExecuteTemplate(w, "studentClassMates", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -178,7 +178,7 @@ func (p *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) {
 		Resources: resources,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
-	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	err = p.templ.ExecuteTemplate(w, "studentResources", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -202,7 +202,7 @@ func (p *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
 		Result: results,
 	}
 	//_ = json.NewEncoder(w).Encode(data)
-	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)
+	err = p.templ.ExecuteTemplate(w, "studentViewResult", in)
 	if err != nil {
 		fmt.Println(err)
 	}
