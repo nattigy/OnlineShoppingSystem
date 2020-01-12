@@ -1,4 +1,15 @@
 {{define "studentClassMates"}}
     <h2>Class Mates</h2>
-    {{.}}
+    <table>
+        {{range .}}
+
+            <tr>
+                <td>{{.FirstName}}</td>
+                <td>{{.MiddleName}}</td>
+                <td>{{.Email}}</td>
+            </tr>
+
+
+        {{end}}
+    </table>
 {{end}}
