@@ -105,9 +105,28 @@ func (p *StudentHandler) StudentUpdateProfile(w http.ResponseWriter, r *http.Req
 		fmt.Println("Id not found")
 		return
 	}
+
+	email := r.FormValue("studentEmail")
+	password := r.FormValue("studentPassword")
+	profile := r.FormValue("studentProfilePic")
+
 	in := StudentInfo{
 		User:          user,
 		UpdateProfile: models.Student{Email: user.Email, Password: user.Password},
+	}
+
+	if email != "" && password != "" && profile != "" {
+		user.Email = email
+		user.Password = password
+		in = StudentInfo{
+			User:          user,
+			UpdateProfile: models.Student{Email: user.Email, Password: user.Password},
+		}
+		studentUpdateInfo := models.Student{Email: email, Password: password, ProfilePic: profile}
+		errs := p.SUsecase.StudentUpdateProfile(studentUpdateInfo)
+		if errs != nil {
+			fmt.Println(errs)
+		}
 	}
 	//_ = json.NewEncoder(w).Encode(data)
 	err = p.templ.ExecuteTemplate(w, "studentPortal.html", in)

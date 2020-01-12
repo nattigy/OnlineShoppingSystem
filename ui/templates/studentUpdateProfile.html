@@ -1,4 +1,10 @@
 {{define "studentUpdateProfile"}}
-    <h2>Update Profile</h2>
-    {{.}}
+    <div class="container pt-4">
+        <form action="/student/updateProfile">
+            <input type="text" name="studentEmail" placeholder="{{.Email}}">
+            <input type="password" name="studentPassword" placeholder="Password">
+            <input type="file" name="studentProfilePic" placeholder="Profile Pic">
+            <input type="submit" value="Submit" onsubmit="updateStudentProfile()">
+        </form>
+    </div>
 {{end}}
