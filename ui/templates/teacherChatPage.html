@@ -16,6 +16,7 @@
             <div>
                 {{range $index, $item := .Parents}}
                     <div class="card">
+                        <p id="parentId" class="hide">{{$item.Id}}</p>
                         <p class="card-title">{{$item.Name}}</p>
                     </div>
                 {{end}}
@@ -25,13 +26,14 @@
             <div class="bg-info p-2">Me</div>
             <div class="h-100 bg-dark">
 
-                {{range $index, $item := .}}
-                    <div class="card bg-{{if .}}primary{{else}}info{{end}}">
+                {{range $index, $item := .Messages}}
+                    <div class="card bg-{{if eq .From "teacher"}}primary{{else}}info{{end}}">
                         <p class="card-title">message</p>
                     </div>
                 {{end}}
 
-                <form action="/send" method="post">
+                <form action="/teacher/send" method="post" onsubmit="getParentId()">
+                    <input type="hidden" id="formParentId" name="parentId">
                     <input placeholder="Your massage" type="text" name="message"><input type="submit">
                 </form>
             </div>

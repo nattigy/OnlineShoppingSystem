@@ -26,3 +26,8 @@ function makeNewPost() {
 function DeletePost(task) {
     window.location.href = '/teacher/removeTask?id=' + task.Id
 }
+
+function getParentId() {
+    id = document.getElementById("parentId").innerText;
+    document.getElementById("formParentId").value = id
+}

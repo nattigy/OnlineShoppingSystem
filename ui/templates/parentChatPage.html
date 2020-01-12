@@ -15,7 +15,7 @@
             <div class="bg-primary p-2">Teacher</div>
             <div>
                 <div class="card">
-                    <p class="card-title">Name</p>
+                    <p class="card-title">{{.Teacher.Name}}</p>
                 </div>
             </div>
         </div>
@@ -23,13 +23,13 @@
             <div class="bg-info p-2">Me</div>
             <div class="h-100 bg-dark">
 
-                {{range $index, $item := .}}
-                    <div class="card bg-{{if .}}primary{{else}}info{{end}}">
-                        <p class="card-title">message</p>
+                {{range $index, $item := .Messages}}
+                    <div class="card bg-{{if eq $item.From "teacher"}}primary{{else}}info{{end}}">
+                        <p class="card-title">{{$item.MessageContent}}</p>
                     </div>
                 {{end}}
 
-                <form action="/send" method="post">
+                <form action="/parent/send" method="post">
                     <input placeholder="Your massage" type="text" name="message"><input type="submit">
                 </form>
             </div>
