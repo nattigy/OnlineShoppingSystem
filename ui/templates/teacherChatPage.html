@@ -1,15 +1,10 @@
-{{define "teacherChatPage"}}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="/assets/css/student.css" rel="stylesheet"/>
-        <title>Teacher Chat</title>
-    </head>
-    <body>
+{{define "teacherChatPage.layout"}}
     {{template "navbar.html" .User}}
+    {{template "teacherChatPage"}}
+    {{template "footer"}}
+{{end}}
+
+{{define "teacherChatPage"}}
     <div class="container bg-light row h-75">
         <div class="col-4">
             <div class="bg-primary p-2">Parent</div>
@@ -41,11 +36,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Script Tags -->
-    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/main.js"></script>
-    </body>
-    </html>
 {{end}}

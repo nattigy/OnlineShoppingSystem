@@ -1,15 +1,10 @@
-{{define "teacherUploadResource"}}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="/assets/css/student.css" rel="stylesheet"/>
-        <title>Teacher Chat</title>
-    </head>
-    <body>
+{{define "teacherUploadResource.layout"}}
     {{template "navbar.html" .User}}
+    {{template "teacherUploadResource"}}
+    {{template "footer"}}
+{{end}}
+
+{{define "teacherUploadResource"}}
     <!-- Upload Resource Start -->
     <div class="container bg-light top-to-bottom shadow-sm pt-5" id="uploadResources">
         <form>
@@ -62,13 +57,4 @@
         </table>
     </div>
     <!-- Upload Resource End -->
-    <!-- Script Tags -->
-    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/datepicker.js"></script>
-    <script src="/assets/js/calander.js"></script>
-    <script src="/assets/js/table.js"></script>
-    <script src="/assets/js/main.js"></script>
-    </body>
-    </html>
 {{end}}

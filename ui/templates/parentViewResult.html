@@ -1,20 +1,10 @@
-{{define "parentViewResult"}}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="/assets/css/student.css" rel="stylesheet"/>
-        <title>Welcome {{.User.Email}}</title>
-    </head>
-    <body>
+{{define "parentViewResult.layout"}}
     {{template "navbar.html" .User}}
+    {{template "parentViewResult"}}
+    {{template "footer"}}
+{{end}}
+
+{{define "parentViewResult"}}
     <h2>View Grade</h2>
     {{.Result}}
-    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/main.js"></script>
-    </body>
-    </html>
 {{end}}

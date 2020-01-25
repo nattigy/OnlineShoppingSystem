@@ -1,15 +1,10 @@
-{{define "studentUpdateProfile"}}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta content="width=device-width, initial-scale=1" name="viewport"/>
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet"/>
-        <link href="/assets/css/student.css" rel="stylesheet"/>
-        <title>Welcome {{.User.Email}}</title>
-    </head>
-    <body>
+{{define "studentUpdateProfile.layout"}}
     {{template "navbar.html" .User}}
+    {{template "studentUpdateProfile"}}
+    {{template "footer"}}
+{{end}}
+
+{{define "studentUpdateProfile"}}
     <div class="container pt-4">
         <form action="/student/updateProfile">
             <input type="text" name="studentEmail" placeholder="{{.UpdateProfile.Email}}">
@@ -18,8 +13,4 @@
             <input type="submit" value="Submit" onsubmit="updateStudentProfile()">
         </form>
     </div>
-    <!-- Script Tags -->
-    <script src="/assets/js/jquery-3.4.1.slim.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script src="/assets/js/main.js"></script>
 {{end}}

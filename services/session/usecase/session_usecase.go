@@ -6,6 +6,7 @@ import (
 	session2 "github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type SessionUsecase struct {
@@ -21,9 +22,19 @@ func (s *SessionUsecase) Sessions() ([]models.Session, []error) {
 	return data, err
 }
 
-func (s *SessionUsecase) DeleteSession(id uint) []error {
-	err := s.session.DeleteSession(id)
-	return err
+func (s *SessionUsecase) DeleteSession(id uint, w http.ResponseWriter, r *http.Request) []error {
+	cookie, _ := r.Cookie("session")
+	cookie = &http.Cookie{
+		Name:     "session",
+		Value:    "",
+		Path:     "/",
+		MaxAge:   0,
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+	}
+	http.SetCookie(w, cookie)
+	errs := s.session.DeleteSession(id)
+	return errs
 }
 
 func (s *SessionUsecase) UpdateSession(sess models.Session) (models.Session, []error) {
@@ -31,8 +42,15 @@ func (s *SessionUsecase) UpdateSession(sess models.Session) (models.Session, []e
 	return data, err
 }
 
-func (s *SessionUsecase) StoreSession(sess models.Session) (models.Session, []error) {
-	data, err := s.session.StoreSession(sess)
+func (s *SessionUsecase) CreateSession(w http.ResponseWriter, sess models.Session) (models.Session, []error) {
+	cookie := &http.Cookie{
+		Name:     "session",
+		Value:    sess.Uuid,
+		HttpOnly: true,
+		Path:     "/",
+	}
+	http.SetCookie(w, cookie)
+	data, err := s.session.CreateSession(sess)
 	return data, err
 }
 
