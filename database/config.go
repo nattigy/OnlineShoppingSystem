@@ -7,6 +7,6 @@ import (
 )
 
 func Config() (*gorm.DB, error) {
-	dbConn, err := gorm.Open("postgres", "host=localhost user=postgres dbname=pscsgorm password=mo port=2349 sslmode=disable")
+	dbConn, err := gorm.Open("postgres", "host=localhost user=postgres dbname=pscsgorm password=1234 sslmode=disable")
 	return dbConn, err
 }

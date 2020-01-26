@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/api/admin"
+	studentApi2 "github.com/nattigy/parentschoolcommunicationsystem/delivery/http/api/studentApi"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/chatHandler"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/parentHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/studentHandlers"
@@ -56,7 +57,7 @@ func main() {
 	studentRepo := repository.NewGormStudentRepository(gormdb)
 	studentSer := usecase.NewStudentUsecase(studentRepo)
 	studentHandler := studentHandlers.NewStudentHandler(templ, sessionSer, *studentSer)
-	//studentApi := studentApi2.NewStudentApi(studentSer)
+	studentApi := studentApi2.NewStudentApi(studentSer)
 
 	teacherRepo := repository2.NewGormTeacherRepository(gormdb)
 	teacherSer := usecase2.NewTeacherUsecase(teacherRepo)
@@ -132,11 +133,14 @@ func main() {
 	router.GET("/api/admin/teacher/:id", adminApi.GetTeacherById)
 	router.GET("/api/admin/parents", adminApi.GetParents)
 	router.GET("/api/admin/parent/:id", adminApi.GetParentById)
+
+	router.GET("/api/student/viewTasks/:id", studentApi.ViewTasks)
+
 	router.DELETE("/api/admin/student/delete/:id", adminApi.DeleteStudent)
 	router.DELETE("/api/admin/teacher/delete/:id", adminApi.DeleteTeacher)
 	router.DELETE("/api/admin/parent/delete/:id", adminApi.DeleteParent)
 
-	err = http.ListenAndServe(":3000", mux)
+	err = http.ListenAndServe(":3000", router)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
