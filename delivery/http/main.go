@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/api/admin"
+	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/chatHandler"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/parentHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/studentHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/teacherHandlers"
+	repository6 "github.com/nattigy/parentschoolcommunicationsystem/services/chatServices/repository"
+	usecase6 "github.com/nattigy/parentschoolcommunicationsystem/services/chatServices/usecase"
 	"html/template"
 	"net/http"
 
@@ -65,6 +68,10 @@ func main() {
 	parentHandler := parentHandlers.NewParentHandler(templ, *sessionSer)
 	//parentApi := parentApi2.NewParentApi(parentSer)
 
+	charRepo := repository6.NewChatRepository(gormdb)
+	chatServ := usecase6.NewChatUsecase(charRepo)
+	chatHandle := chatHandler.NewChatHandler(templ, chatServ, sessionSer, teacherSer, studentSer, parentSer)
+
 	adminApi := admin.NewAdminApi(studentSer, teacherSer, parentSer)
 
 	authRepo := repository4.NewAuthenticateRepository(gormdb)
@@ -105,6 +112,12 @@ func main() {
 	mux.Handle("/admin/parent/new", authHandler.AuthenticateUser(http.HandlerFunc(parentHandler.AddParent)))
 	mux.Handle("/admin/parents", authHandler.AuthenticateUser(http.HandlerFunc(parentHandler.GetParents)))
 	mux.Handle("/admin/parent/delete", authHandler.AuthenticateUser(http.HandlerFunc(parentHandler.DeleteParent)))
+
+	//Chat
+	mux.Handle("/parent/send", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Send)))
+	mux.Handle("/teacher/send", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Send)))
+	mux.Handle("/parent/receive", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Get)))
+	mux.Handle("/teacher/receive", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Get)))
 
 	//RestAPI
 

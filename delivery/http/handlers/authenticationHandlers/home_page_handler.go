@@ -31,7 +31,7 @@ func (h *HomePageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		fmt.Println(err)
-		_ = h.tmpl.ExecuteTemplate(w, "home.layout", false)
+		_ = h.tmpl.ExecuteTemplate(w, "home.layout", LoginError{})
 		return
 	}
 	sess, errs := h.session.GetSession(cookie.Value)

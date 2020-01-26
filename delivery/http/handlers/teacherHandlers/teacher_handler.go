@@ -5,6 +5,7 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/teacherServices/usecase"
+	"github.com/nattigy/parentschoolcommunicationsystem/validateInput"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -20,8 +21,15 @@ func NewTeacherHandler(templ *template.Template, session session.SessionUsecase,
 	return &TeacherHandler{templ: templ, Session: session, TUsecase: TUsecase}
 }
 
+type Error struct {
+	Title            string
+	Description      string
+	ShortDescription string
+}
+
 type TeacherInfo struct {
 	User          models.User
+	Session       models.Session
 	Resource      models.Resources
 	UpdateProfile models.Teacher
 	Students      []models.Student
@@ -30,6 +38,7 @@ type TeacherInfo struct {
 	Tasks         []models.Task
 	Result        []models.Result
 	Teacher       models.Teacher
+	Error         Error
 }
 
 func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
@@ -42,16 +51,21 @@ func (th *TeacherHandler) DeleteTeacher(w http.ResponseWriter, r *http.Request) 
 }
 
 func (th *TeacherHandler) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-	teacher, _ := th.TUsecase.GetTeacherById(user.Id)
-
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
+	var user models.User
 	email := r.FormValue("studentEmail")
 	password := r.FormValue("studentPassword")
 	profile := r.FormValue("studentProfilePic")
 
+	user.Email = sess.Email
+	user.Role = sess.Role
+	user.LoggedIn = true
+
 	in := TeacherInfo{
 		User:          user,
 		UpdateProfile: teacher,
+		Session:       sess,
 	}
 
 	if email != "" || password != "" || profile != "" {
@@ -65,6 +79,7 @@ func (th *TeacherHandler) UpdateTeacher(w http.ResponseWriter, r *http.Request) 
 		in = TeacherInfo{
 			User:          user,
 			UpdateProfile: newTeaher,
+			Session:       sess,
 		}
 	}
 	err := th.templ.ExecuteTemplate(w, "teacherUpdateProfile.layout", in)
@@ -74,24 +89,46 @@ func (th *TeacherHandler) UpdateTeacher(w http.ResponseWriter, r *http.Request) 
 }
 
 func (th *TeacherHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-	teacher, _ := th.TUsecase.GetTeacherById(user.Id)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
+
 	title := r.FormValue("title")
-	shortDescriptio := r.FormValue("shortDescription")
+	shortDescription := r.FormValue("shortDescription")
 	description := r.FormValue("description")
 	grade, _ := strconv.Atoi(r.FormValue("grade"))
 	section := r.FormValue("section")
+	token := r.FormValue("csrf")
 
-	teacher, errs := th.TUsecase.GetTeacherById(user.Id)
-	newTask := models.Task{Title: title, ShortDescription: shortDescriptio, Description: description, ClassRoomId: teacher.ClassRoomId, SubjectId: teacher.SubjectId}
+	taskValidation := validateInput.Input{VErrors: validateInput.ValidationErrors{}}
+	taskValidation.MatchesPattern(title, validateInput.StringRX)
+	taskValidation.MatchesPattern(shortDescription, validateInput.StringRX)
+	taskValidation.MatchesPattern(description, validateInput.StringRX)
+	taskValidation.MatchesPattern(section, validateInput.StringRX)
+	taskValidation.CSRFCheck(token, sess)
+
+	teacher, errs := th.TUsecase.GetTeacherById(sess.UserID)
+	newTask := models.Task{Title: title, ShortDescription: shortDescription, Description: description, ClassRoomId: teacher.ClassRoomId, SubjectId: teacher.SubjectId}
 
 	if len(errs) > 0 {
 		fmt.Println(errs)
 	}
 
-	//input validation
+	if len(taskValidation.VErrors) > 0 {
+		tt := taskValidation.VErrors[title][0]
+		ss := taskValidation.VErrors[shortDescription][0]
+		dd := taskValidation.VErrors[description][0]
+		csrf := taskValidation.VErrors[token][0]
+		fmt.Println(csrf)
+		in := TeacherInfo{
+			User:    models.User{Role: sess.Role, Email: sess.Email, Id: sess.UserID, LoggedIn: true},
+			Teacher: teacher,
+			Session: sess,
+			Error:   Error{Title: tt, ShortDescription: ss, Description: dd},
+		}
+		_ = th.templ.ExecuteTemplate(w, "teacherMakeNewPost.layout", in)
+	}
 
-	if title != "" && shortDescriptio != "" && description != "" && grade != 0 && section != "" {
+	if len(taskValidation.VErrors) == 0 && title != "" && shortDescription != "" && description != "" && grade != 0 && section != "" {
 		errs = th.TUsecase.CreateTask(newTask)
 		if errs != nil {
 			fmt.Println(errs)
@@ -99,8 +136,10 @@ func (th *TeacherHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	in := TeacherInfo{
-		User:    user,
+		User:    models.User{Role: sess.Role, Email: sess.Email, Id: sess.UserID, LoggedIn: true},
 		Teacher: teacher,
+		Session: sess,
+		Error:   Error{},
 	}
 
 	err := th.templ.ExecuteTemplate(w, "teacherMakeNewPost.layout", in)
@@ -110,14 +149,14 @@ func (th *TeacherHandler) CreateTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (th *TeacherHandler) GetTasks(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-	teacher, _ := th.TUsecase.GetTeacherById(user.Id)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
 	prevoiusPosts, errs := th.TUsecase.GetTasks(teacher.SubjectId)
 	if errs != nil {
 		fmt.Println(errs)
 	}
 	in := TeacherInfo{
-		User:      user,
+		User:      models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true},
 		FetchPost: prevoiusPosts,
 		Tasks:     prevoiusPosts,
 	}
@@ -154,7 +193,8 @@ func (th *TeacherHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (th *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	user := models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true}
 	in := TeacherInfo{
 		User: user,
 	}
@@ -174,7 +214,8 @@ func (th *TeacherHandler) DeleteResource(w http.ResponseWriter, r *http.Request)
 }
 
 func (th *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	user := models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true}
 	in := TeacherInfo{
 		User: user,
 	}
@@ -185,7 +226,8 @@ func (th *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
 }
 
 func (th *TeacherHandler) ViewStudents(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	user := models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true}
 	students, errs := th.TUsecase.ViewStudents(user.Id)
 	if errs != nil {
 		fmt.Println(errs)

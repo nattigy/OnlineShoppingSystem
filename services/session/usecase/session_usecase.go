@@ -59,20 +59,19 @@ func (s *SessionUsecase) GetSession(value string) (models.Session, []error) {
 	return data, err
 }
 
-func (s *SessionUsecase) Check(w http.ResponseWriter, r *http.Request) (models.User, error) {
+func (s *SessionUsecase) Check(w http.ResponseWriter, r *http.Request) (models.Session, error) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return models.User{}, err
+		return models.Session{}, err
 	}
 	sess, _ := s.GetSession(cookie.Value)
-	user, _ := s.GetUser(sess.UserID)
-	if user.Role != checkUserRole(r.URL.Path) {
+	if sess.Role != checkUserRole(r.URL.Path) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return models.User{}, nil
+		return models.Session{}, nil
 	}
-	return user, err
+	return sess, err
 }
 
 func (s *SessionUsecase) GetUser(id uint) (models.User, []error) {
