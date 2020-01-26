@@ -11,6 +11,6 @@ type SessionUsecase interface {
 	UpdateSession(sess models.Session) (models.Session, []error)
 	CreateSession(w http.ResponseWriter, sess models.Session) (models.Session, []error)
 	GetSession(value string) (models.Session, []error)
-	Check(w http.ResponseWriter, r *http.Request) (models.User, error)
+	Check(w http.ResponseWriter, r *http.Request) (models.Session, error)
 	GetUser(id uint) (models.User, []error)
 }

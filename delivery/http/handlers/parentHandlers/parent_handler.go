@@ -35,9 +35,9 @@ func (ph *ParentHandler) DeleteParent(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ph *ParentHandler) ViewGrade(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	in := ParentInfo{
-		User:   user,
+		User:   models.User{Id: sess.ID, Email: sess.Email, Role: sess.Role, LoggedIn: true},
 		Result: []models.Result{},
 	}
 	err := ph.templ.ExecuteTemplate(w, "parentViewResult.layout", in)

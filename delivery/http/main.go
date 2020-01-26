@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/api/admin"
+	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/chatHandler"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/parentHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/studentHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/teacherHandlers"
+	repository6 "github.com/nattigy/parentschoolcommunicationsystem/services/chatServices/repository"
+	usecase6 "github.com/nattigy/parentschoolcommunicationsystem/services/chatServices/usecase"
 	"html/template"
 	"net/http"
 
@@ -30,7 +33,7 @@ import (
 var templ = template.Must(template.ParseGlob("ui/templates/*.html"))
 
 func CreateTables(gormdb *gorm.DB) {
-	gormdb.CreateTable(&models.Teacher{}, &models.Parent{}, &models.ClassRoom{}, &models.Subject{}, &models.Resources{}, &models.Student{}, &models.Result{}, &models.Task{}, &models.Comment{}, &models.User{}, &models.Session{}, &models.Message{})
+	gormdb.CreateTable(&models.Section{}, &models.Teacher{}, &models.Parent{}, &models.ClassRoom{}, &models.Subject{}, &models.Resources{}, &models.Student{}, &models.Result{}, &models.Task{}, &models.Comment{}, &models.User{}, &models.Session{}, &models.Message{})
 }
 
 func main() {
@@ -45,24 +48,29 @@ func main() {
 	defer gormdb.Close()
 
 	//CreateTables(gormdb)
+	//PopulateTables(gormdb)
 
 	sessionRepo := repository5.NewSessionRepository(gormdb)
 	sessionSer := usecase5.NewSessionUsecase(sessionRepo)
 
 	studentRepo := repository.NewGormStudentRepository(gormdb)
 	studentSer := usecase.NewStudentUsecase(studentRepo)
-	studentHandler := studentHandlers.NewStudentHandler(templ, sessionSer)
+	studentHandler := studentHandlers.NewStudentHandler(templ, sessionSer, *studentSer)
 	//studentApi := studentApi2.NewStudentApi(studentSer)
 
 	teacherRepo := repository2.NewGormTeacherRepository(gormdb)
 	teacherSer := usecase2.NewTeacherUsecase(teacherRepo)
-	teacherHandler := teacherHandlers.NewTeacherHandler()
+	teacherHandler := teacherHandlers.NewTeacherHandler(templ, sessionSer, *teacherSer)
 	//teacherApi := teacherApi2.NewTeacherApi(teacherSer)
 
 	parentRepo := repository3.NewGormParentRepository(gormdb)
 	parentSer := usecase3.NewParentUsecase(parentRepo)
-	parentHandler := parentHandlers.NewParentHandler(templ, sessionSer)
+	parentHandler := parentHandlers.NewParentHandler(templ, *sessionSer)
 	//parentApi := parentApi2.NewParentApi(parentSer)
+
+	charRepo := repository6.NewChatRepository(gormdb)
+	chatServ := usecase6.NewChatUsecase(charRepo)
+	chatHandle := chatHandler.NewChatHandler(templ, chatServ, sessionSer, teacherSer, studentSer, parentSer)
 
 	adminApi := admin.NewAdminApi(studentSer, teacherSer, parentSer)
 
@@ -77,12 +85,14 @@ func main() {
 	mux.HandleFunc("/logout", authHandler.Logout)
 
 	mux.Handle("/student/viewTask", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.ViewTasks)))
+	//mux.HandleFunc("/student/viewTask", studentHandler.ViewTasks)
 	mux.Handle("/student/comment", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.Comment)))
 	mux.Handle("/student/updateProfile", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.UpdateStudent)))
 	mux.Handle("/student/viewClass", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.ViewClass)))
 	mux.Handle("/student/resources", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.ViewResources)))
 	mux.Handle("/student/viewResult", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.ViewResult)))
 
+	mux.Handle("/teacher/makeNewPost", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.CreateTask)))
 	mux.Handle("/teacher/editPost", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.UpdateTask)))
 	mux.Handle("/teacher/removeTask", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.DeleteTask)))
 	mux.Handle("/teacher/uploadResources", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.UploadResource)))
@@ -103,6 +113,11 @@ func main() {
 	mux.Handle("/admin/parents", authHandler.AuthenticateUser(http.HandlerFunc(parentHandler.GetParents)))
 	mux.Handle("/admin/parent/delete", authHandler.AuthenticateUser(http.HandlerFunc(parentHandler.DeleteParent)))
 
+	//Chat
+	mux.Handle("/parent/send", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Send)))
+	mux.Handle("/teacher/send", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Send)))
+	mux.Handle("/parent/receive", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Get)))
+	mux.Handle("/teacher/receive", authHandler.AuthenticateUser(http.HandlerFunc(chatHandle.Get)))
 
 	//RestAPI
 
@@ -117,12 +132,68 @@ func main() {
 	router.GET("/api/admin/teacher/:id", adminApi.GetTeacherById)
 	router.GET("/api/admin/parents", adminApi.GetParents)
 	router.GET("/api/admin/parent/:id", adminApi.GetParentById)
-	router.DELETE("/api/admin/student/delete", adminApi.DeleteStudent)
-	router.DELETE("/api/admin/teacher/delete", adminApi.DeleteTeacher)
-	router.DELETE("/api/admin/parent/delete", adminApi.DeleteParent)
+	router.DELETE("/api/admin/student/delete/:id", adminApi.DeleteStudent)
+	router.DELETE("/api/admin/teacher/delete/:id", adminApi.DeleteTeacher)
+	router.DELETE("/api/admin/parent/delete/:id", adminApi.DeleteParent)
 
-	err = http.ListenAndServe(":3000", router)
+	err = http.ListenAndServe(":3000", mux)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
+}
+
+func PopulateTables(gormdb *gorm.DB) {
+
+	//gormdb.CreateTable(&models.Teacher{})
+	//gormdb.CreateTable(&models.Parent{})
+	//gormdb.CreateTable(&models.ClassRoom{})
+	gormdb.CreateTable(&models.Subject{})
+	//gormdb.CreateTable(&models.Resources{})
+	//gormdb.CreateTable(&models.Student{})
+	//gormdb.CreateTable(&models.Result{})
+	gormdb.CreateTable(&models.Task{})
+	//gormdb.CreateTable(&models.Comment{})
+	//gormdb.CreateTable(&models.User{})
+	//gormdb.CreateTable(&models.Session{})
+	//gormdb.CreateTable(&models.Message{})
+
+	//teacher := models.Teacher{Id: 10, FirstName: "Amanuel", MiddleName: "Tadele", ClassRoomId: 60, SubjectId: 100, Email: "aman@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//teacher2 := models.Teacher{Id: 11, FirstName: "Abebe", MiddleName: "Kebede", ClassRoomId: 61, SubjectId: 101, Email: "abebe@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//parent := models.Parent{Id: 20, FirstName: "Dinsa", MiddleName: "Lemi", Email: "dinsa@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//parent2 := models.Parent{Id: 21, FirstName: "Yewondwosen", MiddleName: "Akale", Email: "yewond@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//classRoom := models.ClassRoom{Id: 60, GradeLevel: 12, HomeRoom: 1}
+	//classRoom2 := models.ClassRoom{Id: 61, GradeLevel: 10, HomeRoom: 2}
+	subject := models.Subject{Id: 100, SubjectName: "Math", ClassRoomId: 1}
+	subject2 := models.Subject{Id: 101, SubjectName: "Physics", ClassRoomId: 2}
+	task := models.Task{Title: "Home Work", Description: "Do it", ShortDescription: "Just Do it or i will kill you", SubjectId: 100, ClassRoomId: 60}
+	task2 := models.Task{Title: "CLass Work", Description: "Do it", ShortDescription: "Just Do it or i will kill you", SubjectId: 101, ClassRoomId: 61}
+	//student := models.Student{FirstName: "Nathnael", MiddleName: "Yewondwosen", Email: "natnael@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 60, ParentId: 2}
+	//student2 := models.Student{FirstName: "Moti", MiddleName: "Dinsa", Email: "moti@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 61, ParentId: 1}
+	//comment := models.Comment{StudentId: 1, TaskId: 1, Data: "nati commenting"}
+	//comment2 := models.Comment{StudentId: 1, TaskId: 1, Data: "moti commenting"}
+	//user1 := models.User{Id: 1, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "nati@gmail.com", Role: "student"}
+	//user2 := models.User{Id: 10, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "aman@gmail.com", Role: "teacher"}
+	//user3 := models.User{Id: 20, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "dinsa@gmail.com", Role: "parent"}
+	//section1 := models.Section{Id: 200, Section: "A", ClassRoomId: 60}
+	//section2 := models.Section{Id: 201, Section: "B", ClassRoomId: 61}
+
+	//fmt.Println(gormdb.Create(&teacher))
+	//fmt.Println(gormdb.Create(&teacher2))
+	//fmt.Println(gormdb.Create(&parent))
+	//fmt.Println(gormdb.Create(&parent2))
+	//fmt.Println(gormdb.Create(&classRoom))
+	//fmt.Println(gormdb.Create(&classRoom2))
+	fmt.Println(gormdb.Create(&subject))
+	fmt.Println(gormdb.Create(&subject2))
+	fmt.Println(gormdb.Create(&task))
+	fmt.Println(gormdb.Create(&task2))
+	//fmt.Println(gormdb.Create(&student))
+	//fmt.Println(gormdb.Create(&student2))
+	//fmt.Println(gormdb.Create(&comment))
+	//fmt.Println(gormdb.Create(&comment2))
+	//fmt.Println(gormdb.Create(&user1))
+	//fmt.Println(gormdb.Create(&user2))
+	//fmt.Println(gormdb.Create(&user3))
+	//fmt.Println(gormdb.Create(&section1))
+	//fmt.Println(gormdb.Create(&section2))
 }

@@ -22,6 +22,7 @@ func NewStudentHandler(templ *template.Template, session session.SessionUsecase,
 
 type StudentInfo struct {
 	User          models.User
+	Student       models.Student
 	Tasks         []models.Task
 	Task          models.Task
 	UpdateProfile models.Student
@@ -43,22 +44,23 @@ func (sh *StudentHandler) DeleteStudent(w http.ResponseWriter, r *http.Request) 
 }
 
 func (sh *StudentHandler) UpdateStudent(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	student, _ := sh.SUsecase.GetStudentById(sess.UserID)
+	user := models.User{Role: sess.Role, Email: student.Email, LoggedIn: true}
 	email := r.FormValue("studentEmail")
 	password := r.FormValue("studentPassword")
 	profile := r.FormValue("studentProfilePic")
 
 	in := StudentInfo{
+		Student:       student,
 		User:          user,
-		UpdateProfile: models.Student{Email: user.Email, Password: user.Password},
+		UpdateProfile: models.Student{Email: student.Email, Password: student.Password},
 	}
 
 	if email != "" || password != "" || profile != "" {
-		fmt.Println("here email and password, ", email, password)
-		user.Email = email
-		user.Password = password
-		studentUpdateInfo := models.Student{Id: user.Id, Email: email, Password: password, ProfilePic: profile}
+		student.Email = email
+		student.Password = password
+		studentUpdateInfo := models.Student{Id: student.Id, Email: email, Password: password, ProfilePic: profile}
 		newStudent, errs := sh.SUsecase.UpdateStudent(studentUpdateInfo)
 		if len(errs) > 0 {
 			fmt.Println(errs)
@@ -75,10 +77,12 @@ func (sh *StudentHandler) UpdateStudent(w http.ResponseWriter, r *http.Request) 
 }
 
 func (sh *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	subjectId, _ := strconv.Atoi(r.FormValue("subjectId"))
 	//input validation
-	student, errs := sh.SUsecase.GetStudentById(user.Id)
+	student, errs := sh.SUsecase.GetStudentById(sess.UserID)
+	fmt.Println(sess.Role)
+	user := models.User{Id: student.Id, Email: student.Email, Role: sess.Role, LoggedIn: true}
 	data, _ := sh.SUsecase.ViewTasks(student.ClassRoomId, uint(subjectId))
 	if len(errs) > 0 {
 		fmt.Println(errs)
@@ -95,18 +99,19 @@ func (sh *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 }
 
 func (sh *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 
 	comment := r.FormValue("comment")
 	taskId, _ := strconv.Atoi(r.FormValue("taskId"))
 	//input validation
-	_ = sh.SUsecase.Comment(uint(taskId), user.Id, comment)
+	_ = sh.SUsecase.Comment(uint(taskId), sess.UserID, comment)
 	http.Redirect(w, r, "/student/viewTask?subjectId=1", http.StatusSeeOther)
 }
 
 func (sh *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-	student, _ := sh.SUsecase.GetStudentById(user.Id)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	student, _ := sh.SUsecase.GetStudentById(sess.UserID)
+	user := models.User{Email: student.Email, Role: sess.Role, Id: student.Id, LoggedIn: true}
 	classMates, _ := sh.SUsecase.ViewClass(student.ClassRoomId)
 	in := StudentInfo{
 		User:       user,
@@ -119,14 +124,14 @@ func (sh *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
 }
 
 func (sh *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	subjectId, _ := strconv.Atoi(r.FormValue("subjectId"))
 	resources, errs := sh.SUsecase.ViewResources(uint(subjectId))
 	if len(errs) > 0 {
 		fmt.Println(errs)
 	}
 	in := StudentInfo{
-		User:      user,
+		User:      models.User{Id: sess.ID, Role: sess.Role, Email: sess.Email},
 		Resources: resources,
 	}
 	err := sh.templ.ExecuteTemplate(w, "studentResources.layout", in)
@@ -136,10 +141,10 @@ func (sh *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) 
 }
 
 func (sh *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-	results, _ := sh.SUsecase.ViewResult(user.Id)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	results, _ := sh.SUsecase.ViewResult(sess.UserID)
 	in := StudentInfo{
-		User:   user,
+		User:   models.User{Role: sess.Role, Email: sess.Email, Id: sess.UserID},
 		Result: results.Result,
 	}
 	err := sh.templ.ExecuteTemplate(w, "studentViewResult.layout", in)

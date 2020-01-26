@@ -2,7 +2,6 @@ package chatHandler
 
 import (
 	"fmt"
-	"github.com/julienschmidt/httprouter"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/chatServices"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/parentServices"
@@ -30,30 +29,30 @@ func NewChatHandler(templ *template.Template, chatServices chatServices.ChatUsec
 type ChatInfo struct {
 	Message []models.Message
 	User    models.User
-	Parents []models.Student
+	Parents []models.Parent
 	Teacher models.Teacher
 }
 
-func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
+func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request) {
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	data := r.FormValue("message")
-	if user.Role == "parent" {
-		s, err := c.parentUsecase.GetChild(user.Id)
+	if sess.Role == "parent" {
+		s, err := c.parentUsecase.GetChild(sess.UserID)
 		teacher, err := c.studentUsecase.GetHomeRoomTeacher(s.Id)
 		if len(err) != 0 {
 			fmt.Println(err)
 			return
 		}
-		errs := c.chatServices.Store(user.Id, teacher.Id, data, "parent")
+		errs := c.chatServices.Store(sess.UserID, teacher.Id, data, "parent")
 		if len(err) != 0 {
 			fmt.Println(errs)
 			return
 		}
 		http.Redirect(w, r, "/parent/receive", http.StatusSeeOther)
-	} else if user.Role == "teacher" {
+	} else if sess.Role == "teacher" {
 		parentId := r.FormValue("parentId")
 		id, _ := strconv.Atoi(parentId)
-		errs := c.chatServices.Store(uint(id), user.Id, data, "teacher")
+		errs := c.chatServices.Store(uint(id), sess.UserID, data, "teacher")
 		if len(errs) != 0 {
 			fmt.Println(errs)
 			return
@@ -62,15 +61,16 @@ func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request, p httprouter.
 	}
 }
 
-func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-	if user.Role == "parent" {
-		s, err := c.parentUsecase.GetChild(user.Id)
+func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request) {
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	user := models.User{Id: sess.ID, Email: sess.Email, Role: sess.Role, LoggedIn: true}
+	if sess.Role == "parent" {
+		s, err := c.parentUsecase.GetChild(sess.UserID)
 		teacher, err := c.studentUsecase.GetHomeRoomTeacher(s.Id)
 		if len(err) != 0 {
 			fmt.Println(err)
 		}
-		messages, errs := c.chatServices.Get(user.Id, teacher.Id)
+		messages, errs := c.chatServices.Get(sess.UserID, teacher.Id)
 		if len(err) != 0 {
 			fmt.Println(errs)
 		}
@@ -80,15 +80,22 @@ func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request, p httprouter.P
 			Teacher: teacher,
 		}
 		_ = c.templ.ExecuteTemplate(w, "parentChatPage.layout", in)
-	} else if user.Role == "teacher" {
-		teacher, _ := c.teacherUsecase.GetTeacherById(user.Id)
-		parents, errs := c.teacherUsecase.ViewStudents(teacher.ClassRoomId)
+	} else if sess.Role == "teacher" {
+		teacher, _ := c.teacherUsecase.GetTeacherById(sess.UserID)
+		students, errs := c.teacherUsecase.ViewStudents(teacher.ClassRoomId)
 		if len(errs) != 0 {
 			fmt.Println(errs)
 		}
 		parentId := r.FormValue("parentId")
 		id, _ := strconv.Atoi(parentId)
-		messages, errs := c.chatServices.Get(uint(id), user.Id)
+		messages, errs := c.chatServices.Get(uint(id), sess.UserID)
+		var parents []models.Parent
+		if len(students) > 0 {
+			for i := 0; i < len(students); i++ {
+				parent, _ := c.parentUsecase.GetParentById(students[0].ParentId)
+				parents = append(parents, parent)
+			}
+		}
 		in := ChatInfo{
 			Message: messages,
 			User:    user,
