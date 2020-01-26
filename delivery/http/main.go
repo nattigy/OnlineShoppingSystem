@@ -135,12 +135,16 @@ func main() {
 	router.GET("/api/admin/parent/:id", adminApi.GetParentById)
 
 	router.GET("/api/student/viewTasks/:id", studentApi.ViewTasks)
+	router.GET("/api/student/comment/:id", studentApi.Comment)
+	router.GET("/api/student/viewClass/:id", studentApi.ViewClass)
+	router.GET("/api/student/viewResources/:id", studentApi.ViewClass)
+	router.GET("/api/student/viewResult/:id", studentApi.ViewResult)
 
 	router.DELETE("/api/admin/student/delete/:id", adminApi.DeleteStudent)
 	router.DELETE("/api/admin/teacher/delete/:id", adminApi.DeleteTeacher)
 	router.DELETE("/api/admin/parent/delete/:id", adminApi.DeleteParent)
 
-	err = http.ListenAndServe(":3000", router)
+	err = http.ListenAndServe(":3000", mux)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
