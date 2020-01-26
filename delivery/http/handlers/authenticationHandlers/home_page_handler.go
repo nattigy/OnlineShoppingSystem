@@ -2,7 +2,6 @@ package authenticationHandlers
 
 import (
 	"fmt"
-	"github.com/julienschmidt/httprouter"
 	"html/template"
 	"net/http"
 
@@ -24,7 +23,7 @@ func NewHomePageHandler(tmpl *template.Template, student studentServices.Student
 	return &HomePageHandler{tmpl: tmpl, student: student, teacher: teacher, parent: parent, session: session}
 }
 
-func (h *HomePageHandler) Home(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (h *HomePageHandler) Home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		_ = h.tmpl.ExecuteTemplate(w, "errorPage", http.StatusSeeOther)
 		return
@@ -32,7 +31,7 @@ func (h *HomePageHandler) Home(w http.ResponseWriter, r *http.Request, p httprou
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		fmt.Println(err)
-		_ = h.tmpl.ExecuteTemplate(w, "index.html", false)
+		_ = h.tmpl.ExecuteTemplate(w, "home.layout", false)
 		return
 	}
 	sess, errs := h.session.GetSession(cookie.Value)

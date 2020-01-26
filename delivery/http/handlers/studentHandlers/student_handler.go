@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
-	"github.com/nattigy/parentschoolcommunicationsystem/services/studentServices"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/studentServices/usecase"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -13,11 +13,11 @@ import (
 type StudentHandler struct {
 	templ    *template.Template
 	Session  session.SessionUsecase
-	SUsecase studentServices.StudentUsecase
+	SUsecase usecase.StudentUsecase
 }
 
-func NewStudentHandler(templ *template.Template, session session.SessionUsecase) *StudentHandler {
-	return &StudentHandler{templ: templ, Session: session}
+func NewStudentHandler(templ *template.Template, session session.SessionUsecase, SUsecase usecase.StudentUsecase) *StudentHandler {
+	return &StudentHandler{templ: templ, Session: session, SUsecase: SUsecase}
 }
 
 type StudentInfo struct {
@@ -54,10 +54,11 @@ func (sh *StudentHandler) UpdateStudent(w http.ResponseWriter, r *http.Request) 
 		UpdateProfile: models.Student{Email: user.Email, Password: user.Password},
 	}
 
-	if email != "" && password != "" && profile != "" {
+	if email != "" || password != "" || profile != "" {
+		fmt.Println("here email and password, ", email, password)
 		user.Email = email
 		user.Password = password
-		studentUpdateInfo := models.Student{Email: email, Password: password, ProfilePic: profile}
+		studentUpdateInfo := models.Student{Id: user.Id, Email: email, Password: password, ProfilePic: profile}
 		newStudent, errs := sh.SUsecase.UpdateStudent(studentUpdateInfo)
 		if len(errs) > 0 {
 			fmt.Println(errs)
@@ -67,7 +68,7 @@ func (sh *StudentHandler) UpdateStudent(w http.ResponseWriter, r *http.Request) 
 			UpdateProfile: newStudent,
 		}
 	}
-	err := sh.templ.ExecuteTemplate(w, "studentUpdateProfile", in)
+	err := sh.templ.ExecuteTemplate(w, "studentUpdateProfile.layout", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -75,19 +76,19 @@ func (sh *StudentHandler) UpdateStudent(w http.ResponseWriter, r *http.Request) 
 
 func (sh *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 	user, _ := r.Context().Value("signed_in_user_session").(models.User)
-	subjectId, err := strconv.Atoi(r.FormValue("id"))
+	subjectId, _ := strconv.Atoi(r.FormValue("subjectId"))
 	//input validation
-	student, _ := sh.SUsecase.GetStudentById(user.Id)
-	data, _ := sh.SUsecase.ViewTasks(student.SectionId, uint(subjectId))
-	if err != nil {
-		fmt.Println(err)
+	student, errs := sh.SUsecase.GetStudentById(user.Id)
+	data, _ := sh.SUsecase.ViewTasks(student.ClassRoomId, uint(subjectId))
+	if len(errs) > 0 {
+		fmt.Println(errs)
 	}
 	in := StudentInfo{
 		Tasks: data,
 		Task:  models.Task{},
 		User:  user,
 	}
-	err = sh.templ.ExecuteTemplate(w, "studentViewTask", in)
+	err := sh.templ.ExecuteTemplate(w, "studentViewTask.layout", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -100,7 +101,7 @@ func (sh *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
 	taskId, _ := strconv.Atoi(r.FormValue("taskId"))
 	//input validation
 	_ = sh.SUsecase.Comment(uint(taskId), user.Id, comment)
-	http.Redirect(w, r, "/student/viewTask", http.StatusSeeOther)
+	http.Redirect(w, r, "/student/viewTask?subjectId=1", http.StatusSeeOther)
 }
 
 func (sh *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
@@ -111,7 +112,7 @@ func (sh *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
 		User:       user,
 		ClassMates: classMates,
 	}
-	err := sh.templ.ExecuteTemplate(w, "studentClassMates", in)
+	err := sh.templ.ExecuteTemplate(w, "studentClassMates.layout", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -128,7 +129,7 @@ func (sh *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) 
 		User:      user,
 		Resources: resources,
 	}
-	err := sh.templ.ExecuteTemplate(w, "studentResources", in)
+	err := sh.templ.ExecuteTemplate(w, "studentResources.layout", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -141,7 +142,7 @@ func (sh *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
 		User:   user,
 		Result: results.Result,
 	}
-	err := sh.templ.ExecuteTemplate(w, "studentViewResult", in)
+	err := sh.templ.ExecuteTemplate(w, "studentViewResult.layout", in)
 	if err != nil {
 		fmt.Println(err)
 	}

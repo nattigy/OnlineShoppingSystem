@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type GormTeacherRepository struct {
@@ -37,7 +38,10 @@ func (tr *GormTeacherRepository) DeleteTeacher(id uint) []error {
 
 func (tr *GormTeacherRepository) UpdateTeacher(newTeacher models.Teacher) (models.Teacher, []error) {
 	teacher := models.Teacher{}
-	errs := tr.conn.Model(&teacher).Where("id = ?", newTeacher.Id).Updates(&models.Parent{Email: newTeacher.Email, Password: newTeacher.Password}).GetErrors()
+	user := models.User{}
+	password, _ := bcrypt.GenerateFromPassword([]byte(newTeacher.Password), bcrypt.DefaultCost)
+	errs := tr.conn.Model(&teacher).Where("id = ?", newTeacher.Id).Updates(&models.Teacher{Email: newTeacher.Email, Password: string(password)}).GetErrors()
+	errs = tr.conn.Model(&user).Where("id = ?", newTeacher.Id).Updates(&models.User{Email: newTeacher.Email, Password: string(password)}).GetErrors()
 	return teacher, errs
 }
 

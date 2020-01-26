@@ -1,12 +1,12 @@
 {{define "studentUpdateProfile.layout"}}
     {{template "navbar.html" .User}}
-    {{template "studentUpdateProfile"}}
+    {{template "studentUpdateProfile" .}}
     {{template "footer"}}
 {{end}}
 
 {{define "studentUpdateProfile"}}
     <div class="container pt-4">
-        <form action="/student/updateProfile">
+        <form action="/student/updateProfile" class="my-5 py-5">
             <input type="text" name="studentEmail" placeholder="{{.UpdateProfile.Email}}">
             <input type="password" name="studentPassword" placeholder="Password">
             <input type="file" name="studentProfilePic" placeholder="Profile Pic">

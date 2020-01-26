@@ -79,7 +79,7 @@ func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request, p httprouter.P
 			User:    user,
 			Teacher: teacher,
 		}
-		_ = c.templ.ExecuteTemplate(w, "parentChatPage", in)
+		_ = c.templ.ExecuteTemplate(w, "parentChatPage.layout", in)
 	} else if user.Role == "teacher" {
 		teacher, _ := c.teacherUsecase.GetTeacherById(user.Id)
 		parents, errs := c.teacherUsecase.ViewStudents(teacher.ClassRoomId)
@@ -94,6 +94,6 @@ func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request, p httprouter.P
 			User:    user,
 			Parents: parents,
 		}
-		_ = c.templ.ExecuteTemplate(w, "teacherChatPage", in)
+		_ = c.templ.ExecuteTemplate(w, "teacherChatPage.layout", in)
 	}
 }

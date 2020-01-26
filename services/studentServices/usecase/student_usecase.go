@@ -34,12 +34,12 @@ func (sr *StudentUsecase) DeleteStudent(id uint) []error {
 }
 
 func (sr *StudentUsecase) UpdateStudent(newStudent models.Student) (models.Student, []error) {
-	student, errs := sr.UpdateStudent(newStudent)
+	student, errs := sr.studentRepo.UpdateStudent(newStudent)
 	return student, errs
 }
 
 func (sr *StudentUsecase) ViewTasks(classRoomId uint, subjectId uint) ([]models.Task, []error) {
-	tasks, errs := sr.ViewTasks(classRoomId, subjectId)
+	tasks, errs := sr.studentRepo.ViewTasks(classRoomId, subjectId)
 	return tasks, errs
 }
 
@@ -64,6 +64,6 @@ func (sr *StudentUsecase) ViewResult(studentId uint) (models.Student, []error) {
 }
 
 func (sr *StudentUsecase) GetHomeRoomTeacher(studentId uint) (models.Teacher, []error) {
-	teacher, errs := sr.GetHomeRoomTeacher(studentId)
+	teacher, errs := sr.studentRepo.GetHomeRoomTeacher(studentId)
 	return teacher, errs
 }

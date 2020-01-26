@@ -1,6 +1,6 @@
 {{define "teacherMakeNewPost.layout"}}
     {{template "navbar.html" .User}}
-    {{template "teacherMakeNewPost"}}
+    {{template "teacherMakeNewPost" .}}
     {{template "footer"}}
 {{end}}
 
@@ -29,6 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label for="title">Title</label>
+                        <input type="hidden" name="subjectId" value="{{.Teacher.SubjectId}}">
                         <input type="text" name="title" class="form-control" id="title"/>
                     </div>
                     <div class="form-group">
@@ -49,6 +50,4 @@
     <script src="/assets/js/datepicker.js"></script>
     <script src="/assets/js/calander.js"></script>
     <script src="/assets/js/table.js"></script>
-    </body>
-    </html>
 {{end}}

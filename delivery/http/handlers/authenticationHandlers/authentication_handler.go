@@ -35,7 +35,7 @@ func NewAuthenticationHandler(tmpl *template.Template, student studentServices.S
 	return &AuthenticationHandler{tmpl: tmpl, student: student, teacher: teacher, parent: parent, session: session, utility: utility}
 }
 
-func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request) {
 	user := models.User{
 		Email:    r.FormValue("email"),
 		Password: r.FormValue("password"),
@@ -73,7 +73,7 @@ func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request, p 
 
 }
 
-func (l *AuthenticationHandler) Logout(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (l *AuthenticationHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	cookie, _ := r.Cookie("session")
 	sessId, _ := l.session.GetSession(cookie.Value)
 	errors := l.session.DeleteSession(sessId.ID, w, r)
@@ -115,7 +115,7 @@ func (l *AuthenticationHandler) UserHandler(next httprouter.Handle) httprouter.H
 
 func Redirect(w http.ResponseWriter, r *http.Request, role models.User) {
 	if role.Role == Student {
-		http.Redirect(w, r, "/student/viewTask?id=1", http.StatusSeeOther)
+		http.Redirect(w, r, "/student/viewTask?subjectId=100", http.StatusSeeOther)
 	} else if role.Role == Teacher {
 		http.Redirect(w, r, "/teacher/makeNewPost", http.StatusSeeOther)
 	} else if role.Role == Parent {

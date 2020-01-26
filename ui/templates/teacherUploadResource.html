@@ -1,6 +1,6 @@
 {{define "teacherUploadResource.layout"}}
     {{template "navbar.html" .User}}
-    {{template "teacherUploadResource"}}
+    {{template "teacherUploadResource" .}}
     {{template "footer"}}
 {{end}}
 
@@ -57,4 +57,7 @@
         </table>
     </div>
     <!-- Upload Resource End -->
+    <script src="/assets/js/datepicker.js"></script>
+    <script src="/assets/js/calander.js"></script>
+    <script src="/assets/js/table.js"></script>
 {{end}}

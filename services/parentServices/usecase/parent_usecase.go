@@ -44,6 +44,6 @@ func (pr *ParentUsecase) ViewGrade(parentId uint) (models.Student, []error) {
 }
 
 func (pr *ParentUsecase) GetChild(parentId uint) (models.Student, []error) {
-	student, errs := pr.GetChild(parentId)
+	student, errs := pr.parentRepo.GetChild(parentId)
 	return student, errs
 }

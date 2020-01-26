@@ -3,17 +3,17 @@ package parentHandlers
 import (
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/session/usecase"
 	"html/template"
 	"net/http"
 )
 
 type ParentHandler struct {
 	templ   *template.Template
-	Session session.SessionUsecase
+	Session usecase.SessionUsecase
 }
 
-func NewParentHandler(templ *template.Template, session session.SessionUsecase) *ParentHandler {
+func NewParentHandler(templ *template.Template, session usecase.SessionUsecase) *ParentHandler {
 	return &ParentHandler{templ: templ, Session: session}
 }
 
@@ -40,7 +40,7 @@ func (ph *ParentHandler) ViewGrade(w http.ResponseWriter, r *http.Request) {
 		User:   user,
 		Result: []models.Result{},
 	}
-	err := ph.templ.ExecuteTemplate(w, "parentViewResult", in)
+	err := ph.templ.ExecuteTemplate(w, "parentViewResult.layout", in)
 	if err != nil {
 		fmt.Println(err)
 	}

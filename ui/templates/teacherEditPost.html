@@ -1,6 +1,6 @@
 {{define "teacherEditPost.layout"}}
     {{template "navbar.html" .User}}
-    {{template "teacherEditPost"}}
+    {{template "teacherEditPost" .}}
     {{template "footer"}}
 {{end}}
 
@@ -155,4 +155,7 @@
         </div>
     </div>
     <!-- Edit modal -->
+    <script src="/assets/js/datepicker.js"></script>
+    <script src="/assets/js/calander.js"></script>
+    <script src="/assets/js/table.js"></script>
 {{end}}
