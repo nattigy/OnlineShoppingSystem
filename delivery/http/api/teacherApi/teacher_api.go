@@ -14,7 +14,7 @@ func NewTeacherApi(teacherServices teacherServices.TeacherUsecase) *TeacherApi {
 	return &TeacherApi{teacherServices: teacherServices}
 }
 
-func (ta *TeacherApi) CreateTask(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (ta *TeacherApi) CreateTask(w http.ResponseWriter, r *http.Request, p httprouter.Params){
 
 }
 
@@ -22,7 +22,7 @@ func (ta *TeacherApi) GetTasks(w http.ResponseWriter, r *http.Request, p httprou
 
 }
 
-func (ta *TeacherApi) UpdateTask(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (ta *TeacherApi) UpdateTask(w http.ResponseWriter, r *http.Request, p httprouter.Params){
 
 }
 
@@ -34,7 +34,7 @@ func (ta *TeacherApi) UploadResource(w http.ResponseWriter, r *http.Request, p h
 
 }
 
-func (ta *TeacherApi) DeleteResource(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (ta *TeacherApi) DeleteResource(w http.ResponseWriter, r *http.Request, p httprouter.Params){
 
 }
 
@@ -45,3 +45,5 @@ func (ta *TeacherApi) ReportGrade(w http.ResponseWriter, r *http.Request, p http
 func (ta *TeacherApi) ViewStudents(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 }
+
+
