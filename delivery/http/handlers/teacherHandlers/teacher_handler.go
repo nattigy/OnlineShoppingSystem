@@ -6,6 +6,7 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/teacherServices/usecase"
 	"github.com/nattigy/parentschoolcommunicationsystem/validateInput"
+	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -39,20 +40,11 @@ type TeacherInfo struct {
 	Result        []models.Result
 	Teacher       models.Teacher
 	Error         Error
+	Teachers      []models.Teacher
 }
 
 func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
-	type Teacher struct {
-		Id          uint
-		FirstName   string
-		MiddleName  string
-		Email       string
-		Password    string
-		ProfilePic  string
-		SubjectId   uint
-		ClassRoomId uint
-	}
-
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	FirstName := r.FormValue("firstname")
 	MiddleName := r.FormValue("middlename")
 	Email := r.FormValue("email")
@@ -62,6 +54,7 @@ func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
 	ClassRoomId := r.FormValue("classroomid")
 
 	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && ProfilePic != "" && SubjectId != "" && ClassRoomId != "" {
+		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
 		subject, _ := strconv.Atoi(SubjectId)
 		newSubject := uint(subject)
 		classRoom, _ := strconv.Atoi(ClassRoomId)
@@ -70,7 +63,7 @@ func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
 			FirstName:   FirstName,
 			MiddleName:  MiddleName,
 			Email:       Email,
-			Password:    Password,
+			Password:    string(password),
 			ProfilePic:  ProfilePic,
 			SubjectId:   newSubject,
 			ClassRoomId: newClassRoom,
@@ -80,15 +73,26 @@ func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(errs)
 		}
 	}
-	http.Redirect(w, r, "", http.StatusSeeOther)
+	in := TeacherInfo{
+		User: models.User{Role: sess.Role, Id: sess.UserID, Email: sess.Email, LoggedIn: true},
+	}
+	err := th.templ.ExecuteTemplate(w, "adminAddTeacher.layout", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (th *TeacherHandler) GetTeachers(w http.ResponseWriter, r *http.Request) {
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	teachers, errs := th.TUsecase.GetTeachers()
 	if errs != nil {
 		fmt.Println(errs)
 	}
-	err := th.templ.ExecuteTemplate(w, "getTeachers", teachers)
+	in := TeacherInfo{
+		User:     models.User{Role: sess.Role, Id: sess.UserID, Email: sess.Email, LoggedIn: true},
+		Teachers: teachers,
+	}
+	err := th.templ.ExecuteTemplate(w, "adminListTeacher.layout", in)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -101,7 +105,7 @@ func (th *TeacherHandler) DeleteTeacher(w http.ResponseWriter, r *http.Request) 
 	if len(errs) > 0 {
 		fmt.Println(errs)
 	}
-	http.Redirect(w, r, "", http.StatusSeeOther)
+	http.Redirect(w, r, "/admin/teachers", http.StatusSeeOther)
 }
 
 func (th *TeacherHandler) UpdateTeacher(w http.ResponseWriter, r *http.Request) {

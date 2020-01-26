@@ -21,6 +21,7 @@ const (
 	Student string = "student"
 	Teacher string = "teacher"
 	Parent  string = "parent"
+	Admin   string = "admin"
 )
 
 type AuthenticationHandler struct {
@@ -142,6 +143,8 @@ func Redirect(w http.ResponseWriter, r *http.Request, role models.User) {
 		http.Redirect(w, r, "/teacher/makeNewPost", http.StatusSeeOther)
 	} else if role.Role == Parent {
 		http.Redirect(w, r, "/parent/viewGrade", http.StatusSeeOther)
+	} else if role.Role == Admin {
+		http.Redirect(w, r, "/admin/parent/new", http.StatusSeeOther)
 	} else {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}

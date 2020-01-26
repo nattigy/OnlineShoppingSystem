@@ -39,6 +39,15 @@ type Parent struct {
 	ProfilePic string
 }
 
+type Admin struct {
+	Id         uint
+	FirstName  string
+	MiddleName string
+	Email      string
+	Password   string
+	ProfilePic string
+}
+
 type Resources struct {
 	gorm.Model
 	SubjectId   uint

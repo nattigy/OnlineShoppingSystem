@@ -27,6 +27,18 @@ function DeletePost(task) {
     window.location.href = '/teacher/removeTask?id=' + task.Id
 }
 
+function DeleteTeacher(teacher) {
+    window.location.href = '/admin/teacher/delete?id=' + teacher.Id
+}
+
+function DeleteStudent(student) {
+    window.location.href = '/admin/student/delete?id=' + student.Id
+}
+
+function DeleteParent(parent) {
+    window.location.href = '/admin/parent/delete?id=' + parent.Id
+}
+
 function getParentId() {
     id = document.getElementById("parentId").innerText;
     document.getElementById("formParentId").value = id

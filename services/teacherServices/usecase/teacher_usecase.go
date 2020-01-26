@@ -29,7 +29,7 @@ func (tr *TeacherUsecase) GetTeacherById(id uint) (models.Teacher, []error) {
 }
 
 func (tr *TeacherUsecase) DeleteTeacher(id uint) []error {
-	errs := tr.teacherRepo.DeleteTask(id)
+	errs := tr.teacherRepo.DeleteTeacher(id)
 	return errs
 }
 
