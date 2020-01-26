@@ -42,12 +42,66 @@ type TeacherInfo struct {
 }
 
 func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
+	type Teacher struct {
+		Id          uint
+		FirstName   string
+		MiddleName  string
+		Email       string
+		Password    string
+		ProfilePic  string
+		SubjectId   uint
+		ClassRoomId uint
+	}
+
+	FirstName := r.FormValue("firstname")
+	MiddleName := r.FormValue("middlename")
+	Email := r.FormValue("email")
+	Password := r.FormValue("password")
+	ProfilePic := r.FormValue("profilepic")
+	SubjectId := r.FormValue("subjectid")
+	ClassRoomId := r.FormValue("classroomid")
+
+	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && ProfilePic != "" && SubjectId != "" && ClassRoomId != "" {
+		subject, _ := strconv.Atoi(SubjectId)
+		newSubject := uint(subject)
+		classRoom, _ := strconv.Atoi(ClassRoomId)
+		newClassRoom := uint(classRoom)
+		teacher := models.Teacher{
+			FirstName:   FirstName,
+			MiddleName:  MiddleName,
+			Email:       Email,
+			Password:    Password,
+			ProfilePic:  ProfilePic,
+			SubjectId:   newSubject,
+			ClassRoomId: newClassRoom,
+		}
+		errs := th.TUsecase.AddTeacher(teacher)
+		if errs != nil {
+			fmt.Println(errs)
+		}
+	}
+	http.Redirect(w, r, "", http.StatusSeeOther)
 }
 
 func (th *TeacherHandler) GetTeachers(w http.ResponseWriter, r *http.Request) {
+	teachers, errs := th.TUsecase.GetTeachers()
+	if errs != nil {
+		fmt.Println(errs)
+	}
+	err := th.templ.ExecuteTemplate(w, "getTeachers", teachers)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (th *TeacherHandler) DeleteTeacher(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	errs := th.TUsecase.DeleteTeacher(uint(id))
+
+	if len(errs) > 0 {
+		fmt.Println(errs)
+	}
+	http.Redirect(w, r, "", http.StatusSeeOther)
 }
 
 func (th *TeacherHandler) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
