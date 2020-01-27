@@ -1,11 +1,13 @@
 package studentHandlers
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/nattigy/parentschoolcommunicationsystem/database"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
-	"github.com/nattigy/parentschoolcommunicationsystem/services/session/repository"
+	repository2 "github.com/nattigy/parentschoolcommunicationsystem/services/session/mock"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/session/usecase"
+	"github.com/nattigy/parentschoolcommunicationsystem/services/studentServices/mock"
+	usecase2 "github.com/nattigy/parentschoolcommunicationsystem/services/studentServices/usecase"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -23,18 +25,15 @@ func TestStudentHandler_ViewTasks(t *testing.T) {
 		t.Error(err)
 	}
 
-	gormdb, err := database.Config()
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer gormdb.Close()
-
-	sessionRepo := repository.NewSessionRepository(gormdb)
-	sessionSer := usecase.NewSessionUsecase(sessionRepo)
+	sessionMockRepo := repository2.NewSessionMockRepo()
+	sessionSer := usecase.NewSessionUsecase(sessionMockRepo)
 	sessionSer.CreateSession(httprr, models.Session{Role: "student", Uuid: "sgdfgf", UserID: 1})
 
+	studentMockRepo := mock.NewGormStudentMockRepo()
+	studentSer := usecase2.NewStudentUsecase(studentMockRepo)
+
 	//user, _ := req.Context().Value("signed_in_user_session").(models.User)
-	shandler := NewStudentHandler(templ, sessionSer)
+	shandler := NewStudentHandler(templ, sessionSer, *studentSer)
 
 	shandler.ViewTasks(httprr, req)
 	resp := httprr.Result()
@@ -48,7 +47,10 @@ func TestStudentHandler_ViewTasks(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	tasks := models.Task{}
+	_ = json.Unmarshal([]byte(body), &tasks)
 
+	fmt.Println(tasks)
 	if string(body) != "About" {
 		//
 	}
