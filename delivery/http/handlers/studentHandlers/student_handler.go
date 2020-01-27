@@ -33,20 +33,55 @@ type StudentInfo struct {
 
 func (sh *StudentHandler) AddStudent(w http.ResponseWriter, r *http.Request) {
 
-	//err := sh.templ.ExecuteTemplate(w, "adminAddStudent.layout", in)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
+	FirstName := r.FormValue("firstname")
+	MiddleName := r.FormValue("middlename")
+	Email := r.FormValue("email")
+	Password := r.FormValue("password")
+	SectionId := r.FormValue("section")
+	ClassRoomId := r.FormValue("classroomid")
+	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && SectionId != "" && ClassRoomId != "" {
+		student := &models.Student{}
+		student.FirstName = FirstName
+		student.MiddleName = MiddleName
+		student.Email = Email
+		student.Password = Password
+		secID, _ := strconv.Atoi(SectionId)
+		student.SectionId = uint(secID)
+		classId, _ := strconv.Atoi(ClassRoomId)
+		student.ClassRoomId = uint(classId)
+		err := sh.SUsecase.AddStudent(*student)
+		if len(err) > 0 {
+			fmt.Println(err)
+		}
+	}
+	http.Redirect(w, r, "/admin", http.StatusSeeOther)
+
 }
 
 func (sh *StudentHandler) GetStudents(w http.ResponseWriter, r *http.Request) {
-	//err := sh.templ.ExecuteTemplate(w, "adminListStudent.layout", in)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
+	students, err := sh.SUsecase.GetStudents()
+	if len(err) > 0 {
+		fmt.Println(err)
+	}
+	//err = sh.templ.ExecuteTemplate(w, "adminViewStudents", students)
+	errr := sh.templ.ExecuteTemplate(w, "adminViewStudents", students)
+	if errr != nil {
+		fmt.Println(err)
+	}
+
 }
 
 func (sh *StudentHandler) DeleteStudent(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("studentid")
+	if id != "" {
+		converted, _ := strconv.Atoi(id)
+		err := sh.SUsecase.DeleteStudent(uint(converted))
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	http.Redirect(w, r, "/admin", http.StatusSeeOther)
 
 }
 
