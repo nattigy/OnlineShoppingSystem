@@ -21,8 +21,8 @@ func (s *SessionRepository) GetSession(value string) (models.Session, []error) {
 
 func (s *SessionRepository) Sessions() ([]models.Session, []error) {
 	sess := []models.Session{
-		{Role: "student", Email: "nati@gmail.com", UserID: 1, Uuid: "k;ahdfuhiudhfighiuse"},
-		{Role: "teacher", Email: "aman@gmail.com", UserID: 1, Uuid: "k;ahdfuhiudhfighiuse"},
+		{Role: "student", Email: "nati@gmail.com", UserID: 1, Uuid: "kahdfuhiudhfighiuse"},
+		{Role: "teacher", Email: "aman@gmail.com", UserID: 1, Uuid: "tryekahdfuhiudhfighiuse"},
 	}
 	return sess, []error{}
 }

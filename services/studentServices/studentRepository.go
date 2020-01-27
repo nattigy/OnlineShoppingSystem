@@ -9,7 +9,7 @@ type StudentRepository interface {
 	DeleteStudent(id uint) []error
 	UpdateStudent(newStudent models.Student) (models.Student, []error)
 	ViewTasks(classRoomId uint, subjectId uint) ([]models.Task, []error)
-	Comment(taskId uint, studentId uint, data string) []error
+	Comment(taskId uint, studentId uint, studentName string, data string) []error
 	ViewClass(sectionId uint) ([]models.Student, []error)
 	ViewResources(subjectId uint) ([]models.Resources, []error)
 	ViewResult(studentId uint) (models.Student, []error)

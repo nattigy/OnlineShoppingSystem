@@ -1,6 +1,7 @@
 package studentHandlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
@@ -15,11 +16,9 @@ import (
 	"testing"
 )
 
-var templ = template.Must(template.ParseGlob("ui/templates/*.html"))
-
 func TestStudentHandler_ViewTasks(t *testing.T) {
 	httprr := httptest.NewRecorder()
-	req, err := http.NewRequest("GET", "/student/viewTask", nil)
+	req, err := http.NewRequest("GET", "/student/viewTask?subjectId=1", nil)
 
 	if err != nil {
 		t.Error(err)
@@ -27,15 +26,17 @@ func TestStudentHandler_ViewTasks(t *testing.T) {
 
 	sessionMockRepo := repository2.NewSessionMockRepo()
 	sessionSer := usecase.NewSessionUsecase(sessionMockRepo)
-	sessionSer.CreateSession(httprr, models.Session{Role: "student", Uuid: "sgdfgf", UserID: 1})
+	sessionSer.CreateSession(httprr, models.Session{Role: "student", Uuid: "kahdfuhiudhfighiuse", UserID: 1})
+	sess, _ := sessionSer.GetSession("kahdfuhiudhfighiuse")
+	ctx := context.WithValue(req.Context(), "signed_in_user_session", sess)
 
 	studentMockRepo := mock.NewGormStudentMockRepo()
 	studentSer := usecase2.NewStudentUsecase(studentMockRepo)
 
-	//user, _ := req.Context().Value("signed_in_user_session").(models.User)
+	templ := template.Must(template.ParseGlob("C:/Users/Nati/go/src/github.com/nattigy/parentschoolcommunicationsystem/ui/templates/*.html"))
 	shandler := NewStudentHandler(templ, sessionSer, *studentSer)
 
-	shandler.ViewTasks(httprr, req)
+	shandler.ViewTasks(httprr, req.WithContext(ctx))
 	resp := httprr.Result()
 
 	if resp.StatusCode != http.StatusOK {
