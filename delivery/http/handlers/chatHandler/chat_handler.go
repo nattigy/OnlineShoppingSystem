@@ -27,10 +27,10 @@ func NewChatHandler(templ *template.Template, chatServices chatServices.ChatUsec
 }
 
 type ChatInfo struct {
-	Message []models.Message
-	User    models.User
-	Parents []models.Parent
-	Teacher models.Teacher
+	Messages []models.Message
+	User     models.User
+	Parents  []models.Parent
+	Teacher  models.Teacher
 }
 
 func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request) {
@@ -51,6 +51,7 @@ func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/parent/receive", http.StatusSeeOther)
 	} else if sess.Role == "teacher" {
 		parentId := r.FormValue("parentId")
+		fmt.Println(parentId + "parentId")
 		id, _ := strconv.Atoi(parentId)
 		errs := c.chatServices.Store(uint(id), sess.UserID, data, "teacher")
 		if len(errs) != 0 {
@@ -75,9 +76,9 @@ func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(errs)
 		}
 		in := ChatInfo{
-			Message: messages,
-			User:    user,
-			Teacher: teacher,
+			Messages: messages,
+			User:     user,
+			Teacher:  teacher,
 		}
 		_ = c.templ.ExecuteTemplate(w, "parentChatPage.layout", in)
 	} else if sess.Role == "teacher" {
@@ -86,21 +87,37 @@ func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request) {
 		if len(errs) != 0 {
 			fmt.Println(errs)
 		}
+
 		parentId := r.FormValue("parentId")
+		fmt.Println("guvghvhg", parentId)
 		id, _ := strconv.Atoi(parentId)
+		fmt.Println("sessionuser", sess.UserID)
 		messages, errs := c.chatServices.Get(uint(id), sess.UserID)
+		fmt.Println("length", messages)
 		var parents []models.Parent
 		if len(students) > 0 {
 			for i := 0; i < len(students); i++ {
 				parent, _ := c.parentUsecase.GetParentById(students[0].ParentId)
+				fmt.Println(parent.FirstName)
 				parents = append(parents, parent)
+
 			}
 		}
 		in := ChatInfo{
-			Message: messages,
-			User:    user,
-			Parents: parents,
+			Messages: messages,
+			User:     user,
+			Parents:  parents,
 		}
-		_ = c.templ.ExecuteTemplate(w, "teacherChatPage.layout", in)
+		err := c.templ.ExecuteTemplate(w, "teacherChatPage.layout", in)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
+
+//func (c *ChatHandler)GetMessageById(w http.ResponseWriter,r *http.Response){
+//	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+//	user := models.User{Id: sess.ID, Email: sess.Email, Role: sess.Role, LoggedIn: true}
+//
+//
+//}
