@@ -5,5 +5,27 @@
 {{end}}
 
 {{define "teacherViewClasses"}}
-    {{.Students}}
+    <table id="table" class="table  table-borderless  table-hover table-responsive-sm">
+        <!-- <thead> -->
+        <tr>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Email</th>
+        </tr>
+        <!-- </thead> -->
+
+        <!-- <tbody> -->
+
+        {{range $index, $item := .Students}}
+            <tr>
+                <td>{{$item.FirstName}}</td>
+                <td>
+                    {{$item.MiddleName}}
+                </td>
+                <td>{{$item.Email}}</td>
+            </tr>
+        {{end}}
+    </table>
+
+    <script src="/assets/js/table.js"></script>
 {{end}}

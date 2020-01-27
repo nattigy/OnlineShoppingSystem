@@ -6,5 +6,30 @@
 
 {{define "parentViewResult"}}
     <h2>View Grade</h2>
-    {{.Result}}
+    <table id="table" class="table  table-borderless  table-hover table-responsive-sm">
+        <!-- <thead> -->
+        <tr>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Subject Name</th>
+            <th>Assessment</th>
+            <th>Final</th>
+            <th>Total</th>
+        </tr>
+        <!-- </thead> -->
+
+        <!-- <tbody> -->
+        {{range $index, $item := .Result}}
+            <tr>
+                <td>{{$item.Student.FirstName}}</td>
+                <td>{{$item.Student.MiddleName}}</td>
+                <td>{{$item.Subject.SubjectName}}</td>
+                <td>Assessment {{$item.Assessment}}</td>
+                <td>Final {{$item.Final}}</td>
+                <td>Total {{$item.Total}}</td>
+            </tr>
+        {{end}}
+    </table>
+
+    <script src="/assets/js/table.js"></script>
 {{end}}

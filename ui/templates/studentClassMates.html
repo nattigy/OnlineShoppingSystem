@@ -6,12 +6,17 @@
 
 {{define "studentClassMates"}}
     <h2>Class Mates</h2>
-    <table>
+    <table id="table" class="table  table-borderless  table-hover table-responsive-sm">
+        <!-- <thead> -->
         <th>
         <td>First Name</td>
         <td>Middle Name</td>
         <td>Email</td>
         </th>
+        <!-- </thead> -->
+
+        <!-- <tbody> -->
+
         {{range $index, $item := .ClassMates}}
             <tr>
                 <td>{{$item.FirstName}}</td>
@@ -20,4 +25,6 @@
             </tr>
         {{end}}
     </table>
+
+    <script src="/assets/js/table.js"></script>
 {{end}}
