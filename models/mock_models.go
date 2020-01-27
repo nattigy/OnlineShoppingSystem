@@ -67,7 +67,7 @@ var Task1 = Task{
 
 var Teacher1 = Teacher{
 	Id:          40,
-	FirstName:   "anmanuel",
+	FirstName:   "aman",
 	MiddleName:  "belete",
 	Email:       "aman@gmail.com",
 	Password:    "1234",
