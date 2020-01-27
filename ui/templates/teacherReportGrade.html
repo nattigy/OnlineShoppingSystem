@@ -5,5 +5,164 @@
 {{end}}
 
 {{define "teacherReportGrade"}}
-    {{.Result}}
+    <div class="container py-5">
+        <div class="row">
+            <div class="offset-md-2 col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="card-title text-uppercase">Report Grade</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="needs-validation" snovalidate>
+                            <div class="column">
+                                <div class="form-group form-inline">
+                                    <label for="firstname" class="studentid"
+                                    >Student ID:
+                                    </label>
+                                    <input
+                                            type="number"
+                                            id="studentid"
+                                            class="form-control"
+                                            placeholder="Student ID"
+                                            aria-describedby="inputGroupPrepend"
+                                            required
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter student id.
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group form-inline">
+                                    <label for="lastname" class="assesment">Assesment: </label>
+                                    <input
+                                            type="number"
+                                            id="lastname"
+                                            class="form-control"
+                                            placeholder="Assesment"
+                                            aria-describedby="inputGroupPrepend"
+                                            required
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter assesment.
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-inline">
+                                    <label for="lastname" class="test">Test: </label>
+                                    <input
+                                            type="number"
+                                            id="lastname"
+                                            class="form-control"
+                                            placeholder="Test"
+                                            aria-describedby="inputGroupPrepend"
+                                            required
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter test.
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-inline">
+                                    <label for="lastname" class="final">Final: </label>
+                                    <input
+                                            type="number"
+                                            id="lastname"
+                                            class="form-control"
+                                            placeholder="Final"
+                                            aria-describedby="inputGroupPrepend"
+                                            required
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter final result.
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-inline">
+                                    <label for="lastname" class="total">Total: </label>
+                                    <input
+                                            type="number"
+                                            id="total"
+                                            class="form-control"
+                                            placeholder="Total"
+                                            aria-describedby="inputGroupPrepend"
+                                            required
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter total result.
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12 col-xs-12">
+                                        <div class="float-right">
+                                            <button class="btn btn-danger rounded-0" type="reset">
+                                                Reset
+                                            </button>
+                                            <button class="btn btn-primary rounded-0" type="submit">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        (function () {
+            "use strict";
+            window.addEventListener(
+                "load",
+                function () {
+                    var form = document.getElementById("needs-validation");
+                    form.addEventListener(
+                        "submit",
+                        function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add("was-validated");
+                        },
+                        false
+                    );
+                },
+                false
+            );
+        })();
+    </script>
+    <style>
+        .card-header.bg-primary.text-white {
+            text-align: center;
+        }
+
+        .studentid {
+            margin-right: 49px;
+            margin-left: 50px;
+        }
+
+        .assesment {
+            margin-right: 50px;
+            margin-left: 50px;
+        }
+
+        .test {
+            margin-right: 96px;
+            margin-left: 50px;
+        }
+
+        .final {
+            margin-right: 90px;
+            margin-left: 50px;
+        }
+
+        .total {
+            margin-right: 85px;
+            margin-left: 50px;
+        }
+    </style>
 {{end}}

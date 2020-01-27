@@ -6,8 +6,17 @@
 
 {{define "studentViewResult"}}
     <h2>View Result</h2>
-    <div class="container">
-        <table>
+    <table id="table" class="table  table-borderless  table-hover table-responsive-sm">
+        <!-- <thead> -->
+        <tr>
+            <th>Subject Name</th>
+            <th>Assessment</th>
+            <th>Final</th>
+            <th>Total</th>
+        </tr>
+        <!-- </thead> -->
+
+        <!-- <tbody> -->
             {{range $index, $item := .Result}}
                 <tr>
                     <td>{{$item.Subject.SubjectName}}</td>
@@ -16,6 +25,7 @@
                     <td>Total {{$item.Total}}</td>
                 </tr>
             {{end}}
-        </table>
-    </div>
+    </table>
+
+    <script src="/assets/js/table.js"></script>
 {{end}}
