@@ -28,8 +28,7 @@ func (sa *StudentApi) ViewTasks(w http.ResponseWriter, r *http.Request, p httpro
 
 func (sa *StudentApi) Comment(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	id, _ := strconv.Atoi(p.ByName("id"))
-
-	errs := sa.studentService.Comment(uint(id), uint(id), "")
+	errs := sa.studentService.Comment(uint(id), uint(id), "", "")
 	if len(errs) > 0 {
 		_ = json.NewEncoder(w).Encode(errs)
 	}
