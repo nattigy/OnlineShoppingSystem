@@ -107,11 +107,11 @@ func (sh *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 
 func (sh *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
-
+	student, _ := sh.SUsecase.GetStudentById(sess.UserID)
 	comment := r.FormValue("comment")
 	taskId, _ := strconv.Atoi(r.FormValue("taskId"))
 	//input validation
-	_ = sh.SUsecase.Comment(uint(taskId), sess.UserID, comment)
+	_ = sh.SUsecase.Comment(uint(taskId), sess.UserID, student.FirstName, comment)
 	http.Redirect(w, r, "/student/viewTask?subjectId=1", http.StatusSeeOther)
 }
 

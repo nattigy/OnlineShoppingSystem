@@ -14,6 +14,7 @@ type ClassRoom struct {
 
 type Comment struct {
 	gorm.Model
+	FirstName string
 	Data      string
 	TaskId    uint
 	StudentId uint

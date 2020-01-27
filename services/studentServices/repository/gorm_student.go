@@ -51,8 +51,8 @@ func (sr *GormStudentRepository) ViewTasks(classRoomId uint, subjectId uint) ([]
 	return tasks, errs
 }
 
-func (sr *GormStudentRepository) Comment(taskId uint, studentId uint, data string) []error {
-	errs := sr.conn.Create(&models.Comment{TaskId: taskId, StudentId: studentId, Data: data}).GetErrors()
+func (sr *GormStudentRepository) Comment(taskId uint, studentId uint, studentName string, data string) []error {
+	errs := sr.conn.Create(&models.Comment{TaskId: taskId, StudentId: studentId, FirstName: studentName, Data: data}).GetErrors()
 	return errs
 }
 
