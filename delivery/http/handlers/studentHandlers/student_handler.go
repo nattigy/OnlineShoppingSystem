@@ -33,10 +33,17 @@ type StudentInfo struct {
 
 func (sh *StudentHandler) AddStudent(w http.ResponseWriter, r *http.Request) {
 
+	//err := sh.templ.ExecuteTemplate(w, "adminAddStudent.layout", in)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }
 
 func (sh *StudentHandler) GetStudents(w http.ResponseWriter, r *http.Request) {
-
+	//err := sh.templ.ExecuteTemplate(w, "adminListStudent.layout", in)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }
 
 func (sh *StudentHandler) DeleteStudent(w http.ResponseWriter, r *http.Request) {

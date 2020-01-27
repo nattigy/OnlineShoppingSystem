@@ -6,6 +6,7 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/teacherServices/usecase"
 	"github.com/nattigy/parentschoolcommunicationsystem/validateInput"
+	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -39,15 +40,72 @@ type TeacherInfo struct {
 	Result        []models.Result
 	Teacher       models.Teacher
 	Error         Error
+	Teachers      []models.Teacher
 }
 
 func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	FirstName := r.FormValue("firstname")
+	MiddleName := r.FormValue("middlename")
+	Email := r.FormValue("email")
+	Password := r.FormValue("password")
+	ProfilePic := r.FormValue("profilepic")
+	SubjectId := r.FormValue("subjectid")
+	ClassRoomId := r.FormValue("classroomid")
+
+	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && ProfilePic != "" && SubjectId != "" && ClassRoomId != "" {
+		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
+		subject, _ := strconv.Atoi(SubjectId)
+		newSubject := uint(subject)
+		classRoom, _ := strconv.Atoi(ClassRoomId)
+		newClassRoom := uint(classRoom)
+		teacher := models.Teacher{
+			FirstName:   FirstName,
+			MiddleName:  MiddleName,
+			Email:       Email,
+			Password:    string(password),
+			ProfilePic:  ProfilePic,
+			SubjectId:   newSubject,
+			ClassRoomId: newClassRoom,
+		}
+		errs := th.TUsecase.AddTeacher(teacher)
+		if errs != nil {
+			fmt.Println(errs)
+		}
+	}
+	in := TeacherInfo{
+		User: models.User{Role: sess.Role, Id: sess.UserID, Email: sess.Email, LoggedIn: true},
+	}
+	err := th.templ.ExecuteTemplate(w, "adminAddTeacher.layout", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (th *TeacherHandler) GetTeachers(w http.ResponseWriter, r *http.Request) {
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	teachers, errs := th.TUsecase.GetTeachers()
+	if errs != nil {
+		fmt.Println(errs)
+	}
+	in := TeacherInfo{
+		User:     models.User{Role: sess.Role, Id: sess.UserID, Email: sess.Email, LoggedIn: true},
+		Teachers: teachers,
+	}
+	err := th.templ.ExecuteTemplate(w, "adminListTeacher.layout", in)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (th *TeacherHandler) DeleteTeacher(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	errs := th.TUsecase.DeleteTeacher(uint(id))
+
+	if len(errs) > 0 {
+		fmt.Println(errs)
+	}
+	http.Redirect(w, r, "/admin/teachers", http.StatusSeeOther)
 }
 
 func (th *TeacherHandler) UpdateTeacher(w http.ResponseWriter, r *http.Request) {
