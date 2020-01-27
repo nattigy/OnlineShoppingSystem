@@ -23,6 +23,7 @@ func NewStudentHandler(templ *template.Template, session session.SessionUsecase,
 type StudentInfo struct {
 	User          models.User
 	Student       models.Student
+	Students      []models.Student
 	Tasks         []models.Task
 	Task          models.Task
 	UpdateProfile models.Student
@@ -32,41 +33,45 @@ type StudentInfo struct {
 }
 
 func (sh *StudentHandler) AddStudent(w http.ResponseWriter, r *http.Request) {
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	firstName := r.FormValue("firstname")
+	middleName := r.FormValue("middlename")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	sectionId := r.FormValue("section")
+	classRoomId := r.FormValue("classroomid")
 
-	FirstName := r.FormValue("firstname")
-	MiddleName := r.FormValue("middlename")
-	Email := r.FormValue("email")
-	Password := r.FormValue("password")
-	SectionId := r.FormValue("section")
-	ClassRoomId := r.FormValue("classroomid")
-	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && SectionId != "" && ClassRoomId != "" {
-		student := &models.Student{}
-		student.FirstName = FirstName
-		student.MiddleName = MiddleName
-		student.Email = Email
-		student.Password = Password
-		secID, _ := strconv.Atoi(SectionId)
-		student.SectionId = uint(secID)
-		classId, _ := strconv.Atoi(ClassRoomId)
-		student.ClassRoomId = uint(classId)
-		err := sh.SUsecase.AddStudent(*student)
+	if firstName != "" && middleName != "" && email != "" && password != "" && sectionId != "" && classRoomId != "" {
+		secID, _ := strconv.Atoi(sectionId)
+		classId, _ := strconv.Atoi(classRoomId)
+		student := models.Student{FirstName: firstName, MiddleName: middleName, Email: email, Password: password, SectionId: uint(secID), ClassRoomId: uint(classId)}
+		err := sh.SUsecase.AddStudent(student)
 		if len(err) > 0 {
 			fmt.Println(err)
 		}
 	}
-	http.Redirect(w, r, "/admin", http.StatusSeeOther)
-
+	in := StudentInfo{
+		User: models.User{Id: sess.UserID, Role: sess.Role, LoggedIn: true},
+	}
+	errr := sh.templ.ExecuteTemplate(w, "adminAddStudent.layout", in)
+	if errr != nil {
+		fmt.Println(errr)
+	}
 }
 
 func (sh *StudentHandler) GetStudents(w http.ResponseWriter, r *http.Request) {
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	students, err := sh.SUsecase.GetStudents()
 	if len(err) > 0 {
 		fmt.Println(err)
 	}
-	//err = sh.templ.ExecuteTemplate(w, "adminViewStudents", students)
-	errr := sh.templ.ExecuteTemplate(w, "adminViewStudents", students)
+	in := StudentInfo{
+		User:     models.User{Id: sess.UserID, Role: sess.Role, LoggedIn: true},
+		Students: students,
+	}
+	errr := sh.templ.ExecuteTemplate(w, "adminListStudent.layout", in)
 	if errr != nil {
-		fmt.Println(err)
+		fmt.Println(errr)
 	}
 
 }
@@ -80,9 +85,7 @@ func (sh *StudentHandler) DeleteStudent(w http.ResponseWriter, r *http.Request) 
 			fmt.Println(err)
 		}
 	}
-
-	http.Redirect(w, r, "/admin", http.StatusSeeOther)
-
+	http.Redirect(w, r, "/admin/students", http.StatusSeeOther)
 }
 
 func (sh *StudentHandler) UpdateStudent(w http.ResponseWriter, r *http.Request) {

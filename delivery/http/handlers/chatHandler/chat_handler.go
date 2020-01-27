@@ -51,14 +51,14 @@ func (c *ChatHandler) Send(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/parent/receive", http.StatusSeeOther)
 	} else if sess.Role == "teacher" {
 		parentId := r.FormValue("parentId")
-		fmt.Println(parentId + "parentId")
 		id, _ := strconv.Atoi(parentId)
+		fmt.Println("parentId : ", id)
 		errs := c.chatServices.Store(uint(id), sess.UserID, data, "teacher")
 		if len(errs) != 0 {
 			fmt.Println(errs)
 			return
 		}
-		http.Redirect(w, r, "/teacher/receive", http.StatusSeeOther)
+		http.Redirect(w, r, "/teacher/receive?parentId="+parentId, http.StatusSeeOther)
 	}
 }
 
@@ -87,20 +87,25 @@ func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request) {
 		if len(errs) != 0 {
 			fmt.Println(errs)
 		}
-
 		parentId := r.FormValue("parentId")
-		fmt.Println("guvghvhg", parentId)
 		id, _ := strconv.Atoi(parentId)
-		fmt.Println("sessionuser", sess.UserID)
 		messages, errs := c.chatServices.Get(uint(id), sess.UserID)
-		fmt.Println("length", messages)
 		var parents []models.Parent
 		if len(students) > 0 {
 			for i := 0; i < len(students); i++ {
-				parent, _ := c.parentUsecase.GetParentById(students[0].ParentId)
-				fmt.Println(parent.FirstName)
+				parent, _ := c.parentUsecase.GetParentById(students[i].ParentId)
 				parents = append(parents, parent)
-
+			}
+		}
+		if id == 0 {
+			in := ChatInfo{
+				Messages: []models.Message{},
+				User:     user,
+				Parents:  parents,
+			}
+			err := c.templ.ExecuteTemplate(w, "teacherChatPage.layout", in)
+			if err != nil {
+				fmt.Println(err)
 			}
 		}
 		in := ChatInfo{
@@ -114,10 +119,3 @@ func (c *ChatHandler) Get(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
-//func (c *ChatHandler)GetMessageById(w http.ResponseWriter,r *http.Response){
-//	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
-//	user := models.User{Id: sess.ID, Email: sess.Email, Role: sess.Role, LoggedIn: true}
-//
-//
-//}
