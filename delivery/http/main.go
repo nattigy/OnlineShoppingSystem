@@ -140,14 +140,14 @@ func main() {
 	router.GET("/api/student/viewTasks/:id", studentApi.ViewTasks)
 
 	router.POST("/api/teacher/post/new", teacherApi.CreateTask)
-	router.POST("/api/teacher/post/update/:id", teacherApi.UpdateTask)
-	router.GET("/api/teacher/post/delete/:id", teacherApi.DeleteTask)
+	//router.POST("/api/teacher/post/:id", teacherApi.UpdateTask)
+	router.DELETE("/api/teacher/delete/:id", teacherApi.DeleteTask)
 	router.POST("/api/teacher/resource/new", teacherApi.UploadResource)
 	router.POST("/api/teacher/grade/new", teacherApi.ReportGrade)
 	router.GET("/api/teacher/students", teacherApi.ViewStudents)
-	router.GET("/api/teacher/Posts", teacherApi.GetTasks)
+	router.GET("/api/teacher/posts", teacherApi.GetTasks)
 
-	err = http.ListenAndServe(":3000", mux)
+	err = http.ListenAndServe(":3000", router)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
