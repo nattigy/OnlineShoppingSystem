@@ -5,39 +5,6 @@
 {{end}}
 
 {{define "teacherChatPage"}}
-    {{/*    <div class="container bg-light row h-75">*/}}
-    {{/*        <div class="col-4">*/}}
-    {{/*            <div class="bg-primary p-2">Parent</div>*/}}
-    {{/*            <div>*/}}
-    {{/*                {{range $index, $item := .Parents}}*/}}
-    {{/*                    <div class="card">*/}}
-    {{/*                        <p id="parentId" class="hide" style="visibility: hidden">{{$item.Id}}</p>*/}}
-    {{/*                        <p class="card-title">{{$item.FirstName}}</p>*/}}
-    {{/*                    </div>*/}}
-    {{/*                {{end}}*/}}
-    {{/*            </div>*/}}
-    {{/*        </div>*/}}
-    {{/*        <div class="col-8 h-100">*/}}
-    {{/*            <div class="bg-info p-2">Me</div>*/}}
-    {{/*            <div class="h-100 bg-dark">*/}}
-    {{/*                <div>*/}}
-    {{/*                    <form action="/teacher/send" method="post" onsubmit="getParentId()">*/}}
-    {{/*                        <input type="hidden" id="formParentId" name="parentId">*/}}
-    {{/*                        <input placeholder="Your message" type="text" name="message"><input type="submit">*/}}
-    {{/*                    </form>*/}}
-    {{/*                </div>*/}}
-    {{/*                <div>*/}}
-    {{/*                </div>*/}}
-    {{/*                {{range $index, $item := .Messages}}*/}}
-    {{/*                    <div class="card bg-{{if eq .From "teacher"}}primary{{else}}info{{end}}">*/}}
-    {{/*                        <p class="card-title">message</p>*/}}
-    {{/*                    </div>*/}}
-    {{/*                {{end}}*/}}
-    {{/*            </div>*/}}
-    {{/*        </div>*/}}
-    {{/*    </div>*/}}
-
-
     <div class="row rounded-lg overflow-hidden shadow">
         <!-- Parents box-->
         <div class="col-3 px-0">
@@ -47,23 +14,16 @@
                 </div>
                 <div class="messages-box">
                     <div class="list-group rounded-0">
-
                         {{range $index, $item := .Parents}}
-{{/*                            <div onclick="submitParentId({{$item}})">*/}}
-                                <a class="list-group-item list-group-item-action active text-white rounded-0" href="/teacher/receive?parentId={{$item.Id}}">
-                                    <div class="media">
-                                        <img
-                                                src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg"
-                                                alt="user" width="50" class="rounded-circle">
-                                        <div class="media-body ml-4">
-                                            <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <h6 class="mb-0">{{$item.FirstName}}</h6>
-                                                <small class="small font-weight-bold"></small>
-                                            </div>
-                                        </div>
+                            <div onclick="submitParentId({{$item.Id}})"
+                                 class="bg-info border-dark border-top py-3 px-2 mx-1">
+                                <div class="d-flex mx-1">
+                                    <div class="overflow-hidden px-2"><img style="width: 50px; height: 50px;"
+                                                                           src="/assets/img/avatar_usae7z.svg" alt="">
                                     </div>
-                                </a>
-{{/*                            </div>*/}}
+                                    <h6 class="mb-0 py-2 px-3 flex-fil text-left">{{$item.FirstName}}</h6>
+                                </div>
+                            </div>
                         {{end}}
                     </div>
                 </div>
@@ -73,9 +33,9 @@
         <div class="col-8 px-0">
             <div class="px-4 py-5 chat-box bg-white">
                 <!-- Sender Message-->
-                <form action="/teacher/send" class="bg-light input-message" method="post" val>
+                <form action="/teacher/send" class="bg-light input-message" method="post" onsubmit="subPareId()">
                     <div class="input-group">
-                        <input type="hidden" id="formParentId" name="parentId" value="2">
+                        <input type="hidden" id="formParentId" name="parentId" value="">
                         <input name="message" type="text" placeholder="Type a message" aria-describedby="button-addon2"
                                class="form-control rounded-0 border-0 py-4 bg-light">
                         <div class="input-group-append">
@@ -108,15 +68,7 @@
                         </div>
                     {{end}}
                 {{end}}
-
-
             </div>
         </div>
-        <!--</div>-->
     </div>
-    <script>
-        let params = (new URL(document.location)).searchParams;
-        document.getElementById("formParentId").value= params.get("parentId");
-    </script>
-
 {{end}}

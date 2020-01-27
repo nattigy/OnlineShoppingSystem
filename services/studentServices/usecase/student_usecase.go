@@ -43,8 +43,8 @@ func (sr *StudentUsecase) ViewTasks(classRoomId uint, subjectId uint) ([]models.
 	return tasks, errs
 }
 
-func (sr *StudentUsecase) Comment(taskId uint, studentId uint, data string) []error {
-	errs := sr.studentRepo.Comment(taskId, studentId, data)
+func (sr *StudentUsecase) Comment(taskId uint, studentId uint, studentName string, data string) []error {
+	errs := sr.studentRepo.Comment(taskId, studentId, studentName, data)
 	return errs
 }
 

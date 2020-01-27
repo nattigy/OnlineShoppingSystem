@@ -47,7 +47,12 @@ function getParentId() {
     document.getElementById("formParentId").value = id
 }
 
-function submitParentId(parent){
-    document.getElementById("formParentId").value = parent.Id;
-    window.location.href = 'tudytfutfiytfiyguygytf=' + parent.Id
+function submitParentId(id) {
+    window.location.href = '/teacher/receive?parentId=' + id;
+}
+
+function subPareId() {
+    // e.preventDefault();
+    let params = (new URL(document.location)).searchParams;
+    document.getElementById("formParentId").value = params.get("parentId");
 }
