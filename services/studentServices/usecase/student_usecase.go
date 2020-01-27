@@ -48,6 +48,11 @@ func (sr *StudentUsecase) Comment(taskId uint, studentId uint, studentName strin
 	return errs
 }
 
+func (sr *StudentUsecase) Comments(taskId uint) ([]models.Comment, []error) {
+	comments, errs := sr.studentRepo.Comments(taskId)
+	return comments, errs
+}
+
 func (sr *StudentUsecase) ViewClass(sectionId uint) ([]models.Student, []error) {
 	students, errs := sr.studentRepo.ViewClass(sectionId)
 	return students, errs

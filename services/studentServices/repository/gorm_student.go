@@ -35,6 +35,7 @@ func (sr *GormStudentRepository) GetStudentById(id uint) (models.Student, []erro
 
 func (sr *GormStudentRepository) DeleteStudent(id uint) []error {
 	errs := sr.conn.Unscoped().Where("id = ?", id).Delete(&models.Student{}).GetErrors()
+	errs = sr.conn.Unscoped().Where("id = ?", id).Delete(&models.User{}).GetErrors()
 	return errs
 }
 
@@ -64,6 +65,12 @@ func (sr *GormStudentRepository) ViewClass(sectionId uint) ([]models.Student, []
 	return students, errs
 }
 
+func (sr *GormStudentRepository) Comments(taskId uint) ([]models.Comment, []error) {
+	var comments []models.Comment
+	errs := sr.conn.Where("task_id = ?", taskId).Find(&comments).GetErrors()
+	return comments, errs
+}
+
 func (sr *GormStudentRepository) ViewResources(subjectId uint) ([]models.Resources, []error) {
 	var resources []models.Resources
 	errs := sr.conn.Where("subject_id = ?", subjectId).Find(&resources).GetErrors()
@@ -82,8 +89,6 @@ func (sr *GormStudentRepository) ViewResult(studentId uint) (models.Student, []e
 func (sr *GormStudentRepository) GetHomeRoomTeacher(studentId uint) (models.Teacher, []error) {
 	teacher := models.Teacher{}
 	student, errs := sr.GetStudentById(studentId)
-	classRoom := models.ClassRoom{}
-	errs = sr.conn.Where("id = ?", student.ClassRoomId).First(&classRoom).GetErrors()
-	errs = sr.conn.Where("class_room_id = ?", classRoom.Id).First(&teacher).GetErrors()
+	errs = sr.conn.Where("class_room_id = ?", student.ClassRoomId).First(&teacher).GetErrors()
 	return teacher, errs
 }

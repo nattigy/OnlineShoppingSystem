@@ -274,9 +274,29 @@ func (th *TeacherHandler) DeleteResource(w http.ResponseWriter, r *http.Request)
 
 func (th *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
 	user := models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true}
 	in := TeacherInfo{
 		User: user,
+	}
+	fmt.Println("in here")
+	studentId := r.FormValue("studentid")
+	assement := r.FormValue("assesment")
+	test := r.FormValue("test")
+	final := r.FormValue("final")
+	total := r.FormValue("total")
+
+	if studentId != "" && test != "" && assement != "" && final != "" && total != "" {
+		stdId, _ := strconv.Atoi(studentId)
+		ass, _ := strconv.Atoi(assement)
+		tes, _ := strconv.Atoi(test)
+		fin, _ := strconv.Atoi(final)
+		tot, _ := strconv.Atoi(total)
+		fmt.Println(stdId, tot, ass, fin, tes)
+		errs := th.TUsecase.ReportGrade(models.Result{StudentId: uint(stdId), SubjectId: teacher.SubjectId, Total: tot, Final: fin, Test: tes, Assessment: ass})
+		if errs != nil {
+			fmt.Println(errs)
+		}
 	}
 	err := th.templ.ExecuteTemplate(w, "teacherReportGrade.layout", in)
 	if err != nil {

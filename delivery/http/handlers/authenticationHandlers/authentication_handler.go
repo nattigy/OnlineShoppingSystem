@@ -43,9 +43,12 @@ type LoginError struct {
 
 func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request) {
 	cookie, er := r.Cookie("session")
+	email := r.FormValue("email")
 	if er == nil {
 		sessId, _ := l.session.GetSession(cookie.Value)
-		_ = l.session.DeleteSession(sessId.ID, w, r)
+		if sessId.Email == email {
+			_ = l.session.DeleteSession(sessId.ID, w, r)
+		}
 	}
 
 	password := r.FormValue("password")
@@ -64,7 +67,7 @@ func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := models.User{
-		Email:    r.FormValue("email"),
+		Email:    email,
 		Password: r.FormValue("password"),
 	}
 

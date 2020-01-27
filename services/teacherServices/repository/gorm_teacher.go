@@ -15,7 +15,7 @@ func NewGormTeacherRepository(Conn *gorm.DB) *GormTeacherRepository {
 }
 
 func (tr *GormTeacherRepository) AddTeacher(newTeacher models.Teacher) []error {
-	user := models.User{Id: newTeacher.Id, Role: "student", Email: newTeacher.Email, Password: newTeacher.Password}
+	user := models.User{Id: newTeacher.Id, Role: "teacher", Email: newTeacher.Email, Password: newTeacher.Password}
 	errs := tr.conn.Create(&newTeacher).GetErrors()
 	errs = tr.conn.Create(&user).GetErrors()
 	return errs
@@ -35,6 +35,7 @@ func (tr *GormTeacherRepository) GetTeacherById(id uint) (models.Teacher, []erro
 
 func (tr *GormTeacherRepository) DeleteTeacher(id uint) []error {
 	errs := tr.conn.Unscoped().Where("id = ?", id).Delete(&models.Teacher{}).GetErrors()
+	errs = tr.conn.Unscoped().Where("id = ?", id).Delete(&models.User{}).GetErrors()
 	return errs
 }
 

@@ -14,7 +14,7 @@ func NewGormParentRepository(Conn *gorm.DB) *GormParentRepository {
 }
 
 func (pr *GormParentRepository) AddParent(parent models.Parent) []error {
-	user := models.User{Id: parent.Id, Role: "student", Email: parent.Email, Password: parent.Password}
+	user := models.User{Id: parent.Id, Role: "parent", Email: parent.Email, Password: parent.Password}
 	errs := pr.conn.Create(&parent).GetErrors()
 	errs = pr.conn.Create(&user).GetErrors()
 	return errs
@@ -34,6 +34,7 @@ func (pr *GormParentRepository) GetParentById(id uint) (models.Parent, []error) 
 
 func (pr *GormParentRepository) DeleteParent(id uint) []error {
 	errs := pr.conn.Unscoped().Where("id = ?", id).Delete(&models.Parent{}).GetErrors()
+	errs = pr.conn.Unscoped().Where("id = ?", id).Delete(&models.User{}).GetErrors()
 	return errs
 }
 

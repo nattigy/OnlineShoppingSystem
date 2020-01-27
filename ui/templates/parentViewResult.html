@@ -5,28 +5,26 @@
 {{end}}
 
 {{define "parentViewResult"}}
-    <h2>View Grade</h2>
+    <h5>View Grade</h5>
     <table id="table" class="table  table-borderless  table-hover table-responsive-sm">
         <!-- <thead> -->
         <tr>
-            <th>First Name</th>
-            <th>Middle Name</th>
-            <th>Subject Name</th>
+            <th>Subject Id</th>
             <th>Assessment</th>
+            <th>Test</th>
             <th>Final</th>
             <th>Total</th>
         </tr>
         <!-- </thead> -->
 
         <!-- <tbody> -->
-        {{range $index, $item := .Result}}
+        {{range $index, $item := .Results}}
             <tr>
-                <td>{{$item.Student.FirstName}}</td>
-                <td>{{$item.Student.MiddleName}}</td>
-                <td>{{$item.Subject.SubjectName}}</td>
-                <td>Assessment {{$item.Assessment}}</td>
-                <td>Final {{$item.Final}}</td>
-                <td>Total {{$item.Total}}</td>
+                <td>{{$item.SubjectId}}</td>
+                <td>{{$item.Assessment}}</td>
+                <td>{{$item.Test}}</td>
+                <td>{{$item.Final}}</td>
+                <td>{{$item.Total}}</td>
             </tr>
         {{end}}
     </table>

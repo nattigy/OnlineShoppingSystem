@@ -34,10 +34,13 @@ func (ph *ParentHandler) AddParent(w http.ResponseWriter, r *http.Request) {
 	MiddleName := r.FormValue("middlename")
 	Email := r.FormValue("email")
 	Password := r.FormValue("password")
+	parentid := r.FormValue("parentid")
 
 	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" {
 		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
+		parId, _ := strconv.Atoi(parentid)
 		parent := models.Parent{
+			Id:         uint(parId),
 			FirstName:  FirstName,
 			MiddleName: MiddleName,
 			Email:      Email,

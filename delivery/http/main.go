@@ -137,7 +137,11 @@ func main() {
 	router.DELETE("/api/admin/teacher/delete/:id", adminApi.DeleteTeacher)
 	router.DELETE("/api/admin/parent/delete/:id", adminApi.DeleteParent)
 
-	router.GET("/api/student/viewTasks/:id", studentApi.ViewTasks)
+	router.GET("/api/student/tasks", studentApi.ViewTasks)
+	router.POST("/api/student/comment/new", studentApi.Comment)
+	router.GET("/api/student/classmates", studentApi.ViewClass)
+	router.GET("/api/student/resources", studentApi.ViewResources)
+	router.GET("/api/student/result/:studentId", studentApi.ViewResult)
 
 	router.POST("/api/teacher/post/new", teacherApi.CreateTask)
 	router.POST("/api/teacher/post/update/:id", teacherApi.UpdateTask)
@@ -147,13 +151,7 @@ func main() {
 	router.GET("/api/teacher/students", teacherApi.ViewStudents)
 	router.GET("/api/teacher/posts", teacherApi.GetTasks)
 
-	router.GET("/api/student/tasks", studentApi.ViewTasks)
-	router.POST("/api/student/comment/new", studentApi.Comment)
-	router.GET("/api/student/classmates", studentApi.ViewClass)
-	router.GET("/api/student/resources", studentApi.ViewResources)
-	router.GET("/api/student/result/:studentId", studentApi.ViewResult)
-
-	err = http.ListenAndServe(":3000", mux)
+	err = http.ListenAndServe(":3000", router)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
@@ -161,59 +159,59 @@ func main() {
 
 func PopulateTables(gormdb *gorm.DB) {
 
-	gormdb.CreateTable(&models.Teacher{})
-	gormdb.CreateTable(&models.Parent{})
-	gormdb.CreateTable(&models.ClassRoom{})
-	gormdb.CreateTable(&models.Subject{})
-	gormdb.CreateTable(&models.Resources{})
-	gormdb.CreateTable(&models.Student{})
-	gormdb.CreateTable(&models.Result{})
-	gormdb.CreateTable(&models.Task{})
-	gormdb.CreateTable(&models.Comment{})
-	gormdb.CreateTable(&models.User{})
-	gormdb.CreateTable(&models.Session{})
-	gormdb.CreateTable(&models.Message{})
-	gormdb.CreateTable(&models.Admin{})
+	//gormdb.CreateTable(&models.Teacher{})
+	//gormdb.CreateTable(&models.Parent{})
+	//gormdb.CreateTable(&models.ClassRoom{})
+	//gormdb.CreateTable(&models.Subject{})
+	//gormdb.CreateTable(&models.Resources{})
+	//gormdb.CreateTable(&models.Student{})
+	//gormdb.CreateTable(&models.Result{})
+	//gormdb.CreateTable(&models.Task{})
+	//gormdb.CreateTable(&models.Comment{})
+	//gormdb.CreateTable(&models.User{})
+	//gormdb.CreateTable(&models.Session{})
+	//gormdb.CreateTable(&models.Message{})
+	//gormdb.CreateTable(&models.Admin{})
 
-	teacher := models.Teacher{Id: 10, FirstName: "Amanuel", MiddleName: "Tadele", ClassRoomId: 60, SubjectId: 100, Email: "aman@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
-	teacher2 := models.Teacher{Id: 11, FirstName: "Abebe", MiddleName: "Kebede", ClassRoomId: 61, SubjectId: 101, Email: "abebe@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
-	parent := models.Parent{Id: 20, FirstName: "Dinsa", MiddleName: "Lemi", Email: "dinsa@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
-	parent2 := models.Parent{Id: 21, FirstName: "Yewondwosen", MiddleName: "Akale", Email: "yewond@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//teacher := models.Teacher{Id: 10, FirstName: "Amanuel", MiddleName: "Tadele", ClassRoomId: 60, SubjectId: 100, Email: "aman@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//teacher2 := models.Teacher{Id: 11, FirstName: "Abebe", MiddleName: "Kebede", ClassRoomId: 61, SubjectId: 101, Email: "abebe@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//parent := models.Parent{Id: 20, FirstName: "Dinsa", MiddleName: "Lemi", Email: "dinsa@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	//parent2 := models.Parent{Id: 21, FirstName: "Yewondwosen", MiddleName: "Akale", Email: "yewond@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	admin := models.Admin{Id: 80, FirstName: "Zeleke", MiddleName: "Akale", Email: "zele@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
-	classRoom := models.ClassRoom{Id: 60, GradeLevel: 12, HomeRoom: 1}
-	classRoom2 := models.ClassRoom{Id: 61, GradeLevel: 10, HomeRoom: 2}
-	subject := models.Subject{Id: 100, SubjectName: "Math", ClassRoomId: 1}
-	subject2 := models.Subject{Id: 101, SubjectName: "Physics", ClassRoomId: 2}
-	task := models.Task{Title: "Home Work", Description: "Do it", ShortDescription: "Just Do it or i will kill you", SubjectId: 100, ClassRoomId: 60}
-	task2 := models.Task{Title: "CLass Work", Description: "Do it", ShortDescription: "Just Do it or i will kill you", SubjectId: 101, ClassRoomId: 61}
-	student := models.Student{FirstName: "Nathnael", MiddleName: "Yewondwosen", Email: "natnael@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 60, ParentId: 2}
-	student2 := models.Student{FirstName: "Moti", MiddleName: "Dinsa", Email: "moti@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 61, ParentId: 1}
-	comment := models.Comment{StudentId: 1, TaskId: 1, Data: "nati commenting"}
-	comment2 := models.Comment{StudentId: 1, TaskId: 1, Data: "moti commenting"}
-	user1 := models.User{Id: 1, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "nati@gmail.com", Role: "student"}
-	user2 := models.User{Id: 10, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "aman@gmail.com", Role: "teacher"}
+	classRoom := models.ClassRoom{Id: 60, GradeLevel: 12, HomeRoom: 40}
+	classRoom2 := models.ClassRoom{Id: 61, GradeLevel: 10, HomeRoom: 41}
+	subject := models.Subject{Id: 100, SubjectName: "Math", ClassRoomId: 60}
+	subject2 := models.Subject{Id: 101, SubjectName: "Physics", ClassRoomId: 61}
+	//task := models.Task{Title: "Home Work", Description: "Do it", ShortDescription: "Just Do it or i will kill you", SubjectId: 100, ClassRoomId: 60}
+	//task2 := models.Task{Title: "CLass Work", Description: "Do it", ShortDescription: "Just Do it or i will kill you", SubjectId: 101, ClassRoomId: 61}
+	//student := models.Student{FirstName: "Nathnael", MiddleName: "Yewondwosen", Email: "natnael@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 60, ParentId: 2}
+	//student2 := models.Student{FirstName: "Moti", MiddleName: "Dinsa", Email: "moti@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 61, ParentId: 1}
+	//comment := models.Comment{StudentId: 1, TaskId: 1, Data: "nati commenting"}
+	//comment2 := models.Comment{StudentId: 1, TaskId: 1, Data: "moti commenting"}
+	//user1 := models.User{Id: 1, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "nati@gmail.com", Role: "student"}
+	//user2 := models.User{Id: 10, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "aman@gmail.com", Role: "teacher"}
 	user3 := models.User{Id: 80, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "zele@gmail.com", Role: "admin"}
 	//user3 := models.User{Id: 20, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "dinsa@gmail.com", Role: "parent"}
-	section1 := models.Section{Id: 200, Section: "A", ClassRoomId: 60}
-	section2 := models.Section{Id: 201, Section: "B", ClassRoomId: 61}
+	section1 := models.Section{Id: 300, Section: "A", ClassRoomId: 60}
+	section2 := models.Section{Id: 301, Section: "B", ClassRoomId: 61}
 
-	fmt.Println(gormdb.Create(&teacher))
-	fmt.Println(gormdb.Create(&teacher2))
-	fmt.Println(gormdb.Create(&parent))
-	fmt.Println(gormdb.Create(&parent2))
+	//fmt.Println(gormdb.Create(&teacher))
+	//fmt.Println(gormdb.Create(&teacher2))
+	//fmt.Println(gormdb.Create(&parent))
+	//fmt.Println(gormdb.Create(&parent2))
 	fmt.Println(gormdb.Create(&classRoom))
 	fmt.Println(gormdb.Create(&classRoom2))
 	fmt.Println(gormdb.Create(&subject))
 	fmt.Println(gormdb.Create(&subject2))
-	fmt.Println(gormdb.Create(&task))
-	fmt.Println(gormdb.Create(&task2))
-	fmt.Println(gormdb.Create(&student))
-	fmt.Println(gormdb.Create(&student2))
-	fmt.Println(gormdb.Create(&comment))
-	fmt.Println(gormdb.Create(&comment2))
-	fmt.Println(gormdb.Create(&user1))
-	fmt.Println(gormdb.Create(&user2))
-	fmt.Println(gormdb.Create(&user3))
+	//fmt.Println(gormdb.Create(&task))
+	//fmt.Println(gormdb.Create(&task2))
+	//fmt.Println(gormdb.Create(&student))
+	//fmt.Println(gormdb.Create(&student2))
+	//fmt.Println(gormdb.Create(&comment))
+	//fmt.Println(gormdb.Create(&comment2))
+	//fmt.Println(gormdb.Create(&user1))
+	//fmt.Println(gormdb.Create(&user2))
+	//fmt.Println(gormdb.Create(&user3))
 	fmt.Println(gormdb.Create(&section1))
 	fmt.Println(gormdb.Create(&section2))
 	fmt.Println(gormdb.Create(&admin))

@@ -5,7 +5,9 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/studentServices/usecase"
+	"golang.org/x/crypto/bcrypt"
 	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -28,8 +30,9 @@ type StudentInfo struct {
 	Task          models.Task
 	UpdateProfile models.Student
 	Resources     []models.Resources
-	Result        []models.Result
+	Results       []models.Result
 	ClassMates    []models.Student
+	Comments      []models.Comment
 }
 
 func (sh *StudentHandler) AddStudent(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +50,8 @@ func (sh *StudentHandler) AddStudent(w http.ResponseWriter, r *http.Request) {
 		classId, _ := strconv.Atoi(classRoomId)
 		stuId, _ := strconv.Atoi(studentId)
 		parId, _ := strconv.Atoi(parentId)
-		student := models.Student{FirstName: firstName, MiddleName: middleName, Email: email, Password: password,
+		hashedpassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		student := models.Student{FirstName: firstName, MiddleName: middleName, Email: email, Password: string(hashedpassword),
 			SectionId: uint(secID), ClassRoomId: uint(classId), ParentId: uint(parId), Id: uint(stuId)}
 		err := sh.SUsecase.AddStudent(student)
 		if len(err) > 0 {
@@ -134,6 +138,15 @@ func (sh *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(sess.Role)
 	user := models.User{Id: student.Id, Email: student.Email, Role: sess.Role, LoggedIn: true}
 	data, _ := sh.SUsecase.ViewTasks(student.ClassRoomId, uint(subjectId))
+	if len(data) > 0 {
+		for i := 0; i < len(data); i++ {
+			comments, errs := sh.SUsecase.Comments(data[i].Id)
+			if len(errs) > 0 {
+				log.Fatal(errs)
+			}
+			data[i].Comments = comments
+		}
+	}
 	if len(errs) > 0 {
 		fmt.Println(errs)
 	}
@@ -155,7 +168,7 @@ func (sh *StudentHandler) Comment(w http.ResponseWriter, r *http.Request) {
 	taskId, _ := strconv.Atoi(r.FormValue("taskId"))
 	//input validation
 	_ = sh.SUsecase.Comment(uint(taskId), sess.UserID, student.FirstName, comment)
-	http.Redirect(w, r, "/student/viewTask?subjectId=1", http.StatusSeeOther)
+	http.Redirect(w, r, "/student/viewTask?subjectId=100", http.StatusSeeOther)
 }
 
 func (sh *StudentHandler) ViewClass(w http.ResponseWriter, r *http.Request) {
@@ -181,7 +194,7 @@ func (sh *StudentHandler) ViewResources(w http.ResponseWriter, r *http.Request) 
 		fmt.Println(errs)
 	}
 	in := StudentInfo{
-		User:      models.User{Id: sess.ID, Role: sess.Role, Email: sess.Email},
+		User:      models.User{Id: sess.ID, Role: sess.Role, Email: sess.Email, LoggedIn: true},
 		Resources: resources,
 	}
 	err := sh.templ.ExecuteTemplate(w, "studentResources.layout", in)
@@ -194,8 +207,8 @@ func (sh *StudentHandler) ViewResult(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	results, _ := sh.SUsecase.ViewResult(sess.UserID)
 	in := StudentInfo{
-		User:   models.User{Role: sess.Role, Email: sess.Email, Id: sess.UserID},
-		Result: results.Result,
+		User:    models.User{Role: sess.Role, Email: sess.Email, Id: sess.UserID, LoggedIn: true},
+		Results: results.Result,
 	}
 	err := sh.templ.ExecuteTemplate(w, "studentViewResult.layout", in)
 	if err != nil {
