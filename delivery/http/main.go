@@ -5,6 +5,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/api/admin"
 	studentApi2 "github.com/nattigy/parentschoolcommunicationsystem/delivery/http/api/studentApi"
+	teacherApi2 "github.com/nattigy/parentschoolcommunicationsystem/delivery/http/api/teacherApi"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/chatHandler"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/parentHandlers"
 	"github.com/nattigy/parentschoolcommunicationsystem/delivery/http/handlers/studentHandlers"
@@ -62,7 +63,7 @@ func main() {
 	teacherRepo := repository2.NewGormTeacherRepository(gormdb)
 	teacherSer := usecase2.NewTeacherUsecase(teacherRepo)
 	teacherHandler := teacherHandlers.NewTeacherHandler(templ, sessionSer, *teacherSer)
-	//teacherApi := teacherApi2.NewTeacherApi(teacherSer)
+	teacherApi := teacherApi2.NewTeacherApi(teacherSer)
 
 	parentRepo := repository3.NewGormParentRepository(gormdb)
 	parentSer := usecase3.NewParentUsecase(parentRepo)
@@ -138,7 +139,15 @@ func main() {
 
 	router.GET("/api/student/viewTasks/:id", studentApi.ViewTasks)
 
-	err = http.ListenAndServe(":3000", mux)
+	router.POST("/api/teacher/post/new", teacherApi.CreateTask)
+	router.POST("/api/teacher/post/:id", teacherApi.UpdateTask)
+	router.GET("/api/teacher/post/:id", teacherApi.DeleteTask)
+	router.POST("/api/teacher/resource/new", teacherApi.UploadResource)
+	router.POST("/api/teacher/grade/new", teacherApi.ReportGrade)
+	router.GET("/api/teacher/students", teacherApi.ViewStudents)
+	router.GET("/api/teacher/Posts", teacherApi.GetTasks)
+
+	err = http.ListenAndServe(":3000", router)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
