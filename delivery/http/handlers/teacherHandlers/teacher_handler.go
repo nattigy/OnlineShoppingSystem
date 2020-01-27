@@ -46,25 +46,26 @@ type TeacherInfo struct {
 func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	FirstName := r.FormValue("firstname")
+	teacherId := r.FormValue("teacherid")
 	MiddleName := r.FormValue("middlename")
 	Email := r.FormValue("email")
 	Password := r.FormValue("password")
-	ProfilePic := r.FormValue("profilepic")
 	SubjectId := r.FormValue("subjectid")
 	ClassRoomId := r.FormValue("classroomid")
 
-	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && ProfilePic != "" && SubjectId != "" && ClassRoomId != "" {
+	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && SubjectId != "" && ClassRoomId != "" {
+		id, _ := strconv.Atoi(teacherId)
 		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
 		subject, _ := strconv.Atoi(SubjectId)
 		newSubject := uint(subject)
 		classRoom, _ := strconv.Atoi(ClassRoomId)
 		newClassRoom := uint(classRoom)
 		teacher := models.Teacher{
+			Id:          uint(id),
 			FirstName:   FirstName,
 			MiddleName:  MiddleName,
 			Email:       Email,
 			Password:    string(password),
-			ProfilePic:  ProfilePic,
 			SubjectId:   newSubject,
 			ClassRoomId: newClassRoom,
 		}

@@ -34,16 +34,14 @@ func (ph *ParentHandler) AddParent(w http.ResponseWriter, r *http.Request) {
 	MiddleName := r.FormValue("middlename")
 	Email := r.FormValue("email")
 	Password := r.FormValue("password")
-	ProfilePic := r.FormValue("profilepic")
 
-	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" || ProfilePic != "" {
+	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" {
 		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
 		parent := models.Parent{
 			FirstName:  FirstName,
 			MiddleName: MiddleName,
 			Email:      Email,
 			Password:   string(password),
-			ProfilePic: ProfilePic,
 		}
 		errs := ph.PUsecase.AddParent(parent)
 		if errs != nil {

@@ -14,7 +14,9 @@ func NewGormParentRepository(Conn *gorm.DB) *GormParentRepository {
 }
 
 func (pr *GormParentRepository) AddParent(parent models.Parent) []error {
+	user := models.User{Id: parent.Id, Role: "student", Email: parent.Email, Password: parent.Password}
 	errs := pr.conn.Create(&parent).GetErrors()
+	errs = pr.conn.Create(&user).GetErrors()
 	return errs
 }
 

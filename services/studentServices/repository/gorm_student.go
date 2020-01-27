@@ -15,7 +15,9 @@ func NewGormStudentRepository(Conn *gorm.DB) *GormStudentRepository {
 }
 
 func (sr *GormStudentRepository) AddStudent(newStudent models.Student) []error {
+	user := models.User{Id: newStudent.Id, Role: "student", Email: newStudent.Email, Password: newStudent.Password}
 	errs := sr.conn.Create(&newStudent).GetErrors()
+	errs = sr.conn.Create(&user).GetErrors()
 	return errs
 }
 

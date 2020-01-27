@@ -34,17 +34,21 @@ type StudentInfo struct {
 
 func (sh *StudentHandler) AddStudent(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	studentId := r.FormValue("studentid")
+	parentId := r.FormValue("parentid")
 	firstName := r.FormValue("firstname")
 	middleName := r.FormValue("middlename")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	sectionId := r.FormValue("section")
+	sectionId := r.FormValue("sectionid")
 	classRoomId := r.FormValue("classroomid")
-
 	if firstName != "" && middleName != "" && email != "" && password != "" && sectionId != "" && classRoomId != "" {
 		secID, _ := strconv.Atoi(sectionId)
 		classId, _ := strconv.Atoi(classRoomId)
-		student := models.Student{FirstName: firstName, MiddleName: middleName, Email: email, Password: password, SectionId: uint(secID), ClassRoomId: uint(classId)}
+		stuId, _ := strconv.Atoi(studentId)
+		parId, _ := strconv.Atoi(parentId)
+		student := models.Student{FirstName: firstName, MiddleName: middleName, Email: email, Password: password,
+			SectionId: uint(secID), ClassRoomId: uint(classId), ParentId: uint(parId), Id: uint(stuId)}
 		err := sh.SUsecase.AddStudent(student)
 		if len(err) > 0 {
 			fmt.Println(err)
@@ -77,7 +81,8 @@ func (sh *StudentHandler) GetStudents(w http.ResponseWriter, r *http.Request) {
 }
 
 func (sh *StudentHandler) DeleteStudent(w http.ResponseWriter, r *http.Request) {
-	id := r.FormValue("studentid")
+	id := r.FormValue("id")
+
 	if id != "" {
 		converted, _ := strconv.Atoi(id)
 		err := sh.SUsecase.DeleteStudent(uint(converted))
