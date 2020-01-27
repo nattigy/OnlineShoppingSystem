@@ -1,3 +1,6 @@
+
+
+
 function UpdateDescription(item) {
     document.getElementById('taskTitle').innerText = item.Title;
     document.getElementById('taskDescription').innerText = item.Description;
@@ -40,6 +43,11 @@ function DeleteParent(parent) {
 }
 
 function getParentId() {
-    id = document.getElementById("parentId").innerText;
+    id = document.getElementById("parentId").value;
     document.getElementById("formParentId").value = id
+}
+
+function submitParentId(parent){
+    document.getElementById("formParentId").value = parent.Id;
+    window.location.href = 'tudytfutfiytfiyguygytf=' + parent.Id
 }

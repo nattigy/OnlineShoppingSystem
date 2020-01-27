@@ -163,6 +163,7 @@ func PopulateTables(gormdb *gorm.DB) {
 	//teacher := models.Teacher{Id: 10, FirstName: "Amanuel", MiddleName: "Tadele", ClassRoomId: 60, SubjectId: 100, Email: "aman@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	//teacher2 := models.Teacher{Id: 11, FirstName: "Abebe", MiddleName: "Kebede", ClassRoomId: 61, SubjectId: 101, Email: "abebe@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	//parent := models.Parent{Id: 20, FirstName: "Dinsa", MiddleName: "Lemi", Email: "dinsa@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	parent := models.Parent{Id: 20, FirstName: "Endale", MiddleName: "Kebede", Email: "kebede@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	//parent2 := models.Parent{Id: 21, FirstName: "Yewondwosen", MiddleName: "Akale", Email: "yewond@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	//admin := models.Admin{Id: 80, FirstName: "Zeleke", MiddleName: "Akale", Email: "zele@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	//classRoom := models.ClassRoom{Id: 60, GradeLevel: 12, HomeRoom: 1}
@@ -174,14 +175,17 @@ func PopulateTables(gormdb *gorm.DB) {
 	//student := models.Student{FirstName: "Nathnael", MiddleName: "Yewondwosen", Email: "natnael@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 60, ParentId: 2}
 	//student2 := models.Student{FirstName: "Moti", MiddleName: "Dinsa", Email: "moti@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 61, ParentId: 1}
 	//comment := models.Comment{StudentId: 1, TaskId: 1, Data: "nati commenting"}
+	student3 := models.Student{FirstName: "yonatan", MiddleName: "endale", Email: "yoanatan@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", ClassRoomId: 61, ParentId: 3}
 	//comment2 := models.Comment{StudentId: 1, TaskId: 1, Data: "moti commenting"}
 	//user1 := models.User{Id: 1, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "nati@gmail.com", Role: "student"}
 	//user2 := models.User{Id: 10, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "aman@gmail.com", Role: "teacher"}
-	user3 := models.User{Id: 80, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "zele@gmail.com", Role: "admin"}
+	//user3 := models.User{Id: 80, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "zele@gmail.com", Role: "admin"}
 	//user3 := models.User{Id: 20, Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", Email: "dinsa@gmail.com", Role: "parent"}
 	//section1 := models.Section{Id: 200, Section: "A", ClassRoomId: 60}
 	//section2 := models.Section{Id: 201, Section: "B", ClassRoomId: 61}
 
+	fmt.Println(gormdb.Create(parent))
+	fmt.Println(gormdb.Create(student3))
 	//fmt.Println(gormdb.Create(&teacher))
 	//fmt.Println(gormdb.Create(&teacher2))
 	//fmt.Println(gormdb.Create(&parent))
@@ -202,5 +206,5 @@ func PopulateTables(gormdb *gorm.DB) {
 	//fmt.Println(gormdb.Create(&section1))
 	//fmt.Println(gormdb.Create(&section2))
 	//fmt.Println(gormdb.Create(&admin))
-	fmt.Println(gormdb.Create(&user3))
+	//fmt.Println(gormdb.Create(&user3))
 }
