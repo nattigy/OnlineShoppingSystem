@@ -2,6 +2,7 @@ package teacherApi
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/teacherServices"
@@ -18,27 +19,21 @@ func NewTeacherApi(teacherServices teacherServices.TeacherUsecase) *TeacherApi {
 }
 
 func (ta *TeacherApi) CreateTask(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(p.ByName("id"))
+	w.Header().Set("Content-Type", "application/json")
+	var task models.Task
+	err := json.NewDecoder(r.Body).Decode(&task)
 
-	//CreatedAt        time.Time
-	//UpdatedAt        time.Time
-	//DeletedAt        *time.Time `sql:"index"`
-	title := r.FormValue("title")
-	description := r.FormValue("description")
-	shortDescription := r.FormValue("shortdescription")
-	subjectId, _ := strconv.Atoi(r.FormValue("subjectid"))
-	classRoomId, _ := strconv.Atoi(r.FormValue("classroomid"))
-	deadline := r.FormValue("deadline")
-
-	errs := ta.teacherServices.CreateTask(models.Task{Id: uint(id), Title: title, Description: description, ShortDescription: shortDescription, SubjectId: uint(subjectId), ClassRoomId: uint(classRoomId), Deadline: deadline})
-	if len(errs) > 0 {
-		w.Header().Set("Content-Type", "application/json")
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	http.StatusText(http.StatusOK)
-
+	er := ta.teacherServices.CreateTask(task)
+	if er != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
 }
 
 func (ta *TeacherApi) GetTasks(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -56,24 +51,32 @@ func (ta *TeacherApi) GetTasks(w http.ResponseWriter, r *http.Request, p httprou
 }
 
 func (ta *TeacherApi) UpdateTask(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	title := r.FormValue("title")
-	description := r.FormValue("description")
-	shortDescription := r.FormValue("shortdescription")
-	subjectId, _ := strconv.Atoi(r.FormValue("subjectid"))
-	classRoomId, _ := strconv.Atoi(r.FormValue("classroomid"))
-	deadline := r.FormValue("deadline")
-
-	tasks, errs := ta.teacherServices.UpdateTask(models.Task{Id: uint(id), Title: title, Description: description, ShortDescription: shortDescription, SubjectId: uint(subjectId), ClassRoomId: uint(classRoomId), Deadline: deadline})
-	output, _ := json.MarshalIndent(tasks, "", "\t\t")
-	if len(errs) > 0 {
-		w.Header().Set("Content-Type", "application/json")
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	w.Header().Set("Content-Type", "application/json")
+	var task models.Task
+	err := json.NewDecoder(r.Body).Decode(&task)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	_, _ = w.Write(output)
-	return
+	newTask, er := ta.teacherServices.UpdateTask(task)
+	if er != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	response, err := json.Marshal(newTask)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	_, err = w.Write(response)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
 }
 
 func (ta *TeacherApi) DeleteTask(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -89,19 +92,20 @@ func (ta *TeacherApi) DeleteTask(w http.ResponseWriter, r *http.Request, p httpr
 }
 
 func (ta *TeacherApi) UploadResource(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-
-	subjectId, _ := strconv.Atoi(r.FormValue("subjectid"))
-	title := r.FormValue("title")
-	description := r.FormValue("description")
-	path := r.FormValue("path")
-	errs := ta.teacherServices.UploadResource(models.Resources{SubjectId: uint(subjectId), Title: title, Description: description, Link: path})
-	if len(errs) > 0 {
-		w.Header().Set("Content-Type", "application/json")
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	w.Header().Set("Content-Type", "application/json")
+	var resource models.Resources
+	err := json.NewDecoder(r.Body).Decode(&resource)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	http.StatusText(http.StatusOK)
+	er := ta.teacherServices.UploadResource(resource)
+	if er != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
 }
 
 func (ta *TeacherApi) DeleteResource(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
@@ -117,22 +121,20 @@ func (ta *TeacherApi) DeleteResource(w http.ResponseWriter, r *http.Request, p h
 }
 
 func (ta *TeacherApi) ReportGrade(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(r.FormValue("id"))
-
-	subjectId, _ := strconv.Atoi(r.FormValue("subjectid"))
-	studentId, _ := strconv.Atoi(r.FormValue("studentid"))
-	assessment, _ := strconv.Atoi(r.FormValue("assessment"))
-	test, _ := strconv.Atoi(r.FormValue("test"))
-	final, _ := strconv.Atoi(r.FormValue("final"))
-	total, _ := strconv.Atoi(r.FormValue("total"))
-	errs := ta.teacherServices.ReportGrade(models.Result{SubjectId: uint(subjectId), Id: uint(id), StudentId: uint(studentId), Assessment: assessment, Test: test, Final: final, Total: total})
-	if len(errs) > 0 {
-		w.Header().Set("Content-Type", "application/json")
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	w.Header().Set("Content-Type", "application/json")
+	var result models.Result
+	err := json.NewDecoder(r.Body).Decode(&result)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	http.StatusText(http.StatusOK)
+	er := ta.teacherServices.ReportGrade(result)
+	if er != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
 }
 
 func (ta *TeacherApi) ViewStudents(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
