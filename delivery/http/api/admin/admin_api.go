@@ -2,6 +2,7 @@ package admin
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/parentServices"
@@ -22,128 +23,207 @@ func NewAdminApi(studentServices studentServices.StudentUsecase, teacherServices
 }
 
 func (ah *AdminApi) AddParent(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	FirstName := r.FormValue("firstname")
-	MiddleName := r.FormValue("middlename")
-	id, _ := strconv.Atoi(p.ByName("id"))
-	Email := r.FormValue("email")
-	Password := r.FormValue("password")
-	ProfilePic := r.FormValue("profilePic")
-	errs := ah.parentServices.AddParent(models.Parent{FirstName: FirstName, MiddleName: MiddleName, Id: uint(id), Email: Email, Password: Password, ProfilePic: ProfilePic})
-	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+	w.Header().Set("Content-Type", "application/json")
+	var parent models.Parent
+	err := json.NewDecoder(r.Body).Decode(&parent)
+	fmt.Println(parent)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	er := ah.parentServices.AddParent(parent)
+	if er != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
 }
 
 func (ah *AdminApi) GetParents(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
 	parents, errs := ah.parentServices.GetParents()
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(errs)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
-	_ = json.NewEncoder(w).Encode(parents)
+	response, err := json.Marshal(parents)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	_, err = w.Write(response)
 }
 
 func (ah *AdminApi) GetParentById(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
 	id, _ := strconv.Atoi(p.ByName("id"))
-
-	parents, errs := ah.parentServices.GetParentById(uint(id))
+	parent, errs := ah.parentServices.GetParentById(uint(id))
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(errs)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
-	_ = json.NewEncoder(w).Encode(parents)
+	response, err := json.MarshalIndent(parent, "", "\t\t")
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	_, err = w.Write(response)
 }
 
 func (ah *AdminApi) DeleteParent(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(p.ByName("id"))
+	w.Header().Set("Content-Type", "application/json")
+	id, err := strconv.Atoi(p.ByName("id"))
 	errs := ah.parentServices.DeleteParent(uint(id))
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
-	_ = json.NewEncoder(w).Encode(errs)
-
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
 }
 
 func (ah *AdminApi) AddStudent(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(p.ByName("id"))
-	FirstName := r.FormValue("firstname")
-	MiddleName := r.FormValue("middlename")
-	Email := r.FormValue("email")
-	Password := r.FormValue("password")
-	SectionId, _ := strconv.Atoi(r.FormValue("sectionid"))
-	ClassRoomId, _ := strconv.Atoi(r.FormValue("classroomid"))
-	ParentId, _ := strconv.Atoi(r.FormValue("parentid"))
-	ProfilePic := r.FormValue("profilepic")
-
-	errs := ah.studentServices.AddStudent(models.Student{FirstName: FirstName, MiddleName: MiddleName, Id: uint(id), Email: Email, Password: Password, ProfilePic: ProfilePic, SectionId: uint(SectionId), ClassRoomId: uint(ClassRoomId), ParentId: uint(ParentId)})
-	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+	w.Header().Set("Content-Type", "application/json")
+	var student models.Student
+	err := json.NewDecoder(r.Body).Decode(&student)
+	fmt.Println(student)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	er := ah.studentServices.AddStudent(student)
+	if er != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
 }
 
 func (ah *AdminApi) GetStudents(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
 	students, errs := ah.studentServices.GetStudents()
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(errs)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
-	_ = json.NewEncoder(w).Encode(students)
+	response, err := json.Marshal(students)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	_, err = w.Write(response)
 }
 
 func (ah *AdminApi) GetStudentById(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
 	id, _ := strconv.Atoi(p.ByName("id"))
-
 	student, errs := ah.studentServices.GetStudentById(uint(id))
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(errs)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
-	_ = json.NewEncoder(w).Encode(student)
+	response, err := json.MarshalIndent(student, "", "\t\t")
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	_, err = w.Write(response)
 }
 
 func (ah *AdminApi) DeleteStudent(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(p.ByName("id"))
+	w.Header().Set("Content-Type", "application/json")
+	id, err := strconv.Atoi(p.ByName("id"))
 	errs := ah.studentServices.DeleteStudent(uint(id))
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
 }
 
 func (ah *AdminApi) AddTeacher(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(p.ByName("id"))
-	FirstName := r.FormValue("firstname")
-	MiddleName := r.FormValue("middlename")
-	Email := r.FormValue("email")
-	Password := r.FormValue("password")
-	ProfilePic := r.FormValue("profilepic")
-	SubjectId, _ := strconv.Atoi(r.FormValue("subjectid"))
-	ClassRoomId, _ := strconv.Atoi(r.FormValue("classRoomid"))
-
-	errs := ah.teacherServices.AddTeacher(models.Teacher{FirstName: FirstName, MiddleName: MiddleName, Id: uint(id), Email: Email, Password: Password, ProfilePic: ProfilePic, ClassRoomId: uint(ClassRoomId), SubjectId: uint(SubjectId)})
-	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+	w.Header().Set("Content-Type", "application/json")
+	var teacher models.Teacher
+	err := json.NewDecoder(r.Body).Decode(&teacher)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	er := ah.teacherServices.AddTeacher(teacher)
+	if er != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
 }
 
 func (ah *AdminApi) GetTeachers(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
 	teachers, errs := ah.teacherServices.GetTeachers()
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(errs)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
-	_ = json.NewEncoder(w).Encode(teachers)
+	response, err := json.Marshal(teachers)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	_, err = w.Write(response)
 }
 
 func (ah *AdminApi) GetTeacherById(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
 	id, _ := strconv.Atoi(p.ByName("id"))
-
 	teacher, errs := ah.teacherServices.GetTeacherById(uint(id))
 	if len(errs) > 0 {
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(errs)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
-	_ = json.NewEncoder(w).Encode(teacher)
+	response, err := json.MarshalIndent(teacher, "", "\t\t")
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	_, err = w.Write(response)
 }
 
 func (ah *AdminApi) DeleteTeacher(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	id, _ := strconv.Atoi(p.ByName("id"))
+	w.Header().Set("Content-Type", "application/json")
+	id, err := strconv.Atoi(p.ByName("id"))
 	errs := ah.teacherServices.DeleteTeacher(uint(id))
 	if len(errs) > 0 {
-
-		_ = json.NewEncoder(w).Encode(errs)
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
+	}
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(404), 404)
+		return
 	}
 }

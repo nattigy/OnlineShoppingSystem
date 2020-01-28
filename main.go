@@ -152,7 +152,7 @@ func main() {
 	router.GET("/api/teacher/students", teacherApi.ViewStudents)
 	router.GET("/api/teacher/posts", teacherApi.GetTasks)
 
-	err = http.ListenAndServe(":3000", mux)
+	err = http.ListenAndServe(":3000", router)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
