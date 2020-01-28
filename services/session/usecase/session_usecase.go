@@ -70,10 +70,10 @@ func (s *SessionUsecase) Check(userId string, w http.ResponseWriter, r *http.Req
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return models.Session{}, err
 	}
-	//sess, _ := s.GetSession(cookie.Value)
-	//if r.URL.Path == "/logout" {
-	//	return sess, nil
-	//}
+	sess, _ := s.GetSession(cookie.Value)
+	if r.URL.Path == "/logout" {
+		return sess, nil
+	}
 	if sess.Role != checkUserRole(r.URL.Path) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return models.Session{}, nil
