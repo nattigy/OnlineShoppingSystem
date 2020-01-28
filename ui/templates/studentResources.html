@@ -5,15 +5,24 @@
 {{end}}
 
 {{define "studentResources"}}
-    <h2>Resources</h2>
-    <div class="container">
-        <div><a href="/student/resources?id=100" name="subjectId">Maths</a></div>
-        <div><a href="/student/resources?id=101" name="subjectId">Physics</a></div>
-        {{range .Resources}}
-            <div>
-                <label for="">Title: {{.Resources.Title}}</label>
-                <label for="">Description: {{.Resources.Description}}</label>
-            </div>
-        {{end}}
+    <div style="width: 400px !important;" class="w-25 px-5 overflow-hidden bg-white"><h5
+                class="badge-info mx-5 px-3 rounded text-center">Resources</h5></div>
+    <div class="container mb-5">
+        <div><a href="/student/resources?subjectId=100" name="subjectId">Maths</a></div>
+        <div><a href="/student/resources?subjectId=101" name="subjectId">Physics</a></div>
+        <table class="py-5 my-5">
+            <tr class="py-5">
+                <th class="px-2">File Name</th>
+                <th class="px-5">Link</th>
+                <th class="px-5">Date</th>
+            </tr>
+            {{range $index, $item := .Resources}}
+                <tr class="py-3">
+                    <td class="px-2">{{$item.Title}}</td>
+                    <td class="px-5">{{$item.Link}}</td>
+                    <td class="px-5">20/02/2019</td>
+                </tr>
+            {{end}}
+        </table>
     </div>
 {{end}}

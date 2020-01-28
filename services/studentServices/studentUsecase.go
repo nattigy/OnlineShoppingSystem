@@ -10,6 +10,7 @@ type StudentUsecase interface {
 	UpdateStudent(newStudent models.Student) (models.Student, []error)
 	ViewTasks(sectionId uint, subjectId uint) ([]models.Task, []error)
 	Comment(taskId uint, studentId uint, studentName string, data string) []error
+	Comments(taskId uint) ([]models.Comment, []error)
 	ViewClass(classRoomId uint) ([]models.Student, []error)
 	ViewResources(subjectId uint) ([]models.Resources, []error)
 	ViewResult(studentId uint) (models.Student, []error)

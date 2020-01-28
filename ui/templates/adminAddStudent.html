@@ -17,6 +17,22 @@
                             <div class="row">
                                 <div class="col-sm-6 col-md-6 col-xs-12">
                                     <div class="form-group">
+                                        <label for="studentid">Student Id. starts from 20 - 29</label>
+                                        <input
+                                                type="text"
+                                                name="studentid"
+                                                placeholder="Student Id"
+                                                class="form-control"
+                                                aria-describedby="inputGroupPrepend"
+                                                required
+                                        />
+                                        <div class="invalid-feedback">
+                                            Please enter first name.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-xs-12">
+                                    <div class="form-group">
                                         <label for="firstname">First Name</label>
                                         <input
                                                 type="text"
@@ -68,21 +84,46 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4 col-md-4 col-xs-12">
+                                <div class="col-sm-6 col-md-6 col-xs-12">
                                     <div class="form-group">
-                                        <label for="password">Password</label>
-                                        <input
-                                                type="password"
-                                                id="password"
-                                                name="password"
-                                                placeholder="Password"
-                                                class="form-control"
-                                                aria-describedby="inputGroupPrepend"
-                                                required
-                                        />
+                                        <label for="classroomid">Classroom</label>
+                                        <select class="form-control" aria-describedby="inputGroupPrepend"
+                                                name="classroomid" id="classroomid" required>
+                                            <option value="200">12</option>
+                                            <option value="201">11</option>
+                                        </select>
                                         <div class="invalid-feedback">
-                                            Please enter your password.
+                                            Please enter first name.
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="sectionid">Section</label>
+                                    <select class="form-control" aria-describedby="inputGroupPrepend" name="sectionid"
+                                            id="sectionid" required>
+                                        <option value="300">A</option>
+                                        <option value="301">B</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please enter first name.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="firstname">Parent Id. starts from 30 - 39</label>
+                                    <input
+                                            type="text"
+                                            name="parentid"
+                                            placeholder="Parent Id"
+                                            class="form-control"
+                                            aria-describedby="inputGroupPrepend"
+                                            required
+                                    />
+                                    <div class="invalid-feedback">
+                                        Please enter first name.
                                     </div>
                                 </div>
                             </div>

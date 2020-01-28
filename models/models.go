@@ -54,7 +54,7 @@ type Resources struct {
 	SubjectId   uint
 	Title       string
 	Description string
-	Path        string
+	Link        string
 }
 
 type Result struct {
@@ -76,6 +76,7 @@ type Section struct {
 
 type Session struct {
 	gorm.Model
+	Name   string
 	Uuid   string `json:"uuid" gorm:"unique;not null"`
 	UserID uint   `json:"user_id" gorm:"not null"`
 	Email  string `json:"email" gorm:"not null"`

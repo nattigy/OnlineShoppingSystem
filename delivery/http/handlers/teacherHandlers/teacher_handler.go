@@ -32,6 +32,7 @@ type TeacherInfo struct {
 	User          models.User
 	Session       models.Session
 	Resource      models.Resources
+	Resources     []models.Resources
 	UpdateProfile models.Teacher
 	Students      []models.Student
 	FetchPost     []models.Task
@@ -46,25 +47,25 @@ type TeacherInfo struct {
 func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	FirstName := r.FormValue("firstname")
+	teacherId := r.FormValue("teacherid")
 	MiddleName := r.FormValue("middlename")
 	Email := r.FormValue("email")
-	Password := r.FormValue("password")
-	ProfilePic := r.FormValue("profilepic")
 	SubjectId := r.FormValue("subjectid")
 	ClassRoomId := r.FormValue("classroomid")
 
-	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && ProfilePic != "" && SubjectId != "" && ClassRoomId != "" {
-		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
+	if FirstName != "" && MiddleName != "" && Email != "" && SubjectId != "" && ClassRoomId != "" {
+		id, _ := strconv.Atoi(teacherId)
+		password, _ := bcrypt.GenerateFromPassword([]byte("1234"), bcrypt.DefaultCost)
 		subject, _ := strconv.Atoi(SubjectId)
 		newSubject := uint(subject)
 		classRoom, _ := strconv.Atoi(ClassRoomId)
 		newClassRoom := uint(classRoom)
 		teacher := models.Teacher{
+			Id:          uint(id),
 			FirstName:   FirstName,
 			MiddleName:  MiddleName,
 			Email:       Email,
 			Password:    string(password),
-			ProfilePic:  ProfilePic,
 			SubjectId:   newSubject,
 			ClassRoomId: newClassRoom,
 		}
@@ -253,8 +254,23 @@ func (th *TeacherHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 func (th *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	user := models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true}
+	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
+	resources, _ := th.TUsecase.GetResource(teacher.SubjectId)
+
+	title := r.FormValue("title")
+	description := r.FormValue("description")
+	link := r.FormValue("link")
+
+	if title != "" && description != "" && link != "" {
+		err := th.TUsecase.UploadResource(models.Resources{SubjectId: teacher.SubjectId, Title: title, Description: description, Link: link})
+		if len(err) > 0 {
+			fmt.Println(err)
+		}
+	}
+
 	in := TeacherInfo{
-		User: user,
+		User:      user,
+		Resources: resources,
 	}
 	err := th.templ.ExecuteTemplate(w, "teacherUploadResource.layout", in)
 	if err != nil {
@@ -268,14 +284,34 @@ func (th *TeacherHandler) DeleteResource(w http.ResponseWriter, r *http.Request)
 	if len(errs) > 0 {
 		fmt.Println(errs)
 	}
-	http.Redirect(w, r, "/teacher/fetchPosts", http.StatusSeeOther)
+	http.Redirect(w, r, "/teacher/uploadResources", http.StatusSeeOther)
 }
 
 func (th *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
 	user := models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true}
 	in := TeacherInfo{
 		User: user,
+	}
+	fmt.Println("in here")
+	studentId := r.FormValue("studentid")
+	assement := r.FormValue("assesment")
+	test := r.FormValue("test")
+	final := r.FormValue("final")
+	total := r.FormValue("total")
+
+	if studentId != "" && test != "" && assement != "" && final != "" && total != "" {
+		stdId, _ := strconv.Atoi(studentId)
+		ass, _ := strconv.Atoi(assement)
+		tes, _ := strconv.Atoi(test)
+		fin, _ := strconv.Atoi(final)
+		tot, _ := strconv.Atoi(total)
+		fmt.Println(stdId, tot, ass, fin, tes)
+		errs := th.TUsecase.ReportGrade(models.Result{StudentId: uint(stdId), SubjectId: teacher.SubjectId, Total: tot, Final: fin, Test: tes, Assessment: ass})
+		if errs != nil {
+			fmt.Println(errs)
+		}
 	}
 	err := th.templ.ExecuteTemplate(w, "teacherReportGrade.layout", in)
 	if err != nil {

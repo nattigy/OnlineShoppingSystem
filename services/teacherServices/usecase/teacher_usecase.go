@@ -77,3 +77,8 @@ func (tr *TeacherUsecase) ViewStudents(classRoomId uint) ([]models.Student, []er
 	students, errs := tr.teacherRepo.ViewStudents(classRoomId)
 	return students, errs
 }
+
+func (tr *TeacherUsecase) GetResource(subjectId uint) ([]models.Resources, []error) {
+	respurces, errs := tr.teacherRepo.GetResource(subjectId)
+	return respurces, errs
+}
