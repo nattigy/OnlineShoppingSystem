@@ -257,9 +257,9 @@ func (th *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request)
 	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
 	resources, _ := th.TUsecase.GetResource(teacher.SubjectId)
 
-	title := r.FormValue("title")
-	description := r.FormValue("description")
-	link := r.FormValue("link")
+	//title := r.FormValue("title")
+	//description := r.FormValue("description")
+	//link := r.FormValue("link")
 
 	if title != "" && description != "" && link != "" {
 		err := th.TUsecase.UploadResource(models.Resources{SubjectId: teacher.SubjectId, Title: title, Description: description, Link: link})
