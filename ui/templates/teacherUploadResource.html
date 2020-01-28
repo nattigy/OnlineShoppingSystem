@@ -6,54 +6,39 @@
 
 {{define "teacherUploadResource"}}
     <!-- Upload Resource Start -->
-    <div class="container bg-light top-to-bottom shadow-sm pt-5" id="uploadResources">
-        <form>
-            <div class="badge rounded p-2 mb-2 badge-primary">Upload New File</div>
-            <div class="custom-file">
-                <input type="file" class="custom-file-input btn-primary" id="customFile"/>
-                <label class="custom-file-label" for="customFile">Choose file</label>
+    <div class="container bg-light top-to-bottom shadow-sm pt-5 mb-5" id="uploadResources">
+        <form method="post" action="/teacher/uploadResources">
+            <div class="badge rounded p-2 mb-2 badge-primary">Upload New Resource</div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" name="title" id="title"/>
+                <label for="description">Description</label>
+                <input type="text" class="form-control" name="description" id="description"/>
+                <label for="link">Link</label>
+                <input type="text" class="form-control" name="link" id="link"/>
             </div>
-            <button class="btn btn-primary my-2">Upload</button>
+            <button type="submit" class="btn btn-primary my-2">Upload</button>
         </form>
         <!-- table new post -->
-        <tr>
-            <th>File Name</th>
-            <th>Date</th>
-            <th>Delete</th>
-        </tr>
-        <tr>
-            <td>Physics Book</td>
-            <td>20/02/2019</td>
-            <td>
-                <p data-placement="top" data-toggle="tooltip" title="Delete">
-                    <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
-                        <span><i class="fas fa-trash-alt"></i></span>
-                    </button>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>Physics Book</td>
-            <td>20/02/2019</td>
-            <td>
-                <p data-placement="top" data-toggle="tooltip" title="Delete">
-                    <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
-                        <span><i class="fas fa-trash-alt"></i></span>
-                    </button>
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>Physics Book</td>
-            <td>20/02/2019</td>
-            <td>
-                <p data-placement="top" data-toggle="tooltip" title="Delete">
-                    <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
-                        <span><i class="fas fa-trash-alt"></i></span>
-                    </button>
-                </p>
-            </td>
-        </tr>
+        <table class="py-5">
+            <tr class="py-5">
+                <th class="px-2">File Name</th>
+                <th class="px-5">Link</th>
+                <th class="px-5">Date</th>
+                <th class="px-5">Delete</th>
+            </tr>
+            {{range $index, $item := .Resources}}
+                <tr class="py-3">
+                    <td class="px-2">{{$item.Title}}</td>
+                    <td class="px-5">{{$item.Link}}</td>
+                    <td class="px-5">20/02/2019</td>
+                    <td class="px-5">
+                        <a href="/teacher/resource/delete?id={{$item.ID}}" class="btn btn-danger btn-xs">
+                            <span><i class="fas fa-trash-alt"></i>Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            {{end}}
         </table>
     </div>
     <!-- Upload Resource End -->

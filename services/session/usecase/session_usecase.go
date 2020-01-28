@@ -5,6 +5,7 @@ import (
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	session2 "github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -22,10 +23,11 @@ func (s *SessionUsecase) Sessions() ([]models.Session, []error) {
 	return data, err
 }
 
-func (s *SessionUsecase) DeleteSession(id uint, w http.ResponseWriter, r *http.Request) []error {
-	cookie, _ := r.Cookie("session")
+func (s *SessionUsecase) DeleteSession(id uint, userId string, w http.ResponseWriter, r *http.Request) []error {
+	cookie, _ := r.Cookie(userId)
+	fmt.Println("in delete", userId)
 	cookie = &http.Cookie{
-		Name:     "session",
+		Name:     userId,
 		Value:    "",
 		Path:     "/",
 		MaxAge:   0,
@@ -44,10 +46,12 @@ func (s *SessionUsecase) UpdateSession(sess models.Session) (models.Session, []e
 
 func (s *SessionUsecase) CreateSession(w http.ResponseWriter, sess models.Session) (models.Session, []error) {
 	cookie := &http.Cookie{
-		Name:     "session",
+		Name:     strconv.Itoa(int(sess.UserID)),
 		Value:    sess.Uuid,
 		HttpOnly: true,
 		Path:     "/",
+		Expires:  time.Unix(3600, 00),
+		MaxAge:   3600,
 	}
 	http.SetCookie(w, cookie)
 	data, err := s.session.CreateSession(sess)
@@ -59,14 +63,17 @@ func (s *SessionUsecase) GetSession(value string) (models.Session, []error) {
 	return data, err
 }
 
-func (s *SessionUsecase) Check(w http.ResponseWriter, r *http.Request) (models.Session, error) {
-	cookie, err := r.Cookie("session")
+func (s *SessionUsecase) Check(userId string, w http.ResponseWriter, r *http.Request) (models.Session, error) {
+	cookie, err := r.Cookie(userId)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return models.Session{}, err
 	}
-	sess, _ := s.GetSession(cookie.Value)
+	//sess, _ := s.GetSession(cookie.Value)
+	//if r.URL.Path == "/logout" {
+	//	return sess, nil
+	//}
 	if sess.Role != checkUserRole(r.URL.Path) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return models.Session{}, nil

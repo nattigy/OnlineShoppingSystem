@@ -13,6 +13,7 @@ type TeacherRepository interface {
 	UpdateTask(newTask models.Task) (models.Task, []error)
 	DeleteTask(taskId uint) []error
 	UploadResource(resource models.Resources) []error
+	GetResource(subjectId uint) ([]models.Resources, []error)
 	DeleteResource(resourceId uint) []error
 	ReportGrade(grade models.Result) []error
 	ViewStudents(classRoomId uint) ([]models.Student, []error)

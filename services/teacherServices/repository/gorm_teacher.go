@@ -90,3 +90,9 @@ func (tr *GormTeacherRepository) ViewStudents(classRoomId uint) ([]models.Studen
 	errs := tr.conn.Where("class_room_id = ?", classRoomId).Find(&students).GetErrors()
 	return students, errs
 }
+
+func (tr *GormTeacherRepository) GetResource(subjectId uint) ([]models.Resources, []error) {
+	var resources []models.Resources
+	errs := tr.conn.Where("subject_id = ?", subjectId).Find(&resources).GetErrors()
+	return resources, errs
+}

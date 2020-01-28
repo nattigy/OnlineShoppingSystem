@@ -42,15 +42,14 @@ func (sh *StudentHandler) AddStudent(w http.ResponseWriter, r *http.Request) {
 	firstName := r.FormValue("firstname")
 	middleName := r.FormValue("middlename")
 	email := r.FormValue("email")
-	password := r.FormValue("password")
 	sectionId := r.FormValue("sectionid")
 	classRoomId := r.FormValue("classroomid")
-	if firstName != "" && middleName != "" && email != "" && password != "" && sectionId != "" && classRoomId != "" {
+	if firstName != "" && middleName != "" && email != "" && sectionId != "" && classRoomId != "" {
 		secID, _ := strconv.Atoi(sectionId)
 		classId, _ := strconv.Atoi(classRoomId)
 		stuId, _ := strconv.Atoi(studentId)
 		parId, _ := strconv.Atoi(parentId)
-		hashedpassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		hashedpassword, _ := bcrypt.GenerateFromPassword([]byte("1234"), bcrypt.DefaultCost)
 		student := models.Student{FirstName: firstName, MiddleName: middleName, Email: email, Password: string(hashedpassword),
 			SectionId: uint(secID), ClassRoomId: uint(classId), ParentId: uint(parId), Id: uint(stuId)}
 		err := sh.SUsecase.AddStudent(student)

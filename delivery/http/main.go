@@ -84,7 +84,7 @@ func main() {
 
 	mux.HandleFunc("/", homeHandler.Home)
 	mux.HandleFunc("/login", authHandler.Login)
-	mux.HandleFunc("/logout", authHandler.Logout)
+	mux.Handle("/logout", authHandler.AuthenticateUser(http.HandlerFunc(authHandler.Logout)))
 
 	mux.Handle("/student/viewTask", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.ViewTasks)))
 	mux.Handle("/student/comment", authHandler.AuthenticateUser(http.HandlerFunc(studentHandler.Comment)))
@@ -96,6 +96,7 @@ func main() {
 	mux.Handle("/teacher/makeNewPost", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.CreateTask)))
 	mux.Handle("/teacher/editPost", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.UpdateTask)))
 	mux.Handle("/teacher/removeTask", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.DeleteTask)))
+	mux.Handle("/teacher/resource/delete", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.DeleteResource)))
 	mux.Handle("/teacher/uploadResources", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.UploadResource)))
 	mux.Handle("/teacher/updateProfile", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.UpdateTeacher)))
 	mux.Handle("/teacher/reportGrade", authHandler.AuthenticateUser(http.HandlerFunc(teacherHandler.ReportGrade)))
@@ -151,7 +152,7 @@ func main() {
 	router.GET("/api/teacher/students", teacherApi.ViewStudents)
 	router.GET("/api/teacher/posts", teacherApi.GetTasks)
 
-	err = http.ListenAndServe(":3000", router)
+	err = http.ListenAndServe(":3000", mux)
 	if err != nil {
 		fmt.Println("server error : ", err)
 	}
@@ -177,7 +178,7 @@ func PopulateTables(gormdb *gorm.DB) {
 	//teacher2 := models.Teacher{Id: 11, FirstName: "Abebe", MiddleName: "Kebede", ClassRoomId: 61, SubjectId: 101, Email: "abebe@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	//parent := models.Parent{Id: 20, FirstName: "Dinsa", MiddleName: "Lemi", Email: "dinsa@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	//parent2 := models.Parent{Id: 21, FirstName: "Yewondwosen", MiddleName: "Akale", Email: "yewond@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
-	admin := models.Admin{Id: 80, FirstName: "Zeleke", MiddleName: "Akale", Email: "zele@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
+	admin1 := models.Admin{Id: 80, FirstName: "Zeleke", MiddleName: "Akale", Email: "zele@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e"}
 	classRoom := models.ClassRoom{Id: 60, GradeLevel: 12, HomeRoom: 40}
 	classRoom2 := models.ClassRoom{Id: 61, GradeLevel: 10, HomeRoom: 41}
 	subject := models.Subject{Id: 100, SubjectName: "Math", ClassRoomId: 60}
@@ -214,6 +215,6 @@ func PopulateTables(gormdb *gorm.DB) {
 	//fmt.Println(gormdb.Create(&user3))
 	fmt.Println(gormdb.Create(&section1))
 	fmt.Println(gormdb.Create(&section2))
-	fmt.Println(gormdb.Create(&admin))
+	fmt.Println(gormdb.Create(&admin1))
 	fmt.Println(gormdb.Create(&user3))
 }

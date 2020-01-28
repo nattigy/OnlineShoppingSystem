@@ -32,7 +32,7 @@ func (s *SessionRepository) Sessions() ([]models.Session, []error) {
 
 func (s *SessionRepository) DeleteSession(id uint) []error {
 	sess := models.Session{UserID: uint(id)}
-	err := s.conn.Unscoped().Delete(&sess).GetErrors()
+	err := s.conn.Unscoped().Where("id = ?", id).Delete(&sess).GetErrors()
 	return err
 }
 

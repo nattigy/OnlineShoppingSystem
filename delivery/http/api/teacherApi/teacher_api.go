@@ -94,7 +94,7 @@ func (ta *TeacherApi) UploadResource(w http.ResponseWriter, r *http.Request, p h
 	title := r.FormValue("title")
 	description := r.FormValue("description")
 	path := r.FormValue("path")
-	errs := ta.teacherServices.UploadResource(models.Resources{SubjectId: uint(subjectId), Title: title, Description: description, Path: path})
+	errs := ta.teacherServices.UploadResource(models.Resources{SubjectId: uint(subjectId), Title: title, Description: description, Link: path})
 	if len(errs) > 0 {
 		w.Header().Set("Content-Type", "application/json")
 		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)

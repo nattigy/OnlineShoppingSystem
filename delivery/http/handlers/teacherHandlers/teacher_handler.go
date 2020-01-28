@@ -32,6 +32,7 @@ type TeacherInfo struct {
 	User          models.User
 	Session       models.Session
 	Resource      models.Resources
+	Resources     []models.Resources
 	UpdateProfile models.Teacher
 	Students      []models.Student
 	FetchPost     []models.Task
@@ -49,13 +50,12 @@ func (th *TeacherHandler) AddTeacher(w http.ResponseWriter, r *http.Request) {
 	teacherId := r.FormValue("teacherid")
 	MiddleName := r.FormValue("middlename")
 	Email := r.FormValue("email")
-	Password := r.FormValue("password")
 	SubjectId := r.FormValue("subjectid")
 	ClassRoomId := r.FormValue("classroomid")
 
-	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" && SubjectId != "" && ClassRoomId != "" {
+	if FirstName != "" && MiddleName != "" && Email != "" && SubjectId != "" && ClassRoomId != "" {
 		id, _ := strconv.Atoi(teacherId)
-		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
+		password, _ := bcrypt.GenerateFromPassword([]byte("1234"), bcrypt.DefaultCost)
 		subject, _ := strconv.Atoi(SubjectId)
 		newSubject := uint(subject)
 		classRoom, _ := strconv.Atoi(ClassRoomId)
@@ -254,8 +254,23 @@ func (th *TeacherHandler) DeleteTask(w http.ResponseWriter, r *http.Request) {
 func (th *TeacherHandler) UploadResource(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	user := models.User{Email: sess.Email, Id: sess.UserID, Role: sess.Role, LoggedIn: true}
+	teacher, _ := th.TUsecase.GetTeacherById(sess.UserID)
+	resources, _ := th.TUsecase.GetResource(teacher.SubjectId)
+
+	title := r.FormValue("title")
+	description := r.FormValue("description")
+	link := r.FormValue("link")
+
+	if title != "" && description != "" && link != "" {
+		err := th.TUsecase.UploadResource(models.Resources{SubjectId: teacher.SubjectId, Title: title, Description: description, Link: link})
+		if len(err) > 0 {
+			fmt.Println(err)
+		}
+	}
+
 	in := TeacherInfo{
-		User: user,
+		User:      user,
+		Resources: resources,
 	}
 	err := th.templ.ExecuteTemplate(w, "teacherUploadResource.layout", in)
 	if err != nil {
@@ -269,7 +284,7 @@ func (th *TeacherHandler) DeleteResource(w http.ResponseWriter, r *http.Request)
 	if len(errs) > 0 {
 		fmt.Println(errs)
 	}
-	http.Redirect(w, r, "/teacher/fetchPosts", http.StatusSeeOther)
+	http.Redirect(w, r, "/teacher/uploadResources", http.StatusSeeOther)
 }
 
 func (th *TeacherHandler) ReportGrade(w http.ResponseWriter, r *http.Request) {

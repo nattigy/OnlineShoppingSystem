@@ -116,9 +116,9 @@ func (sr *GormStudentRepository) ViewClass(sectionId uint) ([]models.Student, []
 
 func (sr *GormStudentRepository) ViewResources(subjectId uint) ([]models.Resources, []error) {
 	resources := []models.Resources{
-		{SubjectId: subjectId, Title: "Resource1", Description: "Resource1", Path: "Resource1"},
-		{SubjectId: subjectId, Title: "Resource2", Description: "Resource2", Path: "Resource2"},
-		{SubjectId: subjectId, Title: "Resource3", Description: "Resource3", Path: "Resource3"},
+		{SubjectId: subjectId, Title: "Resource1", Description: "Resource1", Link: "Resource1"},
+		{SubjectId: subjectId, Title: "Resource2", Description: "Resource2", Link: "Resource2"},
+		{SubjectId: subjectId, Title: "Resource3", Description: "Resource3", Link: "Resource3"},
 	}
 	return resources, []error{}
 }
@@ -136,4 +136,13 @@ func (sr *GormStudentRepository) ViewResult(studentId uint) (models.Student, []e
 func (sr *GormStudentRepository) GetHomeRoomTeacher(studentId uint) (models.Teacher, []error) {
 	teacher := models.Teacher{Id: 1, FirstName: "Amanuel", MiddleName: "kebede", Email: "aman@gmail.com", Password: "$2a$10$izeCetsu3s9pBSJmRDlfzeXCpblROeKhVwUMpruzCIpUDob3QbI.e", SubjectId: 1, ClassRoomId: 1}
 	return teacher, []error{}
+}
+
+func (sr *GormStudentRepository) Comments(taskId uint) ([]models.Comment, []error) {
+	comments := []models.Comment{
+		{Data: "comment data 4", TaskId: 4, StudentId: 4},
+		{Data: "comment data 4", TaskId: 4, StudentId: 4},
+		{Data: "comment data 4", TaskId: 4, StudentId: 4},
+	}
+	return comments, []error{}
 }

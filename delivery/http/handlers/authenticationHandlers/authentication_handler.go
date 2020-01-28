@@ -3,18 +3,17 @@ package authenticationHandlers
 import (
 	"context"
 	"fmt"
-	"github.com/julienschmidt/httprouter"
-	"github.com/nattigy/parentschoolcommunicationsystem/validateInput"
-	"github.com/satori/uuid"
-	"html/template"
-	"net/http"
-
 	"github.com/nattigy/parentschoolcommunicationsystem/models"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/parentServices"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/session"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/studentServices"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/teacherServices"
 	"github.com/nattigy/parentschoolcommunicationsystem/services/utility"
+	"github.com/nattigy/parentschoolcommunicationsystem/validateInput"
+	"github.com/satori/uuid"
+	"html/template"
+	"net/http"
+	"strconv"
 )
 
 const (
@@ -42,15 +41,7 @@ type LoginError struct {
 }
 
 func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request) {
-	cookie, er := r.Cookie("session")
 	email := r.FormValue("email")
-	if er == nil {
-		sessId, _ := l.session.GetSession(cookie.Value)
-		if sessId.Email == email {
-			_ = l.session.DeleteSession(sessId.ID, w, r)
-		}
-	}
-
 	password := r.FormValue("password")
 
 	loginValidation := validateInput.Input{VErrors: validateInput.ValidationErrors{}}
@@ -81,16 +72,19 @@ func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if auth {
+		cookie, er := r.Cookie(string(role.Id))
+		if er == nil {
+			sessId, _ := l.session.GetSession(cookie.Value)
+			if sessId.Email == email {
+				_ = l.session.DeleteSession(sessId.ID, strconv.Itoa(int(sessId.UserID)), w, r)
+			}
+		}
 		role.LoggedIn = true
 		value, _ := uuid.NewV4()
-		ses := models.Session{Role: role.Role, Email: role.Email, UserID: role.Id, Uuid: value.String()}
-		l.session.CreateSession(w, ses)
-		if er == nil {
-			u, err2 := l.session.GetSession(value.String())
-			if err2 != nil {
-				fmt.Println(err2)
-			}
-			Redirect(w, r, models.User{Role: u.Role})
+		ses := models.Session{Name: strconv.Itoa(int(role.Id)), Role: role.Role, Email: role.Email, UserID: role.Id, Uuid: value.String()}
+		newSession, errs := l.session.CreateSession(w, ses)
+		if len(errs) == 0 {
+			Redirect(w, r, models.User{Id: newSession.UserID, Role: newSession.Role})
 			return
 		}
 		Redirect(w, r, role)
@@ -100,9 +94,9 @@ func (l *AuthenticationHandler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (l *AuthenticationHandler) Logout(w http.ResponseWriter, r *http.Request) {
-	cookie, _ := r.Cookie("session")
-	sessId, _ := l.session.GetSession(cookie.Value)
-	errors := l.session.DeleteSession(sessId.ID, w, r)
+	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
+	sessId, _ := l.session.GetSession(sess.Uuid)
+	errors := l.session.DeleteSession(sessId.ID, strconv.Itoa(int(sessId.UserID)), w, r)
 	if errors != nil {
 		fmt.Println(errors)
 	}
@@ -111,7 +105,12 @@ func (l *AuthenticationHandler) Logout(w http.ResponseWriter, r *http.Request) {
 
 func (l *AuthenticationHandler) AuthenticateUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		sess, err := l.session.Check(w, r)
+		cookie, errs := r.Cookie("userId")
+		if errs != nil {
+			fmt.Println("User Id not found")
+			return
+		}
+		sess, err := l.session.Check(cookie.Value, w, r)
 		ctx := context.WithValue(r.Context(), "signed_in_user_session", sess)
 		next.ServeHTTP(w, r.WithContext(ctx))
 		if err != nil {
@@ -125,21 +124,14 @@ func (l *AuthenticationHandler) AuthenticateUser(next http.Handler) http.Handler
 	})
 }
 
-func (l *AuthenticationHandler) UserHandler(next httprouter.Handle) httprouter.Handle {
-	return httprouter.Handle(func(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-		sess, err := l.session.Check(w, r)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		if sess.UserID == 0 {
-			fmt.Println("Id not found")
-			return
-		}
-	})
-}
-
 func Redirect(w http.ResponseWriter, r *http.Request, role models.User) {
+	if role.Id != 0 {
+		cookie := &http.Cookie{
+			Name:  "userId",
+			Value: strconv.Itoa(int(role.Id)),
+		}
+		http.SetCookie(w, cookie)
+	}
 	if role.Role == Student {
 		http.Redirect(w, r, "/student/viewTask?subjectId=100", http.StatusSeeOther)
 	} else if role.Role == Teacher {

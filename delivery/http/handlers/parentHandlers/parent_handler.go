@@ -23,7 +23,7 @@ func NewParentHandler(templ *template.Template, session session.SessionUsecase, 
 
 type ParentInfo struct {
 	User    models.User
-	Result  []models.Result
+	Results []models.Result
 	Parents []models.Parent
 }
 
@@ -33,11 +33,10 @@ func (ph *ParentHandler) AddParent(w http.ResponseWriter, r *http.Request) {
 	FirstName := r.FormValue("firstname")
 	MiddleName := r.FormValue("middlename")
 	Email := r.FormValue("email")
-	Password := r.FormValue("password")
 	parentid := r.FormValue("parentid")
 
-	if FirstName != "" && MiddleName != "" && Email != "" && Password != "" {
-		password, _ := bcrypt.GenerateFromPassword([]byte(Password), bcrypt.DefaultCost)
+	if FirstName != "" && MiddleName != "" && Email != "" {
+		password, _ := bcrypt.GenerateFromPassword([]byte("1234"), bcrypt.DefaultCost)
 		parId, _ := strconv.Atoi(parentid)
 		parent := models.Parent{
 			Id:         uint(parId),
@@ -89,8 +88,8 @@ func (ph *ParentHandler) DeleteParent(w http.ResponseWriter, r *http.Request) {
 func (ph *ParentHandler) ViewGrade(w http.ResponseWriter, r *http.Request) {
 	sess, _ := r.Context().Value("signed_in_user_session").(models.Session)
 	in := ParentInfo{
-		User:   models.User{Id: sess.UserID, Role: sess.Role, Email: sess.Email, LoggedIn: true},
-		Result: []models.Result{},
+		User:    models.User{Id: sess.UserID, Role: sess.Role, Email: sess.Email, LoggedIn: true},
+		Results: []models.Result{},
 	}
 	err := ph.templ.ExecuteTemplate(w, "parentViewResult.layout", in)
 	if err != nil {
