@@ -154,6 +154,7 @@ func (sh *StudentHandler) ViewTasks(w http.ResponseWriter, r *http.Request) {
 		Task:  models.Task{},
 		User:  user,
 	}
+
 	err := sh.templ.ExecuteTemplate(w, "studentViewTask.layout", in)
 	if err != nil {
 		fmt.Println(err)
